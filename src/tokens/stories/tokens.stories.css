@@ -1,0 +1,210 @@
+.token-stories {
+  font-family: var(--farco-font-family-base);
+  color: var(--farco-color-neutral-100);
+}
+
+.token-stories h2 {
+  font-size: var(--farco-font-size-xl);
+  font-weight: var(--farco-font-weight-bold);
+  margin: 0 0 8px 0;
+  letter-spacing: var(--farco-letter-spacing-tight);
+}
+
+.token-stories p.subtitle {
+  font-size: var(--farco-font-size-sm);
+  color: var(--farco-color-neutral-50);
+  margin: 0 0 32px 0;
+}
+
+.token-stories .token-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.token-stories .token-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--farco-color-neutral-20);
+  border-radius: var(--farco-radius-md);
+  overflow: hidden;
+}
+
+.token-stories .token-card__preview {
+  height: 80px;
+  width: 100%;
+}
+
+.token-stories .token-card__info {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.token-stories .token-card__name {
+  font-size: 11px;
+  font-weight: var(--farco-font-weight-medium);
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.token-stories .token-card__value {
+  font-size: 11px;
+  color: var(--farco-color-neutral-50);
+  font-family: monospace;
+}
+
+.token-stories .token-section {
+  margin-bottom: 48px;
+}
+
+.token-stories .token-section__title {
+  font-size: var(--farco-font-size-lg);
+  font-weight: var(--farco-font-weight-bold);
+  margin: 0 0 4px 0;
+}
+
+.token-stories .token-section__description {
+  font-size: var(--farco-font-size-sm);
+  color: var(--farco-color-neutral-50);
+  margin: 0 0 20px 0;
+}
+
+/* Typography story */
+.token-stories .type-row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--farco-color-neutral-10);
+}
+
+.token-stories .type-row:last-child {
+  border-bottom: none;
+}
+
+.token-stories .type-row__sample {
+  flex: 1;
+  min-width: 0;
+}
+
+.token-stories .type-row__meta {
+  flex-shrink: 0;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.token-stories .type-row__token {
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--farco-color-neutral-50);
+}
+
+.token-stories .type-row__value {
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--farco-color-neutral-40);
+}
+
+/* Spacing story */
+.token-stories .spacing-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.token-stories .spacing-row__label {
+  width: 140px;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-family: monospace;
+  color: var(--farco-color-neutral-60);
+}
+
+.token-stories .spacing-row__bar {
+  height: 24px;
+  background: var(--farco-color-primary);
+  border-radius: var(--farco-radius-sm);
+  transition: background 0.2s ease;
+}
+
+.token-stories .spacing-row__value {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-family: monospace;
+  color: var(--farco-color-neutral-50);
+  width: 40px;
+}
+
+/* Radius story */
+.token-stories .radius-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 24px;
+}
+
+.token-stories .radius-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.token-stories .radius-card__preview {
+  width: 80px;
+  height: 80px;
+  border: 2px solid var(--farco-color-primary);
+  background: var(--farco-color-bg-subtle);
+}
+
+.token-stories .radius-card__name {
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: var(--farco-font-weight-medium);
+  text-align: center;
+}
+
+.token-stories .radius-card__value {
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--farco-color-neutral-50);
+}
+
+/* Shadow story */
+.token-stories .shadow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 32px;
+}
+
+.token-stories .shadow-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.token-stories .shadow-card__preview {
+  width: 140px;
+  height: 100px;
+  border-radius: var(--farco-radius-lg);
+  background: var(--farco-color-bg-base);
+}
+
+.token-stories .shadow-card__name {
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: var(--farco-font-weight-medium);
+}
+
+.token-stories .shadow-card__value {
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--farco-color-neutral-50);
+  text-align: center;
+  max-width: 200px;
+}

@@ -1,0 +1,72 @@
+.theme-white-label {
+  /* Colors - Primary */
+  --farco-color-primary: #1677ff;
+  --farco-color-primary-hover: #4096ff;
+  --farco-color-primary-active: #0958d9;
+  --farco-color-accent: #4096ff;
+  --farco-color-success: #52c41a;
+  --farco-color-warning: #faad14;
+  --farco-color-danger: #ff4d4f;
+
+  /* Colors - Neutrals */
+  --farco-color-neutral-0: #ffffff;
+  --farco-color-neutral-10: #f5f5f5;
+  --farco-color-neutral-20: #e8e8e8;
+  --farco-color-neutral-30: #d9d9d9;
+  --farco-color-neutral-40: #bfbfbf;
+  --farco-color-neutral-50: #8c8c8c;
+  --farco-color-neutral-60: #595959;
+  --farco-color-neutral-70: #434343;
+  --farco-color-neutral-80: #262626;
+  --farco-color-neutral-90: #1f1f1f;
+  --farco-color-neutral-100: #000000;
+
+  /* Colors - Semantic */
+  --farco-color-border: #d9d9d9;
+  --farco-color-bg-base: #ffffff;
+  --farco-color-bg-subtle: #f5f5f5;
+
+  /* Typography */
+  --farco-font-family-base: 'Overused Grotesk', sans-serif;
+  --farco-font-size-xs: 12px;
+  --farco-font-size-sm: 14px;
+  --farco-font-size-md: 16px;
+  --farco-font-size-lg: 20px;
+  --farco-font-size-xl: 24px;
+  --farco-font-weight-regular: 400;
+  --farco-font-weight-medium: 500;
+  --farco-font-weight-bold: 700;
+  --farco-line-height-tight: 1.2;
+  --farco-line-height-base: 1.5;
+  --farco-line-height-relaxed: 1.75;
+  --farco-letter-spacing-tight: -0.01em;
+  --farco-letter-spacing-base: 0.01em;
+
+  /* Spacing */
+  --farco-spacing-1: 4px;
+  --farco-spacing-2: 8px;
+  --farco-spacing-3: 12px;
+  --farco-spacing-4: 16px;
+  --farco-spacing-5: 20px;
+  --farco-spacing-6: 24px;
+  --farco-spacing-8: 32px;
+  --farco-spacing-10: 40px;
+  --farco-spacing-12: 48px;
+  --farco-spacing-16: 64px;
+
+  /* Border Radius */
+  --farco-radius-none: 0;
+  --farco-radius-sm: 4px;
+  --farco-radius-md: 6px;
+  --farco-radius-lg: 8px;
+  --farco-radius-xl: 12px;
+  --farco-radius-full: 9999px;
+
+  /* Shadows */
+  --farco-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --farco-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --farco-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Misc */
+  --farco-opacity-disabled: 0.4;
+}

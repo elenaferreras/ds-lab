@@ -1,31 +1,134 @@
-.ds-button {
+/* ===================================================
+ * DS Button — antd overrides using design tokens
+ * =================================================== */
+
+/* Base — override antd's default button styles */
+.ds-button.ant-btn {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  height: 40px;
-  padding: 0 20px 0 24px;
-  gap: 8px;
-  border: 1px solid #000;
-  border-radius: 9999px;
+  justify-content: center;
+  gap: var(--farco-spacing-2);
+  height: var(--farco-spacing-10);
+  padding: 0 var(--farco-spacing-5) 0 var(--farco-spacing-6);
+  border: 1px solid var(--farco-color-border);
+  border-radius: var(--farco-radius-full);
   background: transparent;
-  cursor: pointer;
-  font-family: inherit;
-  text-decoration: none;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.ds-button:hover:not(:disabled) {
-  background: #C9F29F;
-  border-color: #C9F29F;
-}
-
-.ds-button__label {
-  color: #000;
-  font-family: 'Overused Grotesk', sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  color: var(--farco-color-neutral-100);
+  font-family: var(--farco-font-family-base);
+  font-size: var(--farco-font-size-md);
+  font-weight: var(--farco-font-weight-regular);
+  letter-spacing: var(--farco-letter-spacing-base);
   text-transform: uppercase;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  box-shadow: none;
+}
+
+.ds-button.ant-btn:hover:not(:disabled) {
+  background: var(--farco-color-accent);
+  border-color: var(--farco-color-accent);
+  color: var(--farco-color-neutral-100);
+}
+
+.ds-button.ant-btn:active:not(:disabled) {
+  background: var(--farco-color-accent);
+  border-color: var(--farco-color-accent);
+  color: var(--farco-color-neutral-100);
+}
+
+/* Primary variant */
+.ds-button--primary.ant-btn {
+  background: var(--farco-color-primary);
+  border-color: var(--farco-color-primary);
+  color: var(--farco-color-neutral-0);
+}
+
+.ds-button--primary.ant-btn:hover:not(:disabled) {
+  background: var(--farco-color-primary-hover);
+  border-color: var(--farco-color-primary-hover);
+  color: var(--farco-color-neutral-0);
+}
+
+.ds-button--primary.ant-btn:active:not(:disabled) {
+  background: var(--farco-color-primary-active);
+  border-color: var(--farco-color-primary-active);
+  color: var(--farco-color-neutral-0);
+}
+
+/* Dashed variant */
+.ds-button--dashed.ant-btn {
+  border-style: dashed;
+}
+
+/* Text variant */
+.ds-button--text.ant-btn {
+  border-color: transparent;
+  background: transparent;
+}
+
+.ds-button--text.ant-btn:hover:not(:disabled) {
+  background: var(--farco-color-bg-subtle);
+  border-color: transparent;
+}
+
+/* Danger */
+.ds-button.ant-btn-dangerous {
+  border-color: var(--farco-color-danger);
+  color: var(--farco-color-danger);
+}
+
+.ds-button.ant-btn-dangerous:hover:not(:disabled) {
+  background: var(--farco-color-danger);
+  border-color: var(--farco-color-danger);
+  color: var(--farco-color-neutral-0);
+}
+
+.ds-button--primary.ant-btn-dangerous {
+  background: var(--farco-color-danger);
+  color: var(--farco-color-neutral-0);
+}
+
+/* Sizes */
+.ds-button--small.ant-btn {
+  height: var(--farco-spacing-8);
+  padding: 0 var(--farco-spacing-4) 0 var(--farco-spacing-5);
+  font-size: var(--farco-font-size-sm);
+  gap: var(--farco-spacing-1);
+}
+
+.ds-button--large.ant-btn {
+  height: var(--farco-spacing-12);
+  padding: 0 var(--farco-spacing-6) 0 var(--farco-spacing-8);
+  font-size: var(--farco-font-size-lg);
+  gap: var(--farco-spacing-3);
+}
+
+/* Disabled */
+.ds-button.ant-btn:disabled,
+.ds-button.ant-btn[disabled] {
+  opacity: var(--farco-opacity-disabled);
+  cursor: not-allowed;
+  color: var(--farco-color-neutral-100);
+  border-color: var(--farco-color-border);
+  background: transparent;
+}
+
+.ds-button--primary.ant-btn:disabled,
+.ds-button--primary.ant-btn[disabled] {
+  background: var(--farco-color-primary);
+  border-color: var(--farco-color-primary);
+  color: var(--farco-color-neutral-0);
+}
+
+/* Block */
+.ds-button.ant-btn-block {
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Inner elements */
+.ds-button__label {
   white-space: nowrap;
 }
 
@@ -33,7 +136,12 @@
   flex-shrink: 0;
 }
 
-.ds-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+.ds-button--small .ds-button__arrow {
+  width: 11px;
+  height: 11px;
+}
+
+.ds-button--large .ds-button__arrow {
+  width: 16px;
+  height: 16px;
 }

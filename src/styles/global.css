@@ -1,14 +1,17 @@
-@font-face {
-  font-family: 'Overused Grotesk';
-  src: url('/fonts/OverusedGrotesk-VF.woff2') format('woff2-variations');
-  font-weight: 300 900;
-  font-style: normal;
-}
+@import '../tokens/base.css';
+@import '../tokens/tokens.css';
+@import '../tokens/themes/white-label.css';
+@import '../tokens/themes/farco.css';
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 body {
-  font-family: 'Overused Grotesk', sans-serif;
+  margin: 0;
+  font-family: var(--farco-font-family-base);
+  color: var(--farco-color-neutral-100);
+  background-color: var(--farco-color-bg-base);
 }

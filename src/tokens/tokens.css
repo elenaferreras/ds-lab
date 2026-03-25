@@ -1,0 +1,81 @@
+/*
+ * TOKEN CONTRACT
+ * ==============
+ * This file documents all available --farco-* design tokens.
+ * Actual values are defined in theme files (themes/*.css).
+ * The farco theme targets :root as the default fallback.
+ *
+ * TOKEN LIST
+ * ----------
+ *
+ * Colors - Primary
+ *   --farco-color-primary
+ *   --farco-color-primary-hover
+ *   --farco-color-primary-active
+ *   --farco-color-accent
+ *   --farco-color-success
+ *   --farco-color-warning
+ *   --farco-color-danger
+ *
+ * Colors - Neutrals
+ *   --farco-color-neutral-0       (white)
+ *   --farco-color-neutral-10
+ *   --farco-color-neutral-20
+ *   --farco-color-neutral-30
+ *   --farco-color-neutral-40
+ *   --farco-color-neutral-50
+ *   --farco-color-neutral-60
+ *   --farco-color-neutral-70
+ *   --farco-color-neutral-80
+ *   --farco-color-neutral-90
+ *   --farco-color-neutral-100     (black)
+ *
+ * Colors - Semantic
+ *   --farco-color-border
+ *   --farco-color-bg-base
+ *   --farco-color-bg-subtle
+ *
+ * Typography
+ *   --farco-font-family-base
+ *   --farco-font-size-xs          12px
+ *   --farco-font-size-sm          14px
+ *   --farco-font-size-md          16px
+ *   --farco-font-size-lg          20px
+ *   --farco-font-size-xl          24px
+ *   --farco-font-weight-regular   400
+ *   --farco-font-weight-medium    500
+ *   --farco-font-weight-bold      700
+ *   --farco-line-height-tight     1.2
+ *   --farco-line-height-base      1.5
+ *   --farco-line-height-relaxed   1.75
+ *   --farco-letter-spacing-tight  -0.01em
+ *   --farco-letter-spacing-base   0.01em
+ *
+ * Spacing (4px grid)
+ *   --farco-spacing-1             4px
+ *   --farco-spacing-2             8px
+ *   --farco-spacing-3             12px
+ *   --farco-spacing-4             16px
+ *   --farco-spacing-5             20px
+ *   --farco-spacing-6             24px
+ *   --farco-spacing-8             32px
+ *   --farco-spacing-10            40px
+ *   --farco-spacing-12            48px
+ *   --farco-spacing-16            64px
+ *
+ * Border Radius
+ *   --farco-radius-none           0
+ *   --farco-radius-sm             4px
+ *   --farco-radius-md             6px
+ *   --farco-radius-lg             8px
+ *   --farco-radius-xl             12px
+ *   --farco-radius-full           9999px
+ *
+ * Shadows
+ *   --farco-shadow-sm
+ *   --farco-shadow-md
+ *   --farco-shadow-lg
+ *
+ * Misc
+ *   --farco-opacity-disabled      0.4
+ */
