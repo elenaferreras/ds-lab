@@ -1,5 +1,5 @@
 import { Button } from './Button';
-import { SearchOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined } from '../Icons';
 
 export default {
   title: 'Components/Button',
@@ -89,9 +89,9 @@ export const WithoutArrow = {
 export const WithIcon = {
   name: 'With Icon',
   args: {
-    children: 'Search',
+    children: 'Arrow',
     variant: 'default',
-    icon: <SearchOutlined />,
+    icon: <ArrowRightOutlined />,
     showArrow: false,
   },
 };
@@ -228,7 +228,7 @@ export const AllVariants = {
         </div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <Button showArrow={false}>No Arrow</Button>
-          <Button showArrow={false} icon={<SearchOutlined />}>With Icon</Button>
+          <Button showArrow={false} icon={<ArrowRightOutlined />}>With Icon</Button>
         </div>
       </div>
     </div>
