@@ -26,7 +26,7 @@
 }
 
 .ds-button.ant-btn:hover:not(:disabled) {
-  background: var(--farco-color-accent);
+  background: var(--farco-color-danger);
   border-color: var(--farco-color-accent);
   color: var(--farco-color-neutral-100);
 }
