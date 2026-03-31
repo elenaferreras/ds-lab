@@ -3,6 +3,10 @@
 @import '../tokens/themes/white-label.css';
 @import '../tokens/themes/farco.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *,
 *::before,
 *::after {
@@ -14,4 +18,13 @@ body {
   font-family: var(--farco-font-family-base);
   color: var(--farco-color-neutral-100);
   background-color: var(--farco-color-bg-base);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

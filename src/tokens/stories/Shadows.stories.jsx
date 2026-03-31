@@ -33,7 +33,7 @@ export const Scale = {
       <p className="subtitle">Elevation levels for layered UI elements.</p>
 
       <div className="shadow-grid">
-        {shadowTokens.map(({ token, value, description }) => (
+        {shadowTokens.map(({ token, value }) => (
           <div key={token} className="shadow-card">
             <div
               className="shadow-card__preview"

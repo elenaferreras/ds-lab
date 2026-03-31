@@ -1,8 +1,6 @@
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ConfigProvider } from 'antd'
 import './styles/global.css'
-import { getAntdTheme } from './tokens/tokens.js'
 import App from './App.jsx'
 
 function ThemedApp() {
@@ -11,9 +9,7 @@ function ThemedApp() {
   }, [])
 
   return (
-    <ConfigProvider theme={{ token: getAntdTheme() }}>
-      <App />
-    </ConfigProvider>
+    <App />
   )
 }
 

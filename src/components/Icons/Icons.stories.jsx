@@ -1,3 +1,4 @@
+import React from 'react';
 import { ArrowRightOutlined } from './index';
 
 export default {
@@ -15,7 +16,7 @@ export const AllIcons = {
   name: 'All Icons',
   render: () => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
-      {icons.map(({ name, component: Icon }) => (
+      {icons.map(({ name, component: IconComponent }) => (
         <div
           key={name}
           style={{
@@ -29,7 +30,7 @@ export const AllIcons = {
             minWidth: '120px',
           }}
         >
-          <Icon width="24" height="24" />
+          {React.createElement(IconComponent, { width: '24', height: '24' })}
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
