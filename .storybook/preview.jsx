@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import '../src/styles/global.css'
 import { switchTheme } from '../src/tokens/tokens.js'
+import theme from './theme'
 
 function ThemeDecorator({ themeName, children }) {
   useEffect(() => {
@@ -21,7 +22,11 @@ export default {
 
     a11y: {
       test: "todo"
-    }
+    },
+
+    docs: {
+      theme,
+    },
   },
 
   globalTypes: {

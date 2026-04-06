@@ -1,16 +1,28 @@
-import React from 'react';
-import { ArrowRightOutlined } from './index';
+import React from 'react'
+import {
+  ArrowRightOutlined,
+  PlusOutlined,
+  CloseOutlined,
+  CheckCircleOutlined,
+  WarningOutlined,
+  XCircleOutlined,
+} from './index'
 
 export default {
   title: 'Components/Icons',
   parameters: {
     layout: 'padded',
   },
-};
+}
 
 const icons = [
   { name: 'ArrowRightOutlined', component: ArrowRightOutlined },
-];
+  { name: 'PlusOutlined', component: PlusOutlined },
+  { name: 'CloseOutlined', component: CloseOutlined },
+  { name: 'CheckCircleOutlined', component: CheckCircleOutlined },
+  { name: 'WarningOutlined', component: WarningOutlined },
+  { name: 'XCircleOutlined', component: XCircleOutlined },
+]
 
 export const AllIcons = {
   name: 'All Icons',
@@ -43,7 +55,7 @@ export const AllIcons = {
       ))}
     </div>
   ),
-};
+}
 
 export const Sizes = {
   render: () => (
@@ -70,7 +82,7 @@ export const Sizes = {
       ))}
     </div>
   ),
-};
+}
 
 export const Colors = {
   render: () => (
@@ -102,4 +114,4 @@ export const Colors = {
       ))}
     </div>
   ),
-};
+}

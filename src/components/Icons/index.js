@@ -1,1 +1,6 @@
-export { ArrowRightOutlined } from './ArrowRightOutlined';
+export { ArrowRightOutlined } from './ArrowRightOutlined'
+export { PlusOutlined } from './PlusOutlined'
+export { CloseOutlined } from './CloseOutlined'
+export { CheckCircleOutlined } from './CheckCircleOutlined'
+export { WarningOutlined } from './WarningOutlined'
+export { XCircleOutlined } from './XCircleOutlined'

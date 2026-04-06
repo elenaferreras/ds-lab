@@ -2,12 +2,23 @@ import { cn } from '../../../lib/cn'
 
 const VARIANTS = /** @type {const} */ (['primary', 'secondary', 'ghost'])
 const INTENTS = /** @type {const} */ (['regular', 'danger'])
+const SIZES = /** @type {const} */ (['sm', 'md', 'lg'])
+
+const SIZE_CLASSES = {
+  sm: 'h-[var(--farco-spacing-8)] px-[var(--farco-spacing-3)] text-[var(--farco-font-size-sm)] gap-[var(--farco-spacing-1)]',
+  md: 'h-[var(--farco-spacing-10)] px-[var(--farco-spacing-6)] text-[var(--farco-font-size-md)] gap-[var(--farco-spacing-2)]',
+  lg: 'h-[var(--farco-spacing-12)] px-[var(--farco-spacing-8)] text-[var(--farco-font-size-md)] gap-[var(--farco-spacing-2)]',
+}
+
+const ICON_SIZE = {
+  sm: 14,
+  md: 16,
+  lg: 18,
+}
 
 function getVariantClasses(variant, intent) {
   const isDanger = intent === 'danger'
 
-  // We generate subtle interactive states using CSS tokens + color-mix()
-  // so the component automatically adapts to theme changes.
   const subtleFrom = (cssVar) =>
     `enabled:hover:bg-[color-mix(in_oklab,var(${cssVar})_10%,transparent)]`
   const pressedFrom = (cssVar) =>
@@ -61,19 +72,38 @@ function getVariantClasses(variant, intent) {
       }
 }
 
+/**
+ * @param {{
+ *   children?: React.ReactNode
+ *   variant?: 'primary' | 'secondary' | 'ghost'
+ *   intent?: 'regular' | 'danger'
+ *   size?: 'sm' | 'md' | 'lg'
+ *   disabled?: boolean
+ *   loading?: boolean
+ *   iconLeft?: React.ReactNode
+ *   iconRight?: React.ReactNode
+ *   className?: string
+ *   onClick?: React.MouseEventHandler<HTMLButtonElement>
+ * }} props
+ */
 export function Button({
   children = 'Label',
   variant = 'primary',
   intent = 'regular',
+  size = 'md',
   disabled = false,
   loading = false,
+  iconLeft,
+  iconRight,
   className,
   onClick,
   ...props
 }) {
   const resolvedVariant = VARIANTS.includes(variant) ? variant : 'primary'
   const resolvedIntent = INTENTS.includes(intent) ? intent : 'regular'
+  const resolvedSize = SIZES.includes(size) ? size : 'md'
   const v = getVariantClasses(resolvedVariant, resolvedIntent)
+  const iconPx = ICON_SIZE[resolvedSize]
 
   const isDisabled = disabled
   const isLoading = loading
@@ -90,60 +120,69 @@ export function Button({
     'disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none',
     // loading (distinct from disabled)
     isLoading && 'opacity-70 cursor-wait pointer-events-none',
-    // size (single default for now)
-    'h-[var(--farco-spacing-10)] px-[var(--farco-spacing-6)] text-[var(--farco-font-size-md)] gap-[var(--farco-spacing-2)]',
+    // size
+    SIZE_CLASSES[resolvedSize],
     v.base,
     isInteractive && v.hover,
     isInteractive && v.active,
     className
   )
 
-  const elementProps = {
-    type: 'button',
-    disabled: isDisabled,
-    'aria-busy': isLoading ? true : undefined,
-  }
+  const spinner = (
+    <svg
+      width={iconPx}
+      height={iconPx}
+      viewBox="0 0 16 16"
+      style={{ animation: 'spin 0.8s linear infinite', flexShrink: 0 }}
+      aria-hidden="true"
+    >
+      <circle
+        cx="8"
+        cy="8"
+        r="6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeDasharray="25"
+        strokeDashoffset="0"
+        strokeLinecap="round"
+        opacity="0.3"
+      />
+      <path
+        d="M8 2 A6 6 0 0 1 14 8"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+
+  const iconWrapper = (node) =>
+    node ? (
+      <span
+        className="inline-flex items-center justify-center shrink-0"
+        style={{ width: iconPx, height: iconPx }}
+        aria-hidden="true"
+      >
+        {node}
+      </span>
+    ) : null
 
   return (
     <button
       className={base}
       onClick={!isInteractive ? undefined : onClick}
-      {...elementProps}
+      type="button"
+      disabled={isDisabled}
+      aria-busy={isLoading ? true : undefined}
       {...props}
     >
-      {loading && (
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          style={{ animation: 'spin 0.8s linear infinite' }}
-          aria-hidden="true"
-        >
-          <circle
-            cx="8"
-            cy="8"
-            r="6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeDasharray="25"
-            strokeDashoffset="0"
-            strokeLinecap="round"
-            opacity="0.3"
-          />
-          <path
-            d="M8 2 A6 6 0 0 1 14 8"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
-      )}
+      {isLoading ? spinner : iconWrapper(iconLeft)}
       <span className="whitespace-nowrap">{children}</span>
+      {!isLoading && iconWrapper(iconRight)}
     </button>
   )
 }
 
 export default Button
-

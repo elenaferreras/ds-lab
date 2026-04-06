@@ -1,4 +1,5 @@
 import { Button } from './button'
+import { ArrowRightOutlined, PlusOutlined } from '../../Icons'
 
 export default {
   title: 'Components/Button',
@@ -14,6 +15,11 @@ export default {
       control: 'select',
       options: ['regular', 'danger'],
       description: 'Semantic meaning of the action',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size of the button',
     },
     children: {
       control: 'text',
@@ -35,6 +41,7 @@ export const Playground = {
     children: 'Label',
     variant: 'primary',
     intent: 'regular',
+    size: 'md',
   },
 }
 
@@ -58,14 +65,58 @@ export const Danger = {
   ),
 }
 
+export const Sizes = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <Button size="sm">Small</Button>
+      <Button size="md">Medium</Button>
+      <Button size="lg">Large</Button>
+    </div>
+  ),
+}
+
+export const SizesSecondary = {
+  name: 'Sizes – Secondary',
+  render: () => (
+    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <Button size="sm" variant="secondary">Small</Button>
+      <Button size="md" variant="secondary">Medium</Button>
+      <Button size="lg" variant="secondary">Large</Button>
+    </div>
+  ),
+}
+
+export const WithIcons = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <Button iconLeft={<PlusOutlined />}>Add item</Button>
+      <Button variant="secondary" iconRight={<ArrowRightOutlined />}>Continue</Button>
+      <Button variant="ghost" iconLeft={<PlusOutlined />} iconRight={<ArrowRightOutlined />}>Both</Button>
+      <Button size="sm" iconLeft={<PlusOutlined />}>Small</Button>
+      <Button size="lg" iconRight={<ArrowRightOutlined />}>Large</Button>
+    </div>
+  ),
+}
+
+export const IconOnly = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+      <Button size="sm" iconLeft={<PlusOutlined />} className="px-0 w-[var(--farco-spacing-8)]">{null}</Button>
+      <Button size="md" iconLeft={<PlusOutlined />} className="px-0 w-[var(--farco-spacing-10)]">{null}</Button>
+      <Button size="lg" iconLeft={<PlusOutlined />} className="px-0 w-[var(--farco-spacing-12)]">{null}</Button>
+    </div>
+  ),
+}
+
 export const States = {
   render: () => (
     <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
       <Button>Default</Button>
       <Button disabled>Disabled</Button>
-      <Button variant="primary" loading>Loading</Button>
+      <Button loading>Loading</Button>
       <Button variant="secondary" loading>Loading</Button>
+      <Button size="sm" loading>Loading sm</Button>
+      <Button size="lg" loading>Loading lg</Button>
     </div>
   ),
 }
-
