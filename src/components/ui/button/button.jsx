@@ -1,3 +1,4 @@
+import { Slot } from '@radix-ui/react-slot'
 import { cn } from '../../../lib/cn'
 
 const VARIANTS = /** @type {const} */ (['primary', 'secondary', 'ghost'])
@@ -82,6 +83,7 @@ function getVariantClasses(variant, intent) {
  *   loading?: boolean
  *   iconLeft?: React.ReactNode
  *   iconRight?: React.ReactNode
+ *   asChild?: boolean
  *   className?: string
  *   onClick?: React.MouseEventHandler<HTMLButtonElement>
  * }} props
@@ -95,6 +97,7 @@ export function Button({
   loading = false,
   iconLeft,
   iconRight,
+  asChild = false,
   className,
   onClick,
   ...props
@@ -169,19 +172,23 @@ export function Button({
       </span>
     ) : null
 
+  const Comp = asChild ? Slot : 'button'
+
   return (
-    <button
+    <Comp
       className={base}
       onClick={!isInteractive ? undefined : onClick}
-      type="button"
+      type={asChild ? undefined : 'button'}
       disabled={isDisabled}
       aria-busy={isLoading ? true : undefined}
       {...props}
     >
       {isLoading ? spinner : iconWrapper(iconLeft)}
-      <span className="whitespace-nowrap">{children}</span>
+      {children != null && children !== '' && (
+        <span className="whitespace-nowrap">{children}</span>
+      )}
       {!isLoading && iconWrapper(iconRight)}
-    </button>
+    </Comp>
   )
 }
 

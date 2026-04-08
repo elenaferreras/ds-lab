@@ -27,9 +27,9 @@ export default {
 
 export const Playground = {
   args: {
-    src: 'https://i.pravatar.cc/150?img=3',
-    alt: 'Jane Doe',
-    fallback: 'JD',
+    src: '/avatar-default.png',
+    alt: 'User avatar',
+    fallback: 'AB',
     size: 'md',
   },
 }
@@ -37,10 +37,10 @@ export const Playground = {
 export const WithImage = {
   render: () => (
     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-      <Avatar src="https://i.pravatar.cc/150?img=1" alt="User 1" fallback="U1" size="sm" />
-      <Avatar src="https://i.pravatar.cc/150?img=2" alt="User 2" fallback="U2" size="md" />
-      <Avatar src="https://i.pravatar.cc/150?img=3" alt="User 3" fallback="U3" size="lg" />
-      <Avatar src="https://i.pravatar.cc/150?img=4" alt="User 4" fallback="U4" size="xl" />
+      <Avatar src="/avatar-default.png" alt="User" fallback="AB" size="sm" />
+      <Avatar src="/avatar-default.png" alt="User" fallback="AB" size="md" />
+      <Avatar src="/avatar-default.png" alt="User" fallback="AB" size="lg" />
+      <Avatar src="/avatar-default.png" alt="User" fallback="AB" size="xl" />
     </div>
   ),
 }

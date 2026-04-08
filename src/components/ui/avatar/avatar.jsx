@@ -4,10 +4,10 @@ import { cn } from '../../../lib/cn'
 const SIZES = /** @type {const} */ (['sm', 'md', 'lg', 'xl'])
 
 const SIZE_CLASSES = {
-  sm: 'w-6 h-6 text-[10px]',
-  md: 'w-8 h-8 text-[12px]',
-  lg: 'w-10 h-10 text-[14px]',
-  xl: 'w-12 h-12 text-[16px]',
+  sm: 'w-[var(--farco-spacing-6)] h-[var(--farco-spacing-6)] text-[10px]',
+  md: 'w-[var(--farco-spacing-8)] h-[var(--farco-spacing-8)] text-[12px]',
+  lg: 'w-[var(--farco-spacing-10)] h-[var(--farco-spacing-10)] text-[14px]',
+  xl: 'w-[var(--farco-spacing-12)] h-[var(--farco-spacing-12)] text-[16px]',
 }
 
 /**

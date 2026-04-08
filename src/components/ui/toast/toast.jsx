@@ -1,12 +1,13 @@
 import { createContext, useCallback, useContext, useState } from 'react'
 import * as RadixToast from '@radix-ui/react-toast'
 import { cn } from '../../../lib/cn'
+import { Button } from '../button'
 import {
   CheckCircleOutlined,
   WarningOutlined,
   XCircleOutlined,
   CloseOutlined,
-} from '../../Icons'
+} from '../icons'
 
 // ─── Variant styles ──────────────────────────────────────────────────────────
 
@@ -33,15 +34,9 @@ const VARIANT_CLASSES = {
 
 const ICON_MAP = {
   default: null,
-  success: <CheckCircleOutlined width="16" height="16" />,
-  warning: <WarningOutlined width="16" height="16" />,
-  danger: <XCircleOutlined width="16" height="16" />,
-}
-
-// ─── Close icon ──────────────────────────────────────────────────────────────
-
-function CloseIcon() {
-  return <CloseOutlined width="14" height="14" />
+  success: () => <CheckCircleOutlined width="16" height="16" />,
+  warning: () => <WarningOutlined width="16" height="16" />,
+  danger: () => <XCircleOutlined width="16" height="16" />,
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────
@@ -103,7 +98,7 @@ export function ToastProvider({ children }) {
  */
 function ToastItem({ id, title, description, variant = 'default', duration = 4000, onOpenChange }) {
   const resolvedVariant = VARIANTS.includes(variant) ? variant : 'default'
-  const icon = ICON_MAP[resolvedVariant]
+  const IconComponent = ICON_MAP[resolvedVariant]
   const isPermanent = duration === Infinity
 
   return (
@@ -129,8 +124,10 @@ function ToastItem({ id, title, description, variant = 'default', duration = 400
       )}
     >
       {/* Icon */}
-      {icon && (
-        <span className="mt-[1px] shrink-0 opacity-80">{icon}</span>
+      {IconComponent && (
+        <span className="mt-[1px] shrink-0 opacity-80 text-inherit">
+          <IconComponent />
+        </span>
       )}
 
       {/* Content */}
@@ -150,15 +147,15 @@ function ToastItem({ id, title, description, variant = 'default', duration = 400
       </div>
 
       {/* Close button */}
-      <RadixToast.Close
-        aria-label="Close notification"
-        className={cn(
-          'shrink-0 mt-[1px] p-[2px] rounded-[var(--farco-radius-sm)]',
-          'opacity-50 hover:opacity-100 transition-opacity duration-100',
-          'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-current'
-        )}
-      >
-        <CloseIcon />
+      <RadixToast.Close asChild aria-label="Close notification">
+        <Button
+          variant="ghost"
+          size="sm"
+          iconLeft={<CloseOutlined />}
+          className="shrink-0 mt-[1px] !px-[var(--farco-spacing-1)]"
+        >
+          {null}
+        </Button>
       </RadixToast.Close>
     </RadixToast.Root>
   )

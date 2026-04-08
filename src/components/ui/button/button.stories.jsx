@@ -1,5 +1,5 @@
 import { Button } from './button'
-import { ArrowRightOutlined, PlusOutlined } from '../../Icons'
+import { ArrowRightOutlined, PlusOutlined } from '../icons'
 
 export default {
   title: 'Components/Button',

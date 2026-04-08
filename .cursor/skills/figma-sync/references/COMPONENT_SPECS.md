@@ -4,6 +4,7 @@ This file is loaded on demand by the `figma-sync` skill. It contains:
 
 1. The full `--farco-*` token → Figma mapping table
 2. Per-component Figma layer guides for all 6 components
+3. Token sync reference — Variable types, modes, Effect Style format, Text Style matrix
 
 ---
 
@@ -209,15 +210,17 @@ This file is loaded on demand by the `figma-sync` skill. It contains:
 | `xl` | 48×48px | 16px |
 
 **Layer structure per size frame:**
-- `Root` — circle frame, `radius/full`, `color/neutral-20` background fill, `overflow: hidden`
-  - `Image` — fills full frame, object-fit cover
-  - `Skeleton` — absolute fill, `color/neutral-20`, shown during load
-  - `Fallback` — absolute fill, `color/neutral-20` bg, `color/neutral-60` text, initials centered
+- `Root` — circle frame, `radius/full`, `color/neutral-20` background fill, **`clip content: true`** (essential — without this the image overflows the circle). The `Root` frame itself must also have `radius/full` applied so clipping is circular.
+  - `Image` — fills full frame (width and height 100% of `Root`), `radius/full`, image fill using `public/avatar-default.png` (upload via Figma MCP image upload API to receive an image hash, then set fill as `{ type: IMAGE, imageRef: <hash>, scaleMode: FILL }`). **Visible only when `src = true`; hidden when `src = false`.**
+  - `Skeleton` — absolute fill, `color/neutral-20`, `radius/full`, shown during load. Hidden when `src = true`.
+  - `Fallback` — absolute fill, `color/neutral-20` bg, `color/neutral-60` text, initials centered, `radius/full`. Visible when `src = false`; hidden when `src = true`.
+  - `Alt` — text node, `visibility: true`, **`opacity: 0`**, font `font/family-base`, size `font/size-sm`, color `color/neutral-60`, positioned inside the frame. Opacity 0 (not `visibility: false`) is mandatory — Figma requires the layer to be in the visible layer tree to accept a component property binding. A hidden layer cannot be bound.
 
 **Figma layers to update when a token changes:**
 - `color/neutral-20` change → update `Root` bg, `Skeleton` fill, `Fallback` bg across all size frames
-- `color/neutral-60` change → update `Fallback` text fill across all size frames
+- `color/neutral-60` change → update `Fallback` text fill and `Alt` annotation layer color across all size frames
 - Size token change → update frame dimensions on the affected size frames
+- `src` / image presence is controlled by the `src` component property — it does not involve tokens
 
 ---
 
@@ -330,3 +333,324 @@ This file is loaded on demand by the `figma-sync` skill. It contains:
 - `shadow/md` change → update drop shadow effect on all Toast variant frames
 - `radius/lg` change → update corner radius on all Toast variant frames
 - Spacing token change → update padding and gap values on affected frames
+
+---
+
+## 3. Token Sync Reference
+
+### Variable Collection
+
+| Property | Value |
+|---|---|
+| Collection name | `DS-Lab Tokens` |
+| Mode 1 | `Farco` |
+| Mode 2 | `White Label` |
+
+---
+
+### Variable Type Map
+
+Every `--farco-*` token maps to a specific Figma Variable type. Tokens not listed here are handled as Effect Styles or Text Styles instead.
+
+| Token category | CSS variables | Figma Variable type |
+|---|---|---|
+| Colors — Primary | `--farco-color-primary`, `-hover`, `-active`, `--farco-color-accent`, `--farco-color-success`, `--farco-color-warning`, `--farco-color-danger` | `COLOR` |
+| Colors — Neutrals | `--farco-color-neutral-0` through `--farco-color-neutral-100` | `COLOR` |
+| Colors — Semantic | `--farco-color-border`, `--farco-color-bg-base`, `--farco-color-bg-subtle` | `COLOR` |
+| Spacing | `--farco-spacing-1` through `--farco-spacing-16` | `FLOAT` (strip `px`) |
+| Border Radius | `--farco-radius-none` through `--farco-radius-xl` | `FLOAT` (strip `px`) |
+| Border Radius (full) | `--farco-radius-full` | `FLOAT` — store as `9999` |
+| Opacity | `--farco-opacity-disabled` | `FLOAT` |
+| Font sizes | `--farco-font-size-xs` through `--farco-font-size-xl` | `FLOAT` (strip `px`) |
+| Font weights | `--farco-font-weight-regular`, `-medium`, `-bold` | `FLOAT` |
+| Line heights | `--farco-line-height-tight`, `-base`, `-relaxed` | `FLOAT` |
+| Letter spacing | `--farco-letter-spacing-tight`, `-base` | `STRING` (keep `em` unit) |
+| Font family | `--farco-font-family-base` | → Text Styles only, not a Variable |
+| Shadows | `--farco-shadow-sm`, `-md`, `-lg` | → Effect Styles only, not Variables |
+
+---
+
+### Mode Values — Tokens That Differ Between Themes
+
+Most tokens are identical across both themes. Only these differ — set the correct value per mode:
+
+| Figma Variable name | Farco mode | White Label mode |
+|---|---|---|
+| `color/primary` | `#000000` | `#1677ff` |
+| `color/primary-hover` | `#1a1a1a` | `#4096ff` |
+| `color/primary-active` | `#333333` | `#0958d9` |
+| `color/accent` | `#c9f29f` | `#4096ff` |
+| `color/border` | `#000000` | `#d9d9d9` |
+
+All other tokens: set the same value on both `Farco` and `White Label` modes.
+
+---
+
+### Effect Styles — Shadow Format
+
+Parse each shadow CSS value into Figma's DROP_SHADOW format. Shadows are theme-invariant.
+
+| Style name | CSS value | Figma effect |
+|---|---|---|
+| `shadow/sm` | `0 1px 2px rgba(0,0,0,0.05)` | type: DROP_SHADOW, x: 0, y: 1, blur: 2, spread: 0, color: #000000, opacity: 0.05 |
+| `shadow/md` | `0 4px 8px rgba(0,0,0,0.10)` | type: DROP_SHADOW, x: 0, y: 4, blur: 8, spread: 0, color: #000000, opacity: 0.10 |
+| `shadow/lg` | `0 8px 24px rgba(0,0,0,0.12)` | type: DROP_SHADOW, x: 0, y: 8, blur: 24, spread: 0, color: #000000, opacity: 0.12 |
+
+---
+
+### Text Styles — Matrix
+
+Create one Text Style per meaningful size × weight combination used in the codebase. All use font family `Overused Grotesk`, line height `1.5` (`font/line-height-base`), and letter spacing `0.01em` (`font/letter-spacing-base`) unless noted. Text Styles are theme-invariant.
+
+| Style name | Font size | Font weight | Line height | Letter spacing |
+|---|---|---|---|---|
+| `text/xs-regular` | 12px | 400 | 1.5 | 0.01em |
+| `text/sm-regular` | 14px | 400 | 1.5 | 0.01em |
+| `text/sm-medium` | 14px | 500 | 1.5 | 0.01em |
+| `text/md-regular` | 16px | 400 | 1.5 | 0.01em |
+| `text/md-medium` | 16px | 500 | 1.5 | 0.01em |
+| `text/lg-regular` | 20px | 400 | 1.5 | 0.01em |
+| `text/xl-regular` | 24px | 400 | 1.5 | 0.01em |
+
+When creating or updating a Text Style, set all five properties: font family, size, weight, line height, and letter spacing. Never partially update a Text Style.
+
+---
+
+## 4. Figma Component Properties
+
+### Property type rules
+
+Every code prop maps to one of four Figma component property types:
+
+| Figma property type | Use when the code prop is... |
+|---|---|
+| `VARIANT` | An enum — a fixed set of named string options |
+| `BOOLEAN` | A `boolean` (`true` / `false`), or a function prop whose presence/absence toggles visible UI |
+| `TEXT` | A free `string` — user-supplied content like labels, placeholder text, or initials |
+| `TEXT` (hidden annotation) | An accessibility string prop (`alt`, `aria-label`, `title`, etc.) with no visual representation. Create a `TEXT` property bound to an **opacity-0 annotation layer** named after the prop in title case (e.g. `Alt`, `Aria Label`). The layer is a text node, `visibility: true` with **`opacity: 0`**, font `font/family-base`, size `font/size-sm`, color `color/neutral-60`. Use opacity 0, not `visibility: false` — Figma requires the layer to be in the visible layer tree to accept a component property binding. It appears in the properties panel and designers can author the value there; it is invisible on the canvas. |
+| `INSTANCE_SWAP` (required slot) | A `ReactNode` prop that always renders — no `undefined` default. Use a single `INSTANCE_SWAP` property. |
+| `BOOLEAN` + `INSTANCE_SWAP` (optional slot) | A `ReactNode` prop that defaults to `undefined` or `null` — the slot can be absent. Create two paired properties: `Has <SlotName>` (`BOOLEAN`, default `false`) to control layer visibility, and `<SlotName>` (`INSTANCE_SWAP`, default: a sensible first component) to control which instance fills the slot when visible. This mirrors the Storybook `None → pick component` dropdown exactly. |
+
+Properties are defined on the **component set** (the parent node that wraps all variant frames), not on individual frames. Each property must have a default value matching the code default.
+
+---
+
+### Button
+
+**Source:** `src/components/ui/button/button.jsx`
+
+| Figma property name | Property type | Options | Default |
+|---|---|---|---|
+| `Variant` | `VARIANT` | `primary`, `secondary`, `ghost` | `primary` |
+| `Intent` | `VARIANT` | `regular`, `danger` | `regular` |
+| `Size` | `VARIANT` | `sm`, `md`, `lg` | `md` |
+| `Disabled` | `BOOLEAN` | — | `false` |
+| `Loading` | `BOOLEAN` | — | `false` |
+| `Has Icon Left` | `BOOLEAN` | — | `false` |
+| `Icon Left` | `INSTANCE_SWAP` | — | `PlusOutlined` |
+| `Has Icon Right` | `BOOLEAN` | — | `false` |
+| `Icon Right` | `INSTANCE_SWAP` | — | `ArrowRightOutlined` |
+| `Label` | `TEXT` | — | `"Label"` |
+
+**Visual rules per boolean state:**
+- `Disabled = true` → apply `opacity/disabled` (0.4) to the entire component, set `pointer-events: none`
+- `Loading = true` → opacity 0.7, replace `Icon Left` slot with the spinner instance, hide `Icon Right`
+- `Disabled` and `Loading` are mutually exclusive — when `Loading = true`, `Disabled` is ignored
+- `Has Icon Left = false` → hide the `Icon Left` slot layer entirely; `Has Icon Left = true` → show it, defaulting to the `PlusOutlined` instance
+- `Has Icon Right = false` → hide the `Icon Right` slot layer entirely; `Has Icon Right = true` → show it, defaulting to the `ArrowRightOutlined` instance
+
+---
+
+### Badge
+
+**Source:** `src/components/ui/badge/badge.jsx`
+
+| Figma property name | Property type | Options | Default |
+|---|---|---|---|
+| `Variant` | `VARIANT` | `default`, `success`, `warning`, `danger`, `accent` | `default` |
+| `Size` | `VARIANT` | `sm`, `md` | `md` |
+| `Dismissible` | `BOOLEAN` | — | `false` |
+| `Label` | `TEXT` | — | `"Badge"` |
+
+**Visual rules per boolean state:**
+- `Dismissible = true` → show the × (CloseOutlined) button at the end of the badge
+- `Dismissible = false` → hide the × button layer entirely
+
+---
+
+### Avatar
+
+**Source:** `src/components/ui/avatar/avatar.jsx`
+
+| Figma property name | Property type | Options | Default |
+|---|---|---|---|
+| `Size` | `VARIANT` | `sm`, `md`, `lg`, `xl` | `md` |
+| `src` | `BOOLEAN` | — | `false` |
+| `Fallback` | `TEXT` | — | `"AB"` |
+| `alt` | `TEXT` | — | `""` |
+
+**Visual rules per boolean state:**
+- `src = false` → hide `Image` layer; show `Fallback` layer (initials)
+- `src = true` → show `Image` layer; hide `Skeleton` and `Fallback` layers
+
+**Image layer setup (required regardless of boolean state):**
+Before wiring the `src` boolean, the `Image` layer must have its fill set first:
+1. Call the Figma MCP image upload API with the local path `public/avatar-default.png` to receive an **image hash**
+2. Apply the fill on the `Image` layer: `{ type: IMAGE, imageRef: <hash>, scaleMode: FILL }` — do not use the file path as the fill value
+3. Only after the fill is applied, set the layer's visibility to `false` (matching `src` default of `false`)
+4. Wire the `src` boolean to the layer's visibility
+
+This order is mandatory — wiring visibility before setting the fill leaves the layer in a broken state where toggling the boolean reveals an empty layer.
+
+**Notes:**
+- `src` is the visibility toggle — Figma cannot conditionally show a layer based on whether a string is empty, so the boolean is the correct driver
+- `Fallback` drives the text content of the `Fallback` layer (initials) and is only visible when `src = false`
+- `alt` is an accessibility annotation — it is bound to the `Alt` text layer (see §2 layer structure). The layer is visible but opacity 0, so it appears in the properties panel but is invisible on the canvas.
+
+---
+
+### Card
+
+Card is a compound layout component. Figma properties are defined on each sub-component separately, not on the root Card.
+
+| Sub-component | Figma property name | Property type | Default |
+|---|---|---|---|
+| `Card.Header` | `Header` | `TEXT` | `"Card Header"` |
+| `Card.Body` | `Body` | `TEXT` | `"Card body content"` |
+| `Card.Footer` | `Footer` | `TEXT` | `"Card Footer"` |
+
+---
+
+### Input
+
+**Source:** `src/components/ui/input/input.jsx`
+
+| Figma property name | Property type | Options | Default |
+|---|---|---|---|
+| `Disabled` | `BOOLEAN` | — | `false` |
+| `Has Error` | `BOOLEAN` | — | `false` |
+| `Label` | `TEXT` | — | `"Label"` |
+| `Placeholder` | `TEXT` | — | `"Placeholder"` |
+| `Helper Text` | `TEXT` | — | `""` |
+| `Error Text` | `TEXT` | — | `"Error message"` |
+
+**Visual rules per boolean state:**
+- `Disabled = true` → apply `opacity/disabled` (0.4) to the entire component; input background switches to `color/neutral-10`; label and helper text also dimmed
+- `Has Error = true` → border switches to `color/danger`; `Error Text` layer is shown in place of `Helper Text`; `Has Error = false` → show `Helper Text` layer instead
+- `Disabled` takes visual precedence over `Has Error` — a disabled+error input shows the disabled appearance
+
+---
+
+### Toast
+
+**Source:** `src/components/ui/toast/toast.jsx`
+
+| Figma property name | Property type | Options | Default |
+|---|---|---|---|
+| `Variant` | `VARIANT` | `default`, `success`, `warning`, `danger` | `default` |
+| `Title` | `TEXT` | — | `"Toast title"` |
+| `Description` | `TEXT` | — | `""` |
+
+**Notes:**
+- When `Variant = default`, the icon layer is hidden (no icon for the default variant)
+- When `Variant` is `success`, `warning`, or `danger`, show the corresponding icon layer (CheckCircleOutlined, WarningOutlined, XCircleOutlined respectively)
+- `Description` being empty should hide the description text layer in the Figma component
+
+---
+
+## 5. Icons
+
+### Overview
+
+**Source folder:** `src/components/ui/icons/`
+**Figma page:** `Icons`
+**Files to sync:** one Figma component per `.jsx` file — ignore `index.js` and `*.stories.jsx`
+
+**6 icon components:**
+1. `ArrowRightOutlined`
+2. `CheckCircleOutlined`
+3. `CloseOutlined`
+4. `PlusOutlined`
+5. `WarningOutlined`
+6. `XCircleOutlined`
+
+---
+
+### Canvas and constraint rules
+
+- Each icon is a **14×14 Figma component** (matching the default `width`/`height` in the SVG source)
+- Set **constraints to Scale** on both horizontal and vertical axes on the root frame — this allows the icon to resize proportionally when used inside other components
+- Arrange all 6 components in a **single row** on the `Icons` page, spaced 40px apart, labeled by component name below each frame
+- All SVG path/stroke/fill layers must have their color bound to the `DS-Lab Tokens` Variable **`color/neutral-100`** as the default — consuming components override this at the instance level
+
+---
+
+### SVG layer breakdown per icon
+
+Each icon's root frame contains one or more vector layers translated from the SVG paths. Map each SVG child element to a Figma vector node, preserving stroke/fill attributes.
+
+#### ArrowRightOutlined
+
+| Layer name | Type | Attribute |
+|---|---|---|
+| `Arrow` | Vector (fillRule: evenodd) | fill: `color/neutral-100` |
+| `Clip` | Clip mask rectangle 14×14 | — |
+
+SVG path: `fillRule="evenodd"` filled arrow. The `<clipPath>` becomes a clip mask on the root frame.
+
+#### CheckCircleOutlined
+
+| Layer name | Type | Attribute |
+|---|---|---|
+| `Circle` | Ellipse | stroke: `color/neutral-100`, strokeWidth: 1.2, opacity: 0.5 |
+| `Check` | Vector | stroke: `color/neutral-100`, strokeWidth: 1.2, lineCap: round, lineJoin: round |
+
+#### CloseOutlined
+
+| Layer name | Type | Attribute |
+|---|---|---|
+| `Cross` | Vector (two diagonal lines as one path) | stroke: `color/neutral-100`, strokeWidth: 1.2, lineCap: round |
+
+#### PlusOutlined
+
+| Layer name | Type | Attribute |
+|---|---|---|
+| `Plus` | Vector (vertical + horizontal lines as one path) | stroke: `color/neutral-100`, strokeWidth: 1.2, lineCap: round |
+
+#### WarningOutlined
+
+| Layer name | Type | Attribute |
+|---|---|---|
+| `Triangle` | Vector | stroke: `color/neutral-100`, strokeWidth: 1.2, lineJoin: round, opacity: 0.5 |
+| `Stem` | Vector | stroke: `color/neutral-100`, strokeWidth: 1.2, lineCap: round |
+| `Dot` | Ellipse (cx: 7, cy: 10.3, r: 0.65) | fill: `color/neutral-100` |
+
+#### XCircleOutlined
+
+| Layer name | Type | Attribute |
+|---|---|---|
+| `Circle` | Ellipse | stroke: `color/neutral-100`, strokeWidth: 1.2, opacity: 0.5 |
+| `Cross` | Vector (two diagonal lines as one path) | stroke: `color/neutral-100`, strokeWidth: 1.2, lineCap: round |
+
+---
+
+### Nested instances in consuming components
+
+When a UI component uses an icon as a child, that icon slot must be represented as a **nested instance** of the Figma icon component — not a raw vector copy. Use the node IDs from `FIGMA_RULES.md` §8 to reference the correct component.
+
+After placing the instance, **override the fill/stroke Variable on the instance's vector layers** to match the color that component uses for that icon. Do not leave the instance using the icon's default `color/neutral-100` — override it at the instance level using the Variable listed below.
+
+| Consuming component | Icon used | Where | Fill Variable override |
+|---|---|---|---|
+| `Button` (primary, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/neutral-0` |
+| `Button` (primary, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/neutral-0` |
+| `Button` (secondary, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/neutral-100` |
+| `Button` (secondary, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/danger` |
+| `Button` (ghost, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/neutral-100` |
+| `Button` (ghost, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/danger` |
+| `Badge` | `CloseOutlined` | dismiss × button layer | same Variable as the badge's text color for that variant (see §2 Badge color matrix) |
+| `Toast` (success) | `CheckCircleOutlined` | icon layer | `color/success` |
+| `Toast` (warning) | `WarningOutlined` | icon layer | `color/warning` |
+| `Toast` (danger) | `XCircleOutlined` | icon layer | `color/danger` |
+
+After creating or updating icon components, verify that each of the above consuming components has the icon slot wired to a live instance (not a detached vector) and that the fill Variable override is correctly set on the instance. If the slot is a raw vector, replace it with an instance and apply the override.

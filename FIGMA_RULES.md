@@ -308,7 +308,8 @@ Built on `@radix-ui/react-toast`. Toast items stack from the bottom-right corner
 
 ## 5. Icon System
 
-**Location:** `src/components/Icons/`
+**Location:** `src/components/ui/icons/`
+**Figma page:** `Icons`
 
 **Available icons:**
 - `ArrowRightOutlined`
@@ -318,9 +319,15 @@ Built on `@radix-ui/react-toast`. Toast items stack from the bottom-right corner
 - `WarningOutlined`
 - `XCircleOutlined`
 
+**Figma component rules:**
+- One Figma component per `.jsx` file — 14×14 frame, named after the icon
+- Constraints set to **Scale** on both axes so the component resizes proportionally when used inside other components
+- All stroke/fill layers bound to `DS-Lab Tokens` Variable `color/neutral-100` by default; consuming components override color at the instance level
+- When a UI component uses an icon as a child (Button icon slots, Badge dismiss ×, Toast status icons), the icon slot must be a **nested instance** of the Figma icon component — not a raw vector copy
+
 **Usage:**
 ```jsx
-import { PlusOutlined } from '../components/Icons'
+import { PlusOutlined } from '../components/ui/icons'
 <PlusOutlined width={16} height={16} />
 ```
 
@@ -378,5 +385,11 @@ The design file is: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-
 | Card | `6:4` | `10:2` | COMPONENT |
 | Input | `6:5` | `11:27` | COMPONENT_SET |
 | Toast | `6:6` | `12:25` | COMPONENT_SET |
+| Icons / ArrowRightOutlined | `43:2` | `43:9` | COMPONENT |
+| Icons / CheckCircleOutlined | `43:2` | `43:14` | COMPONENT |
+| Icons / CloseOutlined | `43:2` | `43:18` | COMPONENT |
+| Icons / PlusOutlined | `43:2` | `43:22` | COMPONENT |
+| Icons / WarningOutlined | `43:2` | `43:28` | COMPONENT |
+| Icons / XCircleOutlined | `43:2` | `43:33` | COMPONENT |
 
 To get design context for a specific component, open the Figma file in the Figma Desktop app, select the component frame, then call `get_design_context` (the node ID will be in the selection).

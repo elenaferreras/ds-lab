@@ -1,5 +1,5 @@
 import { cn } from '../../../lib/cn'
-import { CloseOutlined } from '../../Icons'
+import { CloseOutlined } from '../icons'
 
 const VARIANTS = /** @type {const} */ (['default', 'success', 'warning', 'danger', 'accent'])
 const SIZES = /** @type {const} */ (['sm', 'md'])
