@@ -1,24 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { ConfigProvider } from 'antd'
+import React, { useEffect } from 'react'
 import '../src/styles/global.css'
-import { getAntdTheme, switchTheme } from '../src/tokens/tokens.js'
+import { switchTheme } from '../src/tokens/tokens.js'
+import theme from './theme'
 
 function ThemeDecorator({ themeName, children }) {
-  const [antdTokens, setAntdTokens] = useState(getAntdTheme())
-
   useEffect(() => {
     switchTheme(themeName)
-    // Re-read tokens after the class is applied so getComputedStyle picks up the new values
-    requestAnimationFrame(() => {
-      setAntdTokens(getAntdTheme())
-    })
   }, [themeName])
 
-  return (
-    <ConfigProvider theme={{ token: antdTokens }}>
-      {children}
-    </ConfigProvider>
-  )
+  return children
 }
 
 export default {
@@ -32,7 +22,11 @@ export default {
 
     a11y: {
       test: "todo"
-    }
+    },
+
+    docs: {
+      theme,
+    },
   },
 
   globalTypes: {

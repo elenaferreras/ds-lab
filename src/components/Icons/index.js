@@ -1,1 +1,0 @@
-export { ArrowRightOutlined } from './ArrowRightOutlined';

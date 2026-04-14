@@ -1,0 +1,164 @@
+<!--
+  Storybook UI CSS overrides — inspired by farcostudio.com
+  Uses design token values from src/tokens/themes/farco.css
+  (CSS custom properties are not available here; values are inlined from tokens)
+
+  Token reference:
+    --farco-color-primary:       #000000
+    --farco-color-accent:        #c9f29f
+    --farco-color-bg-base:       #ffffff
+    --farco-color-bg-subtle:     #f5f5f5
+    --farco-color-neutral-20:    #e8e8e8
+    --farco-color-neutral-30:    #d9d9d9
+    --farco-color-neutral-50:    #8c8c8c
+    --farco-color-neutral-60:    #595959
+    --farco-color-neutral-100:   #000000
+    --farco-font-family-base:    'Overused Grotesk', sans-serif
+    --farco-font-size-xs:        12px
+    --farco-font-size-sm:        14px
+    --farco-radius-none:         0
+    --farco-radius-sm:           4px
+    --farco-spacing-1:           4px
+    --farco-spacing-2:           8px
+    --farco-spacing-3:           12px
+    --farco-spacing-4:           16px
+-->
+<style>
+  /* ─── Global font injection (font file is loaded via @font-face src only) ─── */
+  @font-face {
+    font-family: 'Overused Grotesk';
+    src: url('/fonts/OverusedGrotesk-VF.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* ─── Brand logo — size + vertical rhythm ───────────────────────────────── */
+  /* The brandImage is served as an <img>; constrain it like the Farco navbar  */
+  .sidebar-header img {
+    height: 18px !important;
+    width: auto !important;
+    display: block;
+  }
+
+  /* ─── Sidebar ────────────────────────────────────────────────────────────── */
+  /* Remove all rounded corners from the sidebar nav items — flat like Farco   */
+  .sidebar-item,
+  .sidebar-item button,
+  [data-nodetype="story"] a,
+  [data-nodetype="component"] button,
+  [data-nodetype="group"] button {
+    border-radius: 0 !important;
+  }
+
+  /* Selected story: lime-green left accent bar (Farco CTA hover colour)       */
+  [data-selected="true"],
+  [aria-selected="true"] {
+    background-color: #f5f5f5 !important; /* --farco-color-bg-subtle */
+    color: #000000 !important;
+  }
+
+  [data-selected="true"]::before,
+  [aria-selected="true"]::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: #c9f29f; /* --farco-color-accent */
+    border-radius: 0;
+  }
+
+  /* Sidebar items: position:relative so the ::before accent bar anchors       */
+  [data-nodetype="story"] a,
+  [data-nodetype="component"] button {
+    position: relative !important;
+  }
+
+  /* Hover state — same flat treatment as Farco nav hover                      */
+  [data-nodetype="story"] a:hover,
+  [data-nodetype="component"] button:hover {
+    background-color: #e8e8e8 !important; /* --farco-color-neutral-20 */
+    color: #000000 !important;
+  }
+
+  /* ─── Toolbar ────────────────────────────────────────────────────────────── */
+  /* Bottom border on the toolbar instead of a box shadow — clean rule         */
+  .os-host > div[class*="Toolbar"] {
+    border-bottom: 1px solid #e8e8e8 !important; /* --farco-color-neutral-20 */
+    box-shadow: none !important;
+  }
+
+  /* Active toolbar button: lime-green underline accent                        */
+  button[aria-pressed="true"],
+  button[data-active="true"] {
+    color: #000000 !important;
+    background: transparent !important;
+    box-shadow: inset 0 -2px 0 #c9f29f !important; /* --farco-color-accent */
+    border-radius: 0 !important;
+  }
+
+  /* All toolbar buttons: flat, no rounding                                    */
+  .toolbarButton,
+  [class*="toolbarButton"],
+  [class*="IconButton"] {
+    border-radius: 0 !important;
+  }
+
+  /* ─── Sidebar top header ─────────────────────────────────────────────────── */
+  /* Match the Farco navbar's clean, undecorated header strip                  */
+  .sidebar-header,
+  [class*="SidebarHeader"] {
+    border-bottom: 1px solid #e8e8e8; /* --farco-color-neutral-20 */
+    padding: 16px !important;         /* --farco-spacing-4 */
+  }
+
+  /* ─── Search input ───────────────────────────────────────────────────────── */
+  [class*="search"] input,
+  [placeholder*="Find"],
+  [placeholder*="Search"] {
+    border-radius: 4px !important; /* --farco-radius-sm */
+    border: 1px solid #d9d9d9 !important; /* --farco-color-neutral-30 */
+    font-size: 14px !important; /* --farco-font-size-sm */
+  }
+
+  [class*="search"] input:focus,
+  [placeholder*="Find"]:focus {
+    border-color: #000000 !important; /* --farco-color-primary */
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ─── Panel / addon tabs ─────────────────────────────────────────────────── */
+  /* Flat tab with lime underline for active — mirrors Farco's link style      */
+  [role="tab"][aria-selected="true"] {
+    color: #000000 !important;
+    border-bottom: 2px solid #c9f29f !important; /* --farco-color-accent */
+    background: transparent !important;
+    border-radius: 0 !important;
+  }
+
+  [role="tab"] {
+    border-radius: 0 !important;
+    font-size: 12px !important; /* --farco-font-size-xs */
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Scrollbars — minimal, neutral ─────────────────────────────────────── */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d9d9d9; /* --farco-color-neutral-30 */
+    border-radius: 0;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8c8c8c; /* --farco-color-neutral-50 */
+  }
+</style>
