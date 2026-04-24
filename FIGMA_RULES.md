@@ -391,5 +391,11 @@ The design file is: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-
 | Icons / PlusOutlined | `43:2` | `43:22` | COMPONENT |
 | Icons / WarningOutlined | `43:2` | `43:28` | COMPONENT |
 | Icons / XCircleOutlined | `43:2` | `43:33` | COMPONENT |
+| Button / Documentation | `0:1` | `172:116` | FRAME |
+| Badge / Documentation | `6:2` | `172:205` | FRAME |
+| Avatar / Documentation | `6:3` | `172:290` | FRAME |
+| Card / Documentation | `6:4` | `172:365` | FRAME |
+| Input / Documentation | `6:5` | `172:431` | FRAME |
+| Toast / Documentation | `6:6` | `172:525` | FRAME |
 
 To get design context for a specific component, open the Figma file in the Figma Desktop app, select the component frame, then call `get_design_context` (the node ID will be in the selection).

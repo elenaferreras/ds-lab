@@ -42,9 +42,9 @@ Tokens must be fully synced before components are touched — component layers w
 
 1. List all folder names inside `src/components/ui/`. Call the Figma MCP to enumerate all pages in DS-Lab-Components.
 2. For each component folder, check whether a page with a matching name (PascalCase) exists in Figma:
-   - Folder is `icons` → **Workflow I** (regardless of whether an `Icons` page exists — Workflow I handles both create and update)
-   - Page exists → **Workflow A**
-   - No page found → **Workflow B**
+   - Folder is `icons` → **Workflow I** (regardless of whether an `Icons` page exists — Workflow I handles both create and update). Do **not** run Workflow D for the Icons page.
+   - Page exists → **Workflow A**, then immediately **Workflow D**
+   - No page found → **Workflow B**, then immediately **Workflow D**
 3. Report which components go to which workflow, then execute them.
 
 ### Phase 3 — Page order (runs after all component workflows are complete)
@@ -282,7 +282,97 @@ List the new page URL, its node ID, and all frames created. Flag any MCP call th
 
 ---
 
-## Rules and constraints
+## Workflow D — Add or update Documentation frame on a component page
+
+Run this after Workflow A or Workflow B completes for a component. Skip for the `Icons` page.
+
+Refer to `references/COMPONENT_SPECS.md` §6 for the full layout spec, sub-section definitions, typography, placeholder strings, and auto-generated content format. The canonical reference mockup lives at Figma node `134:2082`.
+
+The Documentation frame's children, in order, are: `summary` → the component set itself (relocated into the frame) → `Variants` → `Props` → `Do / Don't` → `Content guidelines` → `Accessibility`.
+
+### D0. Locate the Documentation frame and detect legacy layout
+
+- Call `get_design_context` on the component's page to find all top-level frames
+- Check whether a **frame named `Documentation`** already exists on the page:
+  - **Exists and already matches the current spec** (contains a `summary` child with a `text/display-lg` title + `Overview` subframe, and the component set is a child of this frame) → proceed to D1
+  - **Exists but uses the legacy layout** (standalone `Overview` sub-section, no `summary` wrapper, or the component set still lives as a sibling above the frame rather than inside it) → treat as a **first-run migration**: delete the legacy `Documentation` frame entirely, then build a fresh one per D3/D4/D5. Preserve the component-set node so its node ID stays stable (do not delete `3:38`, `7:22`, `8:14`, `10:2`, `11:27`, `12:25`, etc.) — it will be reparented into the new frame in D5.
+  - **Does not exist** → skip to D3 (create from scratch)
+
+> `Documentation` is a regular autolayout frame, not a Figma Section. If a Figma Section named `Documentation` exists from a previous run, treat it as legacy and replace it with an autolayout frame per the migration path above.
+
+### D1. Audit existing children
+
+For a `Documentation` frame that already matches the current spec, enumerate its children to determine which are present. For each child found:
+
+- **`summary`, `Variants`, or `Props`** → auto-generated. Proceed to D2 to check whether the content needs updating.
+- **The component set** (e.g. `8:14` for Avatar, looked up via `FIGMA_RULES.md` §8) → verify it is a child of the Documentation frame at the correct autolayout index (immediately after `summary`). If it sits outside the frame or at the wrong index, queue a reparent operation for D5.
+- **`Do / Don't`, `Content guidelines`, or `Accessibility`** → human-authored. Mark as "do not touch" for this run. Do not read, compare, rewrite, or reorder them under any circumstances.
+- **Sub-section absent** → note it as missing; it will be created in D3/D4.
+
+### D2. Update auto-generated children if content changed
+
+For each auto-generated child that already exists (`summary`, `Variants`, `Props`):
+
+- **`summary`:** compare the Title text layer's content against the component's PascalCase name. Compare the Overview body against the description in `COMPONENT_SPECS.md` §2. If both match → skip. If either differs → rewrite only the mismatched layer's content, keeping the Text Style binding intact.
+- **`Variants`:** compare the Figma Table's Background rows against the §2 Variants table for this component. If rows and content match exactly → skip. If they differ → rewrite the Background rows to match §2 (preserve the Header row; only touch data rows).
+- **`Props`:** compare the Figma Table's Background rows against the §4 property table for this component. If they match → skip. If they differ → rewrite the Background rows to match §4.
+
+Only update the specific child that changed. Do not recreate the entire Documentation frame.
+
+### D3. Create missing auto-generated children
+
+For each auto-generated child that is missing from the Documentation frame (or when creating the frame from scratch). All layer fills, strokes, paddings, radii, and text colours must be bound to the matching `DS-Lab Tokens` Variable; all text layers must be bound to the named Text Style. No raw hex or pixel values.
+
+1. **`summary`:** vertical autolayout frame, gap 48, width 1128. Children:
+   - **Title** text layer — Text Style `text/display-lg`, colour `color/neutral-100`, content = component PascalCase name.
+   - **Overview** vertical autolayout frame — gap 16, width 480. Children: an `Overview` heading (Text Style `text/md-medium`, colour `color/neutral-100`) and a body text layer (Text Style `text/md-regular`, colour `color/neutral-100`, content = §2 description, width fill).
+2. **`Variants`:** vertical autolayout frame, gap 16, width 1128. Children:
+   - Heading text `Variants` — Text Style `text/xl-regular`, colour `color/neutral-100`.
+   - `Table` frame — vertical autolayout, gap 0, width fill. One `Header` row (fill `color/neutral-10`, padding 32/16, gap 40; cells Text Style `text/md-medium`, colour `color/neutral-100`; `Name` column fixed 320, `Purpose` column fill) followed by one `Background` row per variant (fill `color/neutral-0`, border-bottom 1px `color/neutral-40`, corner radius 4, padding 32/16, gap 40; inner `div` wrappers; cells Text Style `text/md-regular`, colour `color/neutral-100`). Populate rows from the §2 Variants table.
+3. **`Props`:** same structure as `Variants` but with three columns. Header cells `Name` (fixed 320), `Type` (fill), `Default` (fill). Populate Background rows from the §4 property table — use `Figma property name` as Name, `Property type` as Type, `Default` as Default. Name the header text layers exactly `Name`, `Type`, `Default` (the reference mockup has them mis-named `Purpose`; do not replicate that).
+
+Verify the `text/display-lg` Text Style exists in the file before creating `summary`. If missing, create it per the §3 Text Style matrix (Overused Grotesk, 700, 56px, line height 80px, letter spacing -2.24px) before the Title layer is bound to it.
+
+### D4. Scaffold missing human-authored cards
+
+For each human-authored card that does not yet exist (`Do / Don't`, `Content guidelines`, `Accessibility`). All three share the same card style — see `COMPONENT_SPECS.md` §6.
+
+- Each card: vertical autolayout, gap 12, padding 24, fill `color/bg-subtle`, corner radius `radius/lg`. Label text layer uses Text Style `text/sm-medium` + colour `color/neutral-100`; body uses `text/sm-regular` + colour `color/neutral-40`.
+- **`Do / Don't`:** a horizontal autolayout wrapper (gap 24, width 1128) containing two fixed-width-552 cards named `Do` and `Don't`.
+- **`Content guidelines`:** single card, width fill (1128).
+- **`Accessibility`:** single card, width fill (1128).
+- Use the exact placeholder strings from §6.
+- **This is the only time the skill touches these children.** If they already exist — even with unchanged placeholder text — do not recreate, reorder, or modify them.
+
+### D5. Assemble, reparent the component set, and position the Documentation frame
+
+- If creating the Documentation frame from scratch (or after a legacy-layout migration in D0): create it as a **vertical autolayout frame** (`layout: VERTICAL`, `itemSpacing: 48`, `paddingTop/Right/Bottom/Left: 48`, content width 1128). Position it below the component grid on the page (120px gap). Do not create a Figma Section.
+- **Append children in this exact order:** `summary` → the component set (see below) → `Variants` → `Props` → `Do / Don't` → `Content guidelines` → `Accessibility`.
+- **Reparent the component set** (e.g. `8:14`, `3:38`) from its page-level position into the Documentation frame at autolayout index 1 (between `summary` and `Variants`). Use the Figma MCP's reparent/move API — do **not** clone the component set or create an instance of it. The node ID must stay stable so all existing instances elsewhere in the file continue to resolve.
+- When adding only missing children to an existing compliant Documentation frame: append them at the correct autolayout index — autolayout handles vertical spacing automatically. Do not reorder children that already exist.
+
+### D6. Record the Documentation frame node ID
+
+After creating or first locating the Documentation frame:
+1. Call `get_design_context` to retrieve its node ID if not already known.
+2. Add or update a row in `FIGMA_RULES.md` §8:
+
+```markdown
+| <ComponentName> / Documentation | `<node-id>` |
+```
+
+If a legacy Documentation frame was deleted during migration in D0, remove its stale node ID from §8 before writing the new one.
+
+### D7. Report
+
+For each component Workflow D ran on, list:
+- Whether a legacy-layout migration was performed (old frame deleted, new frame built) or the existing frame was updated in place.
+- Which children were created, updated, or skipped — and why (content match, human-authored, newly created, or already compliant).
+- Whether the component set was reparented into the Documentation frame (and from where).
+- The node ID recorded for the Documentation frame.
+- Any MCP call that failed with the exact node ID and error — do not skip failures silently.
+
+---
 
 - **Work with Variable bindings, not raw values** — component layer properties must be bound to `DS-Lab Tokens` Variables. The only exception is `color-mix()` derived fills, which must be flagged in the report.
 - **Never modify nodes outside DS-Lab-Components** — do not touch any other Figma file.
