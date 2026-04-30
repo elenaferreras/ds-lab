@@ -15,9 +15,9 @@
 
 body {
   margin: 0;
-  font-family: var(--farco-font-family-base);
-  color: var(--farco-color-neutral-100);
-  background-color: var(--farco-color-bg-base);
+  font-family: var(--ds-font-family-base);
+  color: var(--ds-color-text-primary);
+  background-color: var(--ds-color-surface-background-page);
 }
 
 @keyframes spin {

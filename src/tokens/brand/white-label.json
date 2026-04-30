@@ -1,0 +1,43 @@
+{
+  "brand": {
+    "white-label": {
+      "font-family": {
+        "base": { "$value": "Inter, system-ui, sans-serif", "$type": "fontFamily" }
+      },
+      "font-size": {
+        "xs": { "$value": "12px", "$type": "dimension" },
+        "sm": { "$value": "14px", "$type": "dimension" },
+        "md": { "$value": "16px", "$type": "dimension" },
+        "lg": { "$value": "20px", "$type": "dimension" },
+        "xl": { "$value": "24px", "$type": "dimension" }
+      },
+      "font-weight": {
+        "regular": { "$value": 400, "$type": "number" },
+        "medium":  { "$value": 500, "$type": "number" },
+        "bold":    { "$value": 700, "$type": "number" }
+      },
+      "line-height": {
+        "tight":   { "$value": 1.2,  "$type": "number" },
+        "base":    { "$value": 1.5,  "$type": "number" },
+        "relaxed": { "$value": 1.75, "$type": "number" }
+      },
+      "letter-spacing": {
+        "tight": { "$value": "-0.01em", "$type": "string" },
+        "base":  { "$value": "0em",     "$type": "string" }
+      },
+      "radius": {
+        "none": { "$value": "0px",   "$type": "dimension" },
+        "sm":   { "$value": "4px",   "$type": "dimension" },
+        "md":   { "$value": "8px",   "$type": "dimension" },
+        "lg":   { "$value": "12px",  "$type": "dimension" },
+        "xl":   { "$value": "16px",  "$type": "dimension" },
+        "full": { "$value": "9999px","$type": "dimension" }
+      },
+      "shadow": {
+        "sm": { "$value": "0 1px 3px rgba(0,0,0,0.08)",  "$type": "shadow" },
+        "md": { "$value": "0 4px 12px rgba(0,0,0,0.12)", "$type": "shadow" },
+        "lg": { "$value": "0 8px 28px rgba(0,0,0,0.14)", "$type": "shadow" }
+      }
+    }
+  }
+}

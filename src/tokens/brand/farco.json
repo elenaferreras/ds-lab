@@ -1,0 +1,43 @@
+{
+  "brand": {
+    "farco": {
+      "font-family": {
+        "base": { "$value": "'Overused Grotesk', sans-serif", "$type": "fontFamily" }
+      },
+      "font-size": {
+        "xs": { "$value": "12px", "$type": "dimension" },
+        "sm": { "$value": "14px", "$type": "dimension" },
+        "md": { "$value": "16px", "$type": "dimension" },
+        "lg": { "$value": "20px", "$type": "dimension" },
+        "xl": { "$value": "24px", "$type": "dimension" }
+      },
+      "font-weight": {
+        "regular": { "$value": 400, "$type": "number" },
+        "medium":  { "$value": 500, "$type": "number" },
+        "bold":    { "$value": 700, "$type": "number" }
+      },
+      "line-height": {
+        "tight":   { "$value": 1.2,  "$type": "number" },
+        "base":    { "$value": 1.5,  "$type": "number" },
+        "relaxed": { "$value": 1.75, "$type": "number" }
+      },
+      "letter-spacing": {
+        "tight": { "$value": "-0.01em", "$type": "string" },
+        "base":  { "$value": "0.01em",  "$type": "string" }
+      },
+      "radius": {
+        "none": { "$value": "0px",    "$type": "dimension" },
+        "sm":   { "$value": "4px",    "$type": "dimension" },
+        "md":   { "$value": "6px",    "$type": "dimension" },
+        "lg":   { "$value": "8px",    "$type": "dimension" },
+        "xl":   { "$value": "12px",   "$type": "dimension" },
+        "full": { "$value": "9999px", "$type": "dimension" }
+      },
+      "shadow": {
+        "sm": { "$value": "0 1px 2px rgba(0,0,0,0.05)",  "$type": "shadow" },
+        "md": { "$value": "0 4px 8px rgba(0,0,0,0.10)",  "$type": "shadow" },
+        "lg": { "$value": "0 8px 24px rgba(0,0,0,0.12)", "$type": "shadow" }
+      }
+    }
+  }
+}

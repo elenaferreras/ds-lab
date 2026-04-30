@@ -18,7 +18,9 @@ Keeps the DS-Lab Figma file in sync with the codebase. Handles three scenarios:
 
 - Figma Desktop app must be running with the local MCP server active at `http://127.0.0.1:3845/mcp`
 - Figma file: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-Components`
-- Token source of truth: `src/tokens/themes/farco.css` (Farco theme) and `src/tokens/themes/white-label.css` (White Label theme)
+- Token source of truth: `src/tokens/primitives/`, `src/tokens/brand/`, `src/tokens/mode/` — JSON files following the W3C Design Tokens spec
+- Generated CSS (do not edit manually): `src/tokens/themes/farco.css` and `src/tokens/themes/white-label.css` — built by running `npm run build:tokens`
+- Token prefix: `--ds-*` (all tokens, no exceptions)
 - Component implementations: `src/components/ui/<name>/<name>.jsx`
 - Node ID registry: `FIGMA_RULES.md` §8
 
@@ -32,7 +34,7 @@ Execute in strict order. Do not begin Phase 2 until Phase 1 is fully complete.
 
 ### Phase 1 — Tokens (must finish first)
 
-1. Read `src/tokens/themes/farco.css` and `src/tokens/themes/white-label.css`. Compare every `--farco-*` token against the `DS-Lab Tokens` Variable collection in Figma, and against existing Effect Styles and Text Styles.
+1. Read `src/tokens/themes/farco.css` and `src/tokens/themes/white-label.css`. Compare every `--ds-*` token against the Figma Variable collections (`Brand` and `Mode`), and against existing Effect Styles and Text Styles.
 2. If any token is new or has a changed value → **run Workflow T to completion now**, before proceeding.
 3. Once Workflow T is done (or if no token changes were found), move to Phase 2.
 
@@ -65,33 +67,52 @@ Run both phases even if the user specifies a single component or token — other
 
 Refer to `references/COMPONENT_SPECS.md` §3 for the full token → Figma destination table, Variable types, mode matrix, shadow effect format, and text style matrix.
 
-### T0. Locate or create the Variable collection
+### T0. Locate or create the Variable collections
 
-- Call the Figma MCP to check if a Variable collection named `DS-Lab Tokens` exists in the file
-- If it does not exist → create it with two modes: `Farco` and `White Label`
+The token system uses **two separate Figma Variable collections**:
+
+- **`Brand`** — tokens that differ between Farco and White Label (typography, radius, shadow). Two modes: `Farco` and `White Label`.
+- **`Mode`** — semantic color tokens and opacity that differ between light and dark. Two modes: `Light` and `Dark`.
+
+For each collection:
+- Call the Figma MCP to check if it exists in DS-Lab-Components
+- If it does not exist → create it with the two modes listed above
 - If it exists but is missing a mode → add the missing mode before proceeding
 
 ### T1. Parse both theme files
 
-- Read `src/tokens/themes/farco.css` → extract all `--farco-*` name/value pairs
-- Read `src/tokens/themes/white-label.css` → extract all `--farco-*` name/value pairs
-- For each token, build a record: `{ name, farcoValue, whiteLabelValue, sameAcrossThemes: bool }`
+- Read `src/tokens/themes/farco.css` → extract all `--ds-*` name/value pairs
+- Read `src/tokens/themes/white-label.css` → extract all `--ds-*` name/value pairs
+- The generated CSS uses these selectors:
+  - `[data-brand="farco"]` — Farco light mode values
+  - `[data-brand="farco"][data-mode="dark"]` — Farco dark mode overrides
+  - `[data-brand="white-label"]` — White Label light mode values
+  - `[data-brand="white-label"][data-mode="dark"]` — White Label dark mode overrides
+- For each token, build a record: `{ name, farcoLight, farcodark, whiteLabelLight, whiteLabelDark }`
 
 ### T2. Sync Variables (colors, spacing, radius, opacity, font numerics)
 
-For each token that maps to a Figma Variable (see §3 of the reference for which tokens map to `COLOR` vs `FLOAT`):
+**`Brand` collection** — tokens that vary by brand but not by mode (typography, radius, shadow numerics):
+- Token names: `--ds-font-*`, `--ds-line-height-*`, `--ds-letter-spacing-*`, `--ds-radius-*`, `--ds-shadow-*`
+- Derive the Figma Variable name using `category/token-name` (e.g. `font/size-sm`, `radius/md`)
+- Set `Farco` mode value from farco.css `[data-brand="farco"]` block
+- Set `White Label` mode value from white-label.css `[data-brand="white-label"]` block
 
-- Derive the Figma Variable name using the `category/token-name` convention (e.g. `color/primary`, `spacing/4`, `radius/md`, `opacity/disabled`, `font/size-sm`)
-- Check if the Variable already exists in `DS-Lab Tokens`:
-  - **Exists, both mode values match** → skip
-  - **Exists, one or both mode values differ** → update only the changed mode value(s)
-  - **Does not exist** → create the Variable with the correct type, set values for both `Farco` and `White Label` modes
-- For tokens that are identical across both themes, set the same value on both modes
-- For tokens that differ (primarily `color/primary`, `color/primary-hover`, `color/primary-active`, `color/accent`, `color/border`), set the Farco value on the `Farco` mode and the White Label value on the `White Label` mode
+**`Mode` collection** — semantic color tokens and opacity that vary by light/dark mode:
+- Token names: `--ds-color-*`, `--ds-opacity-*`
+- Derive the Figma Variable name using `category/token-name` (e.g. `color/action-background-primary`, `opacity/disabled`)
+- Set `Light` mode value from the `[data-brand="farco"]` block (use Farco as canonical light reference)
+- Set `Dark` mode value from the `[data-brand="farco"][data-mode="dark"]` block
+- Note: White Label values are in a separate file for reference — the `Mode` collection uses Farco's color scale. If White Label has meaningfully different semantic values, create a separate `Mode (White Label)` collection.
+
+For each Variable in either collection:
+- **Exists, both mode values match** → skip
+- **Exists, one or both mode values differ** → update only the changed mode value(s)
+- **Does not exist** → create with correct type (`COLOR` / `FLOAT` / `STRING`), set values for both modes
 
 ### T3. Sync Effect Styles (shadows)
 
-For each `--farco-shadow-*` token (see §3 of the reference for the parsed DROP_SHADOW format):
+For each `--ds-shadow-*` token (see §3 of the reference for the parsed DROP_SHADOW format):
 
 - Check if an Effect Style named `shadow/sm`, `shadow/md`, or `shadow/lg` already exists:
   - **Exists, values match** → skip
@@ -111,7 +132,7 @@ For each entry in the Text Style matrix in §3 of the reference:
 
 ### T5. Update FIGMA_RULES.md
 
-If any token's raw value changed in either theme CSS file, update the corresponding value in the token table in `FIGMA_RULES.md` §2.
+If any token's raw value changed in either theme CSS file, update the corresponding value in the token table in `FIGMA_RULES.md` §2. Note: the CSS files are auto-generated — the actual source of truth is the JSON files in `src/tokens/primitives/`, `src/tokens/brand/`, and `src/tokens/mode/`.
 
 ### T6. Report
 
@@ -188,9 +209,9 @@ Run this for each component that already has a Figma page.
 
 ### A1. Identify what changed
 
-Read the component's JSX file. For each visual property used (fill, border, radius, spacing, typography, shadow, opacity), identify which `--farco-*` token drives it. Then check the current value of that token in `src/tokens/themes/farco.css` against what is currently applied in Figma.
+Read the component's JSX file. For each visual property used (fill, border, radius, spacing, typography, shadow, opacity), identify which `--ds-*` token drives it. Then check the current value of that token in `src/tokens/themes/farco.css` against what is currently applied in Figma.
 
-Do not work with raw hex values — work with token names. The question to answer for each property is: "which `DS-Lab Tokens` Variable should this layer be bound to, and is it currently bound to the right one with the right value?"
+Do not work with raw hex values — work with token names. The question to answer for each property is: "which `Brand` or `Mode` Variable should this layer be bound to, and is it currently bound to the right one with the right value?"
 
 Also audit the component's Figma component properties against the property table in `references/COMPONENT_SPECS.md` §4:
 - Retrieve the current properties defined on the component set using the Figma MCP
@@ -203,7 +224,7 @@ Also audit the component's Figma component properties against the property table
 ### A2. Map tokens to Figma Variables
 
 Using `references/COMPONENT_SPECS.md` §1 and the per-component layer guide:
-- For each changed or unbound property, identify the corresponding `DS-Lab Tokens` Variable name (e.g. `color/primary`, `spacing/6`, `radius/full`)
+- For each changed or unbound property, identify the corresponding Variable name in the `Brand` or `Mode` collection (e.g. `color/action-background-primary`, `radius/full`, `font/size-md`)
 - For `color-mix()` derived values (tinted backgrounds, hover states), no Variable exists — these are the only exception. Compute the resulting color from the token values and note in the report that it is a derived value with no Variable binding
 
 ### A3. Locate the Figma nodes
@@ -243,7 +264,7 @@ Read `src/components/ui/<name>/<name>.jsx` thoroughly. Extract:
 
 ### B2. Resolve all token values
 
-For every `--farco-*` token found in the JSX, look up its resolved value in `src/tokens/themes/farco.css`. For `color-mix()` expressions, compute the resulting color manually.
+For every `--ds-*` token found in the JSX, look up its resolved value in `src/tokens/themes/farco.css`. For `color-mix()` expressions, compute the resulting color manually.
 
 ### B3. Create the Figma page
 
@@ -284,7 +305,7 @@ List the new page URL, its node ID, and all frames created. Flag any MCP call th
 
 ## Rules and constraints
 
-- **Work with Variable bindings, not raw values** — component layer properties must be bound to `DS-Lab Tokens` Variables. The only exception is `color-mix()` derived fills, which must be flagged in the report.
+- **Work with Variable bindings, not raw values** — component layer properties must be bound to `Brand` or `Mode` Variables. The only exception is `color-mix()` derived fills, which must be flagged in the report.
 - **Never modify nodes outside DS-Lab-Components** — do not touch any other Figma file.
 - **Always execute in order: Phase 1 (tokens) → Phase 2 (components)** — never start a component workflow before Workflow T is complete.
 - **For Workflow B**, new pages must use the same grid/frame conventions as existing component pages in the file. Call `get_design_context` on an existing component page first to observe the layout pattern.
