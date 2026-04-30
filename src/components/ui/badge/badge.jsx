@@ -1,5 +1,6 @@
+import { XIcon } from '@phosphor-icons/react'
 import { cn } from '../../../lib/cn'
-import { CloseOutlined } from '../icons'
+import { Button } from '../button'
 
 const VARIANTS = /** @type {const} */ (['default', 'success', 'warning', 'danger', 'accent'])
 const SIZES = /** @type {const} */ (['sm', 'md'])
@@ -64,22 +65,22 @@ export function Badge({
     >
       {children}
       {onDismiss && (
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="sm"
+          iconLeft={<XIcon size={resolvedSize === 'sm' ? 10 : 12} weight="regular" />}
           onClick={onDismiss}
           aria-label="Dismiss"
           className={cn(
-            'inline-flex items-center justify-center rounded-full transition-opacity duration-100',
-            'hover:opacity-60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-current',
             'ml-[2px] -mr-[2px]',
-            resolvedSize === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'
+            resolvedSize === 'sm'
+              ? 'w-[var(--farco-spacing-4)] h-[var(--farco-spacing-4)]'
+              : 'w-[var(--farco-spacing-5)] h-[var(--farco-spacing-5)]'
           )}
         >
-          <CloseOutlined
-            width={resolvedSize === 'sm' ? 10 : 12}
-            height={resolvedSize === 'sm' ? 10 : 12}
-          />
-        </button>
+          {null}
+          
+        </Button>
       )}
     </span>
   )

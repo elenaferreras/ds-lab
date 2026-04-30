@@ -2,12 +2,7 @@ import { createContext, useCallback, useContext, useState } from 'react'
 import * as RadixToast from '@radix-ui/react-toast'
 import { cn } from '../../../lib/cn'
 import { Button } from '../button'
-import {
-  CheckCircleOutlined,
-  WarningOutlined,
-  XCircleOutlined,
-  CloseOutlined,
-} from '../icons'
+import { CheckCircleIcon, WarningIcon, XCircleIcon, XIcon } from '@phosphor-icons/react'
 
 // ─── Variant styles ──────────────────────────────────────────────────────────
 
@@ -34,9 +29,9 @@ const VARIANT_CLASSES = {
 
 const ICON_MAP = {
   default: null,
-  success: () => <CheckCircleOutlined width="16" height="16" />,
-  warning: () => <WarningOutlined width="16" height="16" />,
-  danger: () => <XCircleOutlined width="16" height="16" />,
+  success: () => <CheckCircleIcon size={16} weight="fill" />,
+  warning: () => <WarningIcon size={16} weight="fill" />,
+  danger: () => <XCircleIcon size={16} weight="fill" />,
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────
@@ -125,7 +120,7 @@ function ToastItem({ id, title, description, variant = 'default', duration = 400
     >
       {/* Icon */}
       {IconComponent && (
-        <span className="mt-[1px] shrink-0 opacity-80 text-inherit">
+        <span className="mt-[1px] shrink-0 text-inherit">
           <IconComponent />
         </span>
       )}
@@ -151,8 +146,8 @@ function ToastItem({ id, title, description, variant = 'default', duration = 400
         <Button
           variant="ghost"
           size="sm"
-          iconLeft={<CloseOutlined />}
-          className="shrink-0 mt-[1px] !px-[var(--farco-spacing-1)]"
+          iconLeft={<XIcon size={16} weight="regular" />}
+          className="shrink-0"
         >
           {null}
         </Button>
