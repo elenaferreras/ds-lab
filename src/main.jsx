@@ -5,7 +5,8 @@ import App from './App.jsx'
 
 function ThemedApp() {
   useEffect(() => {
-    document.body.classList.add('theme-farco')
+    document.body.setAttribute('data-brand', 'farco')
+    document.body.setAttribute('data-mode', 'light')
   }, [])
 
   return (

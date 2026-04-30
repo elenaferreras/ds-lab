@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import './tokens.stories.css';
 
 export default {
@@ -7,16 +8,41 @@ export default {
   },
 };
 
-function ColorSwatch({ token, value }) {
+// ---------------------------------------------------------------------------
+// Reads the resolved CSS value of a custom property at runtime
+// ---------------------------------------------------------------------------
+function useResolvedValue(token) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!ref.current) return;
+    const value = getComputedStyle(ref.current)
+      .getPropertyValue(token)
+      .trim();
+    const valueEl = ref.current.querySelector('[data-resolved]');
+    if (valueEl) valueEl.textContent = value || '—';
+  });
+  return ref;
+}
+
+// ---------------------------------------------------------------------------
+// ColorSwatch — reads its own computed value via a ref
+// ---------------------------------------------------------------------------
+function ColorSwatch({ token, label }) {
+  const ref = useResolvedValue(token);
   return (
-    <div className="token-card">
+    <div className="token-card" ref={ref}>
       <div
         className="token-card__preview"
         style={{ background: `var(${token})` }}
       />
       <div className="token-card__info">
         <span className="token-card__name">{token}</span>
-        <span className="token-card__value">{value}</span>
+        <span className="token-card__value" data-resolved>…</span>
+        {label && (
+          <span className="token-card__value" style={{ opacity: 0.5 }}>
+            {label}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -30,8 +56,8 @@ function ColorSection({ title, description, colors }) {
         <p className="token-section__description">{description}</p>
       )}
       <div className="token-grid">
-        {colors.map(({ token, value }) => (
-          <ColorSwatch key={token} token={token} value={value} />
+        {colors.map(({ token, label }) => (
+          <ColorSwatch key={token} token={token} label={label} />
         ))}
       </div>
     </div>
@@ -39,133 +65,173 @@ function ColorSection({ title, description, colors }) {
 }
 
 // ---------------------------------------------------------------------------
-// Primitive scale stops
+// Scale helpers
 // ---------------------------------------------------------------------------
-const STOPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+const BRAND_STEPS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+const FEEDBACK_STEPS = [150, 300, 500, 700, 950];
 
-function paletteTokens(prefix) {
-  return STOPS.map((stop) => ({
-    token: `--farco-${prefix}-${stop}`,
-    value: String(stop),
+function brandScale(mode, palette) {
+  return BRAND_STEPS.map((step) => ({
+    token: `--ds-brand-color-${mode}-${palette}-${step}`,
+  }));
+}
+
+function feedbackScale(mode, role) {
+  return FEEDBACK_STEPS.map((step) => ({
+    token: `--ds-brand-color-${mode}-${role}-${step}`,
   }));
 }
 
 // ---------------------------------------------------------------------------
-// Stories — Primitives
+// Stories — Brand scales (raw palettes)
 // ---------------------------------------------------------------------------
-export const PrimitivePalettes = {
-  name: 'Primitives — Palettes',
+export const BrandScalesLight = {
+  name: 'Brand — Light scales',
   render: () => (
     <div className="token-stories">
-      <h2>Primitive Palettes</h2>
+      <h2>Brand color scales — Light</h2>
       <p className="subtitle">
-        Raw color scales per brand (50–950). These are the source of truth that
-        semantic tokens alias from. Switch themes using the toolbar to compare
-        brands.
+        Raw palettes defined in brand/farco.css and brand/neutral.css.
+        Switch brand using the toolbar above to compare.
+        These are NOT consumed by components directly.
       </p>
 
       <ColorSection
-        title="Primary"
+        title="Primary (100–1000)"
         description="Core brand hue."
-        colors={paletteTokens('primary')}
+        colors={brandScale('light', 'primary')}
       />
-
       <ColorSection
-        title="Secondary"
+        title="Secondary (100–1000)"
         description="Supporting brand hue."
-        colors={paletteTokens('secondary')}
+        colors={brandScale('light', 'secondary')}
+      />
+      <ColorSection
+        title="Neutral (100–1000)"
+        description="Greyscale ramp — tinted for Farco, pure for Neutral."
+        colors={brandScale('light', 'neutral')}
+      />
+      <ColorSection
+        title="Error (150–950)"
+        colors={feedbackScale('light', 'error')}
+      />
+      <ColorSection
+        title="Success (150–950)"
+        colors={feedbackScale('light', 'success')}
+      />
+      <ColorSection
+        title="Warning (150–950)"
+        colors={feedbackScale('light', 'warning')}
+      />
+      <ColorSection
+        title="Info (150–950)"
+        colors={feedbackScale('light', 'info')}
       />
     </div>
   ),
 };
 
-export const PrimitiveNeutrals = {
-  name: 'Primitives — Neutrals',
+export const BrandScalesDark = {
+  name: 'Brand — Dark scales',
   render: () => (
     <div className="token-stories">
-      <h2>Neutral Palette</h2>
+      <h2>Brand color scales — Dark</h2>
       <p className="subtitle">
-        Grayscale ramp from near-white (50) to near-black (950). Black and white
-        exist as separate tokens outside the numbered scale.
+        Same structure as light scales — values are inverted for dark contexts.
+        Switch brand using the toolbar above to compare.
       </p>
 
       <ColorSection
-        title="White &amp; Black"
-        colors={[
-          { token: '--farco-white', value: 'white' },
-          { token: '--farco-black', value: 'black' },
-        ]}
+        title="Primary (100–1000)"
+        colors={brandScale('dark', 'primary')}
       />
-
       <ColorSection
-        title="Neutral Scale"
-        colors={paletteTokens('neutral')}
+        title="Secondary (100–1000)"
+        colors={brandScale('dark', 'secondary')}
       />
-    </div>
-  ),
-};
-
-export const PrimitiveFeedback = {
-  name: 'Primitives — Feedback',
-  render: () => (
-    <div className="token-stories">
-      <h2>Feedback Palettes</h2>
-      <p className="subtitle">
-        Full 50–950 scales for each feedback category. Semantic feedback tokens
-        alias specific stops from these scales.
-      </p>
-
-      <ColorSection title="Success" colors={paletteTokens('success')} />
-      <ColorSection title="Warning" colors={paletteTokens('warning')} />
-      <ColorSection title="Danger"  colors={paletteTokens('danger')} />
-      <ColorSection title="Info"    colors={paletteTokens('info')} />
+      <ColorSection
+        title="Neutral (100–1000)"
+        colors={brandScale('dark', 'neutral')}
+      />
+      <ColorSection
+        title="Error (150–950)"
+        colors={feedbackScale('dark', 'error')}
+      />
+      <ColorSection
+        title="Success (150–950)"
+        colors={feedbackScale('dark', 'success')}
+      />
+      <ColorSection
+        title="Warning (150–950)"
+        colors={feedbackScale('dark', 'warning')}
+      />
+      <ColorSection
+        title="Info (150–950)"
+        colors={feedbackScale('dark', 'info')}
+      />
     </div>
   ),
 };
 
 // ---------------------------------------------------------------------------
-// Stories — Semantic
+// Stories — Semantic tokens
 // ---------------------------------------------------------------------------
 export const SemanticAction = {
   name: 'Semantic — Action',
   render: () => (
     <div className="token-stories">
-      <h2>Action Tokens</h2>
+      <h2>Action tokens</h2>
       <p className="subtitle">
-        Colors for interactive elements (buttons, links). Each role has a full
-        set of interaction states.
+        Colors for interactive elements (buttons, links).
+        Switch brand + mode using the toolbar to verify all combinations.
       </p>
 
       <ColorSection
-        title="Primary"
+        title="Background — primary"
         colors={[
-          { token: '--farco-color-action-primary',          value: 'default' },
-          { token: '--farco-color-action-primary-hover',    value: 'hover' },
-          { token: '--farco-color-action-primary-pressed',  value: 'pressed' },
-          { token: '--farco-color-action-primary-focus',    value: 'focus' },
-          { token: '--farco-color-action-primary-disabled', value: 'disabled' },
+          { token: '--ds-color-background-action-primary',          label: 'default' },
+          { token: '--ds-color-background-action-primary-hover',    label: 'hover' },
+          { token: '--ds-color-background-action-primary-pressed',  label: 'pressed' },
+          { token: '--ds-color-background-action-primary-disabled', label: 'disabled' },
         ]}
       />
-
       <ColorSection
-        title="Secondary"
+        title="Foreground — on primary"
         colors={[
-          { token: '--farco-color-action-secondary',          value: 'default' },
-          { token: '--farco-color-action-secondary-hover',    value: 'hover' },
-          { token: '--farco-color-action-secondary-pressed',  value: 'pressed' },
-          { token: '--farco-color-action-secondary-focus',    value: 'focus' },
-          { token: '--farco-color-action-secondary-disabled', value: 'disabled' },
+          { token: '--ds-color-foreground-action-on-primary',          label: 'default' },
+          { token: '--ds-color-foreground-action-on-primary-disabled', label: 'disabled' },
         ]}
       />
-
       <ColorSection
-        title="Destructive"
+        title="Border — primary"
         colors={[
-          { token: '--farco-color-action-destructive',          value: 'default' },
-          { token: '--farco-color-action-destructive-hover',    value: 'hover' },
-          { token: '--farco-color-action-destructive-pressed',  value: 'pressed' },
-          { token: '--farco-color-action-destructive-focus',    value: 'focus' },
-          { token: '--farco-color-action-destructive-disabled', value: 'disabled' },
+          { token: '--ds-color-border-action-primary',          label: 'default' },
+          { token: '--ds-color-border-action-primary-hover',    label: 'hover' },
+          { token: '--ds-color-border-action-primary-pressed',  label: 'pressed' },
+          { token: '--ds-color-border-action-primary-disabled', label: 'disabled' },
+        ]}
+      />
+      <ColorSection
+        title="Background — secondary"
+        colors={[
+          { token: '--ds-color-background-action-secondary',          label: 'default' },
+          { token: '--ds-color-background-action-secondary-hover',    label: 'hover' },
+          { token: '--ds-color-background-action-secondary-pressed',  label: 'pressed' },
+          { token: '--ds-color-background-action-secondary-disabled', label: 'disabled' },
+        ]}
+      />
+      <ColorSection
+        title="Foreground — on secondary"
+        colors={[
+          { token: '--ds-color-foreground-action-on-secondary',          label: 'default' },
+          { token: '--ds-color-foreground-action-on-secondary-hover',    label: 'hover' },
+          { token: '--ds-color-foreground-action-on-secondary-disabled', label: 'disabled' },
+        ]}
+      />
+      <ColorSection
+        title="Focus ring"
+        colors={[
+          { token: '--ds-color-border-action-focus', label: 'focus' },
         ]}
       />
     </div>
@@ -176,16 +242,34 @@ export const SemanticSurface = {
   name: 'Semantic — Surface',
   render: () => (
     <div className="token-stories">
-      <h2>Surface Tokens</h2>
-      <p className="subtitle">Background colors for page layers.</p>
+      <h2>Surface tokens</h2>
+      <p className="subtitle">
+        Background and foreground colors for page layers and containers.
+      </p>
 
       <ColorSection
-        title="Surface"
+        title="Background"
         colors={[
-          { token: '--farco-color-surface-base',    value: 'base — page background' },
-          { token: '--farco-color-surface-subtle',  value: 'subtle — secondary bg' },
-          { token: '--farco-color-surface-raised',  value: 'raised — cards / panels' },
-          { token: '--farco-color-surface-overlay', value: 'overlay — modal scrim' },
+          { token: '--ds-color-background-surface-page',    label: 'page' },
+          { token: '--ds-color-background-surface-subtle',  label: 'subtle' },
+          { token: '--ds-color-background-surface-raised',  label: 'raised' },
+          { token: '--ds-color-background-surface-overlay', label: 'overlay' },
+        ]}
+      />
+      <ColorSection
+        title="Foreground"
+        colors={[
+          { token: '--ds-color-foreground-surface-on-page',    label: 'on-page' },
+          { token: '--ds-color-foreground-surface-on-subtle',  label: 'on-subtle' },
+          { token: '--ds-color-foreground-surface-on-raised',  label: 'on-raised' },
+          { token: '--ds-color-foreground-surface-on-overlay', label: 'on-overlay' },
+        ]}
+      />
+      <ColorSection
+        title="Border"
+        colors={[
+          { token: '--ds-color-border-surface-default', label: 'default' },
+          { token: '--ds-color-border-surface-strong',  label: 'strong' },
         ]}
       />
     </div>
@@ -196,37 +280,57 @@ export const SemanticText = {
   name: 'Semantic — Text',
   render: () => (
     <div className="token-stories">
-      <h2>Text Tokens</h2>
-      <p className="subtitle">Colors for typographic elements.</p>
+      <h2>Text tokens</h2>
+      <p className="subtitle">Foreground colors for typographic elements.</p>
 
       <ColorSection
-        title="Text"
+        title="Foreground"
         colors={[
-          { token: '--farco-color-text-primary',   value: 'primary — main body' },
-          { token: '--farco-color-text-secondary',  value: 'secondary — muted' },
-          { token: '--farco-color-text-disabled',   value: 'disabled' },
-          { token: '--farco-color-text-inverse',    value: 'inverse — on dark bg' },
-          { token: '--farco-color-text-on-action',  value: 'on-action — button label' },
+          { token: '--ds-color-foreground-text-primary',    label: 'primary' },
+          { token: '--ds-color-foreground-text-secondary',  label: 'secondary' },
+          { token: '--ds-color-foreground-text-disabled',   label: 'disabled' },
+          { token: '--ds-color-foreground-text-inverse',    label: 'inverse' },
+          { token: '--ds-color-foreground-text-link',       label: 'link' },
+          { token: '--ds-color-foreground-text-link-hover', label: 'link-hover' },
         ]}
       />
     </div>
   ),
 };
 
-export const SemanticBorder = {
-  name: 'Semantic — Border',
+export const SemanticInput = {
+  name: 'Semantic — Input',
   render: () => (
     <div className="token-stories">
-      <h2>Border Tokens</h2>
-      <p className="subtitle">Colors for dividers, input borders, and focus rings.</p>
+      <h2>Input tokens</h2>
+      <p className="subtitle">Colors for text fields and form controls.</p>
 
+      <ColorSection
+        title="Background"
+        colors={[
+          { token: '--ds-color-background-input-default',  label: 'default' },
+          { token: '--ds-color-background-input-hover',    label: 'hover' },
+          { token: '--ds-color-background-input-focused',  label: 'focused' },
+          { token: '--ds-color-background-input-disabled', label: 'disabled' },
+          { token: '--ds-color-background-input-error',    label: 'error' },
+        ]}
+      />
+      <ColorSection
+        title="Foreground"
+        colors={[
+          { token: '--ds-color-foreground-input-default',     label: 'default' },
+          { token: '--ds-color-foreground-input-placeholder', label: 'placeholder' },
+          { token: '--ds-color-foreground-input-disabled',    label: 'disabled' },
+        ]}
+      />
       <ColorSection
         title="Border"
         colors={[
-          { token: '--farco-color-border',        value: 'default' },
-          { token: '--farco-color-border-subtle', value: 'subtle' },
-          { token: '--farco-color-border-strong', value: 'strong' },
-          { token: '--farco-color-border-focus',  value: 'focus ring' },
+          { token: '--ds-color-border-input-default',  label: 'default' },
+          { token: '--ds-color-border-input-hover',    label: 'hover' },
+          { token: '--ds-color-border-input-focused',  label: 'focused' },
+          { token: '--ds-color-border-input-disabled', label: 'disabled' },
+          { token: '--ds-color-border-input-error',    label: 'error' },
         ]}
       />
     </div>
@@ -237,44 +341,25 @@ export const SemanticFeedback = {
   name: 'Semantic — Feedback',
   render: () => (
     <div className="token-stories">
-      <h2>Feedback Tokens</h2>
+      <h2>Feedback tokens</h2>
       <p className="subtitle">
-        Semantic feedback colors for alerts, badges, and status indicators.
-        Each category has three levels of emphasis.
+        Colors for alerts, badges, and status indicators.
+        Each category has background, foreground, and border variants.
       </p>
 
-      <ColorSection
-        title="Success"
-        colors={[
-          { token: '--farco-color-feedback-success',          value: 'default' },
-          { token: '--farco-color-feedback-success-subtle',   value: 'subtle' },
-          { token: '--farco-color-feedback-success-emphasis', value: 'emphasis' },
-        ]}
-      />
-      <ColorSection
-        title="Warning"
-        colors={[
-          { token: '--farco-color-feedback-warning',          value: 'default' },
-          { token: '--farco-color-feedback-warning-subtle',   value: 'subtle' },
-          { token: '--farco-color-feedback-warning-emphasis', value: 'emphasis' },
-        ]}
-      />
-      <ColorSection
-        title="Danger"
-        colors={[
-          { token: '--farco-color-feedback-danger',          value: 'default' },
-          { token: '--farco-color-feedback-danger-subtle',   value: 'subtle' },
-          { token: '--farco-color-feedback-danger-emphasis', value: 'emphasis' },
-        ]}
-      />
-      <ColorSection
-        title="Info"
-        colors={[
-          { token: '--farco-color-feedback-info',          value: 'default' },
-          { token: '--farco-color-feedback-info-subtle',   value: 'subtle' },
-          { token: '--farco-color-feedback-info-emphasis', value: 'emphasis' },
-        ]}
-      />
+      {['error', 'success', 'warning', 'info'].map((role) => (
+        <ColorSection
+          key={role}
+          title={role.charAt(0).toUpperCase() + role.slice(1)}
+          colors={[
+            { token: `--ds-color-background-feedback-${role}`,             label: 'background' },
+            { token: `--ds-color-background-feedback-${role}-emphasis`,    label: 'background-emphasis' },
+            { token: `--ds-color-foreground-feedback-on-${role}`,          label: 'foreground' },
+            { token: `--ds-color-foreground-feedback-on-${role}-emphasis`, label: 'foreground-emphasis' },
+            { token: `--ds-color-border-feedback-${role}`,                 label: 'border' },
+          ]}
+        />
+      ))}
     </div>
   ),
 };
