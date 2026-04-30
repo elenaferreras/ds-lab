@@ -39,7 +39,7 @@ export const FontFamily = {
         <div style={{
           fontFamily: 'var(--farco-font-family-base)',
           fontSize: 'var(--farco-font-size-md)',
-          color: 'var(--farco-color-neutral-50)',
+          color: 'var(--farco-color-text-secondary)',
           marginBottom: '24px',
         }}>
           ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />
@@ -151,7 +151,7 @@ export const LineHeight = {
             lineHeight: 'var(--farco-line-height-tight)',
             maxWidth: '480px',
             marginBottom: '32px',
-            background: 'var(--farco-color-bg-subtle)',
+            background: 'var(--farco-color-surface-subtle)',
             padding: '16px',
             borderRadius: 'var(--farco-radius-md)',
           }}>
@@ -167,7 +167,7 @@ export const LineHeight = {
             lineHeight: 'var(--farco-line-height-base)',
             maxWidth: '480px',
             marginBottom: '32px',
-            background: 'var(--farco-color-bg-subtle)',
+            background: 'var(--farco-color-surface-subtle)',
             padding: '16px',
             borderRadius: 'var(--farco-radius-md)',
           }}>
@@ -182,7 +182,7 @@ export const LineHeight = {
             fontSize: 'var(--farco-font-size-md)',
             lineHeight: 'var(--farco-line-height-relaxed)',
             maxWidth: '480px',
-            background: 'var(--farco-color-bg-subtle)',
+            background: 'var(--farco-color-surface-subtle)',
             padding: '16px',
             borderRadius: 'var(--farco-radius-md)',
           }}>

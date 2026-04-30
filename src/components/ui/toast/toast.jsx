@@ -14,21 +14,21 @@ import {
 const VARIANTS = /** @type {const} */ (['default', 'success', 'warning', 'danger'])
 
 const VARIANT_CLASSES = {
-  default: 'bg-[var(--farco-color-neutral-100)] text-[var(--farco-color-neutral-0)] border-[var(--farco-color-neutral-80)]',
+  default: 'bg-[var(--farco-color-surface-overlay)] text-[var(--farco-color-text-inverse)] border-[var(--farco-color-border)]',
   success: [
-    'bg-[color-mix(in_oklab,var(--farco-color-success)_12%,var(--farco-color-bg-base))]',
-    'text-[var(--farco-color-neutral-100)]',
-    'border-[color-mix(in_oklab,var(--farco-color-success)_40%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-feedback-success)_12%,var(--farco-color-surface-base))]',
+    'text-[var(--farco-color-text-primary)]',
+    'border-[color-mix(in_oklab,var(--farco-color-feedback-success)_40%,transparent)]',
   ].join(' '),
   warning: [
-    'bg-[color-mix(in_oklab,var(--farco-color-warning)_12%,var(--farco-color-bg-base))]',
-    'text-[var(--farco-color-neutral-100)]',
-    'border-[color-mix(in_oklab,var(--farco-color-warning)_40%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-feedback-warning)_12%,var(--farco-color-surface-base))]',
+    'text-[var(--farco-color-text-primary)]',
+    'border-[color-mix(in_oklab,var(--farco-color-feedback-warning)_40%,transparent)]',
   ].join(' '),
   danger: [
-    'bg-[color-mix(in_oklab,var(--farco-color-danger)_10%,var(--farco-color-bg-base))]',
-    'text-[var(--farco-color-neutral-100)]',
-    'border-[color-mix(in_oklab,var(--farco-color-danger)_35%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-feedback-danger)_10%,var(--farco-color-surface-base))]',
+    'text-[var(--farco-color-text-primary)]',
+    'border-[color-mix(in_oklab,var(--farco-color-feedback-danger)_35%,transparent)]',
   ].join(' '),
 }
 

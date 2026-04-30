@@ -66,7 +66,7 @@ export const BoxModel = {
                 padding: `var(${token})`,
                 border: `1px solid var(--farco-color-border)`,
                 borderRadius: 'var(--farco-radius-md)',
-                background: 'var(--farco-color-bg-subtle)',
+                background: 'var(--farco-color-surface-subtle)',
               }}
             >
               <span style={{ fontSize: '12px', fontFamily: 'monospace' }}>{label}</span>
@@ -90,7 +90,7 @@ export const BoxModel = {
             <div style={{
               fontSize: '12px',
               fontFamily: 'monospace',
-              color: 'var(--farco-color-neutral-50)',
+              color: 'var(--farco-color-text-secondary)',
               marginBottom: '8px',
             }}>
               {label}
@@ -106,7 +106,7 @@ export const BoxModel = {
                     width: '40px',
                     height: '40px',
                     borderRadius: 'var(--farco-radius-sm)',
-                    background: 'var(--farco-color-primary)',
+                    background: 'var(--farco-color-action-primary)',
                   }}
                 />
               ))}

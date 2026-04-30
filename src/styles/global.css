@@ -1,5 +1,4 @@
 @import '../tokens/base.css';
-@import '../tokens/tokens.css';
 @import '../tokens/themes/white-label.css';
 @import '../tokens/themes/farco.css';
 
@@ -16,8 +15,8 @@
 body {
   margin: 0;
   font-family: var(--farco-font-family-base);
-  color: var(--farco-color-neutral-100);
-  background-color: var(--farco-color-bg-base);
+  color: var(--farco-color-text-primary);
+  background-color: var(--farco-color-surface-base);
 }
 
 @keyframes spin {

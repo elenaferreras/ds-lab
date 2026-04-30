@@ -22,7 +22,7 @@ export const Playground = {
           <h3 style={{ margin: 0, fontSize: 'var(--farco-font-size-md)', fontWeight: 'var(--farco-font-weight-medium)' }}>
             Card title
           </h3>
-          <p style={{ margin: '4px 0 0', fontSize: 'var(--farco-font-size-sm)', color: 'var(--farco-color-neutral-50)' }}>
+          <p style={{ margin: '4px 0 0', fontSize: 'var(--farco-font-size-sm)', color: 'var(--farco-color-text-secondary)' }}>
             Supporting subtitle text
           </p>
         </Card.Header>
@@ -107,7 +107,7 @@ export const RichContent = {
               <h3 style={{ margin: 0, fontSize: 'var(--farco-font-size-md)', fontWeight: 'var(--farco-font-weight-medium)' }}>
                 Project Alpha
               </h3>
-              <p style={{ margin: '4px 0 0', fontSize: 'var(--farco-font-size-xs)', color: 'var(--farco-color-neutral-50)' }}>
+              <p style={{ margin: '4px 0 0', fontSize: 'var(--farco-font-size-xs)', color: 'var(--farco-color-text-secondary)' }}>
                 Last updated 2 hours ago
               </p>
             </div>

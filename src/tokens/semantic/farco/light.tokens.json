@@ -1,0 +1,69 @@
+{
+  "color": {
+    "$type": "color",
+    "action": {
+      "primary": {
+        "default":  { "$value": "{primary.950}" },
+        "hover":    { "$value": "{primary.800}" },
+        "pressed":  { "$value": "{primary.700}" },
+        "focus":    { "$value": "{primary.950}" },
+        "disabled": { "$value": "{neutral.300}" }
+      },
+      "secondary": {
+        "default":  { "$value": "{secondary.500}" },
+        "hover":    { "$value": "{secondary.400}" },
+        "pressed":  { "$value": "{secondary.600}" },
+        "focus":    { "$value": "{secondary.500}" },
+        "disabled": { "$value": "{neutral.300}" }
+      },
+      "destructive": {
+        "default":  { "$value": "{danger.500}" },
+        "hover":    { "$value": "{danger.400}" },
+        "pressed":  { "$value": "{danger.600}" },
+        "focus":    { "$value": "{danger.500}" },
+        "disabled": { "$value": "{neutral.300}" }
+      }
+    },
+    "surface": {
+      "base":    { "$value": "{white}" },
+      "subtle":  { "$value": "{neutral.50}" },
+      "raised":  { "$value": "{white}" },
+      "overlay": { "$value": "{neutral.900}" }
+    },
+    "text": {
+      "primary":   { "$value": "{neutral.950}" },
+      "secondary": { "$value": "{neutral.600}" },
+      "disabled":  { "$value": "{neutral.400}" },
+      "inverse":   { "$value": "{white}" },
+      "on-action": { "$value": "{white}" }
+    },
+    "border": {
+      "default": { "$value": "{neutral.950}" },
+      "subtle":  { "$value": "{neutral.200}" },
+      "strong":  { "$value": "{black}" },
+      "focus":   { "$value": "{primary.950}" }
+    },
+    "feedback": {
+      "success": {
+        "default":   { "$value": "{success.500}" },
+        "subtle":    { "$value": "{success.50}" },
+        "emphasis":  { "$value": "{success.700}" }
+      },
+      "warning": {
+        "default":   { "$value": "{warning.500}" },
+        "subtle":    { "$value": "{warning.50}" },
+        "emphasis":  { "$value": "{warning.700}" }
+      },
+      "danger": {
+        "default":   { "$value": "{danger.500}" },
+        "subtle":    { "$value": "{danger.50}" },
+        "emphasis":  { "$value": "{danger.700}" }
+      },
+      "info": {
+        "default":   { "$value": "{info.500}" },
+        "subtle":    { "$value": "{info.50}" },
+        "emphasis":  { "$value": "{info.700}" }
+      }
+    }
+  }
+}

@@ -5,26 +5,26 @@ const VARIANTS = /** @type {const} */ (['default', 'success', 'warning', 'danger
 const SIZES = /** @type {const} */ (['sm', 'md'])
 
 const VARIANT_CLASSES = {
-  default: 'bg-[var(--farco-color-neutral-10)] text-[var(--farco-color-neutral-80)] border-[var(--farco-color-neutral-20)]',
+  default: 'bg-[var(--farco-color-surface-subtle)] text-[var(--farco-color-text-secondary)] border-[var(--farco-color-border-subtle)]',
   success: [
-    'bg-[color-mix(in_oklab,var(--farco-color-success)_12%,transparent)]',
-    'text-[color-mix(in_oklab,var(--farco-color-success)_80%,var(--farco-color-neutral-100))]',
-    'border-[color-mix(in_oklab,var(--farco-color-success)_30%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-feedback-success)_12%,transparent)]',
+    'text-[color-mix(in_oklab,var(--farco-color-feedback-success)_80%,var(--farco-color-text-primary))]',
+    'border-[color-mix(in_oklab,var(--farco-color-feedback-success)_30%,transparent)]',
   ].join(' '),
   warning: [
-    'bg-[color-mix(in_oklab,var(--farco-color-warning)_12%,transparent)]',
-    'text-[color-mix(in_oklab,var(--farco-color-warning)_80%,var(--farco-color-neutral-100))]',
-    'border-[color-mix(in_oklab,var(--farco-color-warning)_30%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-feedback-warning)_12%,transparent)]',
+    'text-[color-mix(in_oklab,var(--farco-color-feedback-warning)_80%,var(--farco-color-text-primary))]',
+    'border-[color-mix(in_oklab,var(--farco-color-feedback-warning)_30%,transparent)]',
   ].join(' '),
   danger: [
-    'bg-[color-mix(in_oklab,var(--farco-color-danger)_10%,transparent)]',
-    'text-[var(--farco-color-danger)]',
-    'border-[color-mix(in_oklab,var(--farco-color-danger)_30%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-feedback-danger)_10%,transparent)]',
+    'text-[var(--farco-color-feedback-danger)]',
+    'border-[color-mix(in_oklab,var(--farco-color-feedback-danger)_30%,transparent)]',
   ].join(' '),
   accent: [
-    'bg-[color-mix(in_oklab,var(--farco-color-accent)_40%,transparent)]',
-    'text-[var(--farco-color-neutral-100)]',
-    'border-[color-mix(in_oklab,var(--farco-color-accent)_60%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-action-secondary)_40%,transparent)]',
+    'text-[var(--farco-color-text-primary)]',
+    'border-[color-mix(in_oklab,var(--farco-color-action-secondary)_60%,transparent)]',
   ].join(' '),
 }
 

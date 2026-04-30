@@ -40,7 +40,7 @@ export function Input({
             'text-[var(--farco-font-size-sm)] font-medium font-[var(--farco-font-family-base)] leading-none',
             disabled
               ? 'opacity-[var(--farco-opacity-disabled)] cursor-not-allowed'
-              : 'text-[var(--farco-color-neutral-100)]'
+              : 'text-[var(--farco-color-text-primary)]'
           )}
         >
           {label}
@@ -56,20 +56,20 @@ export function Input({
         className={cn(
           // base
           'w-full h-[var(--farco-spacing-10)] rounded-[var(--farco-radius-md)] border px-[var(--farco-spacing-4)]',
-          'bg-[var(--farco-color-bg-base)] text-[var(--farco-color-neutral-100)]',
+          'bg-[var(--farco-color-surface-base)] text-[var(--farco-color-text-primary)]',
           'text-[var(--farco-font-size-sm)] font-[var(--farco-font-family-base)] leading-none',
           'transition-[border-color,box-shadow] duration-150 outline-none',
           // placeholder
-          'placeholder:text-[var(--farco-color-neutral-40)]',
+          'placeholder:text-[var(--farco-color-text-disabled)]',
           // default border
-          !hasError && 'border-[var(--farco-color-neutral-30)]',
+          !hasError && 'border-[var(--farco-color-border-subtle)]',
           // focus (no error)
-          !hasError && 'focus:border-[var(--farco-color-primary)] focus:ring-2 focus:ring-[var(--farco-color-accent)] focus:ring-offset-0',
+          !hasError && 'focus:border-[var(--farco-color-border-focus)] focus:ring-2 focus:ring-[var(--farco-color-border-focus)] focus:ring-offset-0',
           // error border + focus
-          hasError && 'border-[var(--farco-color-danger)]',
-          hasError && 'focus:border-[var(--farco-color-danger)] focus:ring-2 focus:ring-[color-mix(in_oklab,var(--farco-color-danger)_30%,transparent)] focus:ring-offset-0',
+          hasError && 'border-[var(--farco-color-feedback-danger)]',
+          hasError && 'focus:border-[var(--farco-color-feedback-danger)] focus:ring-2 focus:ring-[color-mix(in_oklab,var(--farco-color-feedback-danger)_30%,transparent)] focus:ring-offset-0',
           // disabled
-          'disabled:opacity-[var(--farco-opacity-disabled)] disabled:cursor-not-allowed disabled:bg-[var(--farco-color-neutral-10)]',
+          'disabled:opacity-[var(--farco-opacity-disabled)] disabled:cursor-not-allowed disabled:bg-[var(--farco-color-surface-subtle)]',
           inputClassName
         )}
         {...props}
@@ -81,8 +81,8 @@ export function Input({
           className={cn(
             'text-[var(--farco-font-size-xs)] font-[var(--farco-font-family-base)] leading-tight',
             hasError
-              ? 'text-[var(--farco-color-danger)]'
-              : 'text-[var(--farco-color-neutral-50)]'
+              ? 'text-[var(--farco-color-feedback-danger)]'
+              : 'text-[var(--farco-color-text-secondary)]'
           )}
         >
           {bottomText}
