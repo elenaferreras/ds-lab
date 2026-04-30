@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useState } from 'react'
 import * as RadixToast from '@radix-ui/react-toast'
 import { cn } from '../../../lib/cn'
 import { Button } from '../button'
-import { CheckCircleIcon, WarningIcon, XCircleIcon, XIcon } from '@phosphor-icons/react'
+import { AxeIcon, CheckCircleIcon, WarningIcon, XCircleIcon, XIcon } from '@phosphor-icons/react'
 
 // ─── Variant styles ──────────────────────────────────────────────────────────
 
@@ -31,7 +31,7 @@ const ICON_MAP = {
   default: null,
   success: () => <CheckCircleIcon size={16} weight="fill" />,
   warning: () => <WarningIcon size={16} weight="fill" />,
-  danger: () => <XCircleIcon size={16} weight="fill" />,
+  danger: () => <AxeIcon size={16} weight="fill" />,
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────
