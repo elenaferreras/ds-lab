@@ -63,13 +63,13 @@ export const InContext = {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'var(--farco-color-bg-base)',
+                background: 'var(--farco-color-surface-base)',
               }}
             >
               <span style={{
                 fontSize: '11px',
                 fontFamily: 'monospace',
-                color: 'var(--farco-color-neutral-50)',
+                color: 'var(--farco-color-text-secondary)',
               }}>
                 {value}
               </span>
@@ -89,7 +89,7 @@ export const InContext = {
                 height: '40px',
                 padding: '0 20px',
                 borderRadius: `var(${token})`,
-                border: `1px solid var(--farco-color-neutral-100)`,
+                border: `1px solid var(--farco-color-border-subtle)`,
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',

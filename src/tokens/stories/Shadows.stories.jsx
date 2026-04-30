@@ -63,7 +63,7 @@ export const InContext = {
             <div style={{
               fontSize: '12px',
               fontFamily: 'monospace',
-              color: 'var(--farco-color-neutral-50)',
+              color: 'var(--farco-color-text-secondary)',
               marginBottom: '12px',
             }}>
               {token.replace('--farco-', '')}
@@ -72,7 +72,7 @@ export const InContext = {
               style={{
                 padding: 'var(--farco-spacing-6)',
                 borderRadius: 'var(--farco-radius-lg)',
-                background: 'var(--farco-color-bg-base)',
+                background: 'var(--farco-color-surface-base)',
                 boxShadow: `var(${token})`,
               }}
             >
@@ -85,7 +85,7 @@ export const InContext = {
               </div>
               <div style={{
                 fontSize: 'var(--farco-font-size-sm)',
-                color: 'var(--farco-color-neutral-50)',
+                color: 'var(--farco-color-text-secondary)',
               }}>
                 {description}
               </div>
@@ -116,15 +116,15 @@ export const Stacked = {
           width: '300px',
           height: '200px',
           borderRadius: 'var(--farco-radius-lg)',
-          background: 'var(--farco-color-bg-base)',
+          background: 'var(--farco-color-surface-base)',
           boxShadow: 'var(--farco-shadow-sm)',
           padding: 'var(--farco-spacing-4)',
-          border: '1px solid var(--farco-color-neutral-10)',
+          border: '1px solid var(--farco-color-border-subtle)',
         }}>
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: 'var(--farco-color-neutral-40)',
+            color: 'var(--farco-color-text-secondary)',
           }}>
             shadow-sm (base layer)
           </span>
@@ -137,14 +137,14 @@ export const Stacked = {
           width: '300px',
           height: '200px',
           borderRadius: 'var(--farco-radius-lg)',
-          background: 'var(--farco-color-bg-base)',
+          background: 'var(--farco-color-surface-base)',
           boxShadow: 'var(--farco-shadow-md)',
           padding: 'var(--farco-spacing-4)',
         }}>
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: 'var(--farco-color-neutral-40)',
+            color: 'var(--farco-color-text-secondary)',
           }}>
             shadow-md (middle layer)
           </span>
@@ -157,14 +157,14 @@ export const Stacked = {
           width: '300px',
           height: '200px',
           borderRadius: 'var(--farco-radius-lg)',
-          background: 'var(--farco-color-bg-base)',
+          background: 'var(--farco-color-surface-base)',
           boxShadow: 'var(--farco-shadow-lg)',
           padding: 'var(--farco-spacing-4)',
         }}>
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: 'var(--farco-color-neutral-40)',
+            color: 'var(--farco-color-text-secondary)',
           }}>
             shadow-lg (top layer)
           </span>

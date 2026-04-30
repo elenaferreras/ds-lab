@@ -32,7 +32,7 @@ export function Avatar({
     <RadixAvatar.Root
       className={cn(
         'relative inline-flex items-center justify-center rounded-full overflow-hidden select-none shrink-0',
-        'bg-[var(--farco-color-neutral-20)]',
+        'bg-[var(--farco-color-surface-subtle)]',
         SIZE_CLASSES[resolvedSize],
         className
       )}
@@ -49,7 +49,7 @@ export function Avatar({
         delayMs={0}
         className={cn(
           'absolute inset-0 rounded-full',
-          'bg-[var(--farco-color-neutral-20)] animate-pulse',
+          'bg-[var(--farco-color-surface-subtle)] animate-pulse',
         )}
       />
 
@@ -59,7 +59,7 @@ export function Avatar({
           delayMs={300}
           className={cn(
             'absolute inset-0 flex items-center justify-center rounded-full',
-            'bg-[var(--farco-color-neutral-20)] text-[var(--farco-color-neutral-60)]',
+            'bg-[var(--farco-color-surface-subtle)] text-[var(--farco-color-text-secondary)]',
             'font-[var(--farco-font-family-base)] font-medium uppercase tracking-wide leading-none',
           )}
         >

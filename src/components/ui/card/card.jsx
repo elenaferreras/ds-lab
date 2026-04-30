@@ -8,8 +8,8 @@ function CardRoot({ children, className }) {
     <div
       className={cn(
         'flex flex-col',
-        'bg-[var(--farco-color-bg-base)]',
-        'border border-[var(--farco-color-neutral-20)]',
+        'bg-[var(--farco-color-surface-base)]',
+        'border border-[var(--farco-color-border-subtle)]',
         'rounded-[var(--farco-radius-xl)]',
         'shadow-[var(--farco-shadow-sm)]',
         'overflow-hidden',
@@ -29,7 +29,7 @@ function CardHeader({ children, className }) {
     <div
       className={cn(
         'px-[var(--farco-spacing-6)] pt-[var(--farco-spacing-6)] pb-[var(--farco-spacing-4)]',
-        'border-b border-[var(--farco-color-neutral-20)]',
+        'border-b border-[var(--farco-color-border-subtle)]',
         className
       )}
     >
@@ -62,7 +62,7 @@ function CardFooter({ children, className }) {
     <div
       className={cn(
         'px-[var(--farco-spacing-6)] pt-[var(--farco-spacing-4)] pb-[var(--farco-spacing-6)]',
-        'border-t border-[var(--farco-color-neutral-20)]',
+        'border-t border-[var(--farco-color-border-subtle)]',
         className
       )}
     >

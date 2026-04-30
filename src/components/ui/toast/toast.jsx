@@ -2,41 +2,36 @@ import { createContext, useCallback, useContext, useState } from 'react'
 import * as RadixToast from '@radix-ui/react-toast'
 import { cn } from '../../../lib/cn'
 import { Button } from '../button'
-import {
-  CheckCircleOutlined,
-  WarningOutlined,
-  XCircleOutlined,
-  CloseOutlined,
-} from '../icons'
+import { AxeIcon, CheckCircleIcon, WarningIcon, XCircleIcon, XIcon } from '@phosphor-icons/react'
 
 // ─── Variant styles ──────────────────────────────────────────────────────────
 
 const VARIANTS = /** @type {const} */ (['default', 'success', 'warning', 'danger'])
 
 const VARIANT_CLASSES = {
-  default: 'bg-[var(--farco-color-neutral-100)] text-[var(--farco-color-neutral-0)] border-[var(--farco-color-neutral-80)]',
+  default: 'bg-[var(--farco-color-surface-overlay)] text-[var(--farco-color-text-inverse)] border-[var(--farco-color-border)]',
   success: [
-    'bg-[color-mix(in_oklab,var(--farco-color-success)_12%,var(--farco-color-bg-base))]',
-    'text-[var(--farco-color-neutral-100)]',
-    'border-[color-mix(in_oklab,var(--farco-color-success)_40%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-feedback-success)_12%,var(--farco-color-surface-base))]',
+    'text-[var(--farco-color-text-primary)]',
+    'border-[color-mix(in_oklab,var(--farco-color-feedback-success)_40%,transparent)]',
   ].join(' '),
   warning: [
-    'bg-[color-mix(in_oklab,var(--farco-color-warning)_12%,var(--farco-color-bg-base))]',
-    'text-[var(--farco-color-neutral-100)]',
-    'border-[color-mix(in_oklab,var(--farco-color-warning)_40%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-feedback-warning)_12%,var(--farco-color-surface-base))]',
+    'text-[var(--farco-color-text-primary)]',
+    'border-[color-mix(in_oklab,var(--farco-color-feedback-warning)_40%,transparent)]',
   ].join(' '),
   danger: [
-    'bg-[color-mix(in_oklab,var(--farco-color-danger)_10%,var(--farco-color-bg-base))]',
-    'text-[var(--farco-color-neutral-100)]',
-    'border-[color-mix(in_oklab,var(--farco-color-danger)_35%,transparent)]',
+    'bg-[color-mix(in_oklab,var(--farco-color-feedback-danger)_10%,var(--farco-color-surface-base))]',
+    'text-[var(--farco-color-text-primary)]',
+    'border-[color-mix(in_oklab,var(--farco-color-feedback-danger)_35%,transparent)]',
   ].join(' '),
 }
 
 const ICON_MAP = {
   default: null,
-  success: () => <CheckCircleOutlined width="16" height="16" />,
-  warning: () => <WarningOutlined width="16" height="16" />,
-  danger: () => <XCircleOutlined width="16" height="16" />,
+  success: () => <CheckCircleIcon size={16} weight="fill" />,
+  warning: () => <WarningIcon size={16} weight="fill" />,
+  danger: () => <AxeIcon size={16} weight="fill" />,
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────
@@ -125,7 +120,7 @@ function ToastItem({ id, title, description, variant = 'default', duration = 400
     >
       {/* Icon */}
       {IconComponent && (
-        <span className="mt-[1px] shrink-0 opacity-80 text-inherit">
+        <span className="mt-[1px] shrink-0 text-inherit">
           <IconComponent />
         </span>
       )}
@@ -151,8 +146,8 @@ function ToastItem({ id, title, description, variant = 'default', duration = 400
         <Button
           variant="ghost"
           size="sm"
-          iconLeft={<CloseOutlined />}
-          className="shrink-0 mt-[1px] !px-[var(--farco-spacing-1)]"
+          iconLeft={<XIcon size={16} weight="regular" />}
+          className="shrink-0"
         >
           {null}
         </Button>

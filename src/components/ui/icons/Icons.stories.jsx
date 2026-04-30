@@ -46,7 +46,7 @@ export const AllIcons = {
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: 'var(--farco-color-neutral-60)',
+            color: 'var(--farco-color-text-secondary)',
             textAlign: 'center',
           }}>
             {name}
@@ -74,7 +74,7 @@ export const Sizes = {
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: 'var(--farco-color-neutral-60)',
+            color: 'var(--farco-color-text-secondary)',
           }}>
             {size}px
           </span>
@@ -89,9 +89,9 @@ export const Colors = {
     <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
       {[
         { label: 'default', color: 'inherit' },
-        { label: 'primary', color: 'var(--farco-color-primary)' },
-        { label: 'danger', color: 'var(--farco-color-danger)' },
-        { label: 'subtle', color: 'var(--farco-color-neutral-50)' },
+        { label: 'primary', color: 'var(--farco-color-action-primary)' },
+        { label: 'danger', color: 'var(--farco-color-feedback-danger)' },
+        { label: 'subtle', color: 'var(--farco-color-text-secondary)' },
       ].map(({ label, color }) => (
         <div
           key={label}
@@ -106,7 +106,7 @@ export const Colors = {
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: 'var(--farco-color-neutral-60)',
+            color: 'var(--farco-color-text-secondary)',
           }}>
             {label}
           </span>
