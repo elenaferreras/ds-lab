@@ -2,63 +2,69 @@
  * LAYER: Brand — Farco
  * Activated via [data-brand="farco"].
  * Contains raw color scales (light + dark variants), radius, and font-family.
- * Farco identity: blue-purple tones, rounded corners, humanist sans.
+ * Farco identity: black/grey primary, lime secondary, blue-tinted neutral.
  * Never consumed by components directly — use theme/light.css or theme/dark.css.
+ *
+ * Light scale: 100 = lightest, 1000 = darkest.
+ * Dark scale:  100 = darkest, 1000 = lightest (inverted for dark surfaces).
+ * This means theme/light.css uses high steps (600–800) for prominent elements,
+ * and theme/dark.css also uses high steps (700–900) which resolve to lighter
+ * values — ensuring contrast against the dark page background.
  */
 
 [data-brand="farco"] {
 
   /* -------------------------------------------------------------------------
-   * Primary scale — blue-purple (light mode)
+   * Primary scale — grey (light mode)
    * ------------------------------------------------------------------------- */
-  --ds-brand-color-light-primary-100: #ede9ff;
-  --ds-brand-color-light-primary-200: #d4ccff;
-  --ds-brand-color-light-primary-300: #b3a6ff;
-  --ds-brand-color-light-primary-400: #8b7af7;
-  --ds-brand-color-light-primary-500: #6b55f0;
-  --ds-brand-color-light-primary-600: #5b4ee8;
-  --ds-brand-color-light-primary-700: #4a3dd0;
-  --ds-brand-color-light-primary-800: #3a2faa;
-  --ds-brand-color-light-primary-900: #2b2280;
-  --ds-brand-color-light-primary-1000: #1a1550;
+  --ds-brand-color-light-primary-100: #f0f0f0;
+  --ds-brand-color-light-primary-200: #d9d9d9;
+  --ds-brand-color-light-primary-300: #bfbfbf;
+  --ds-brand-color-light-primary-400: #a0a0a0;
+  --ds-brand-color-light-primary-500: #7a7a7a;
+  --ds-brand-color-light-primary-600: #595959;
+  --ds-brand-color-light-primary-700: #404040;
+  --ds-brand-color-light-primary-800: #2b2b2b;
+  --ds-brand-color-light-primary-900: #1a1a1a;
+  --ds-brand-color-light-primary-1000: #000000;
 
-  /* Primary scale — blue-purple (dark mode) */
-  --ds-brand-color-dark-primary-100: #1a1550;
-  --ds-brand-color-dark-primary-200: #2b2280;
-  --ds-brand-color-dark-primary-300: #3a2faa;
-  --ds-brand-color-dark-primary-400: #4a3dd0;
-  --ds-brand-color-dark-primary-500: #6b55f0;
-  --ds-brand-color-dark-primary-600: #7b6eff;
-  --ds-brand-color-dark-primary-700: #9b91ff;
-  --ds-brand-color-dark-primary-800: #b3a6ff;
-  --ds-brand-color-dark-primary-900: #d4ccff;
-  --ds-brand-color-dark-primary-1000: #ede9ff;
+  /* Primary scale — grey (dark mode) */
+  --ds-brand-color-dark-primary-100: #000000;
+  --ds-brand-color-dark-primary-200: #1a1a1a;
+  --ds-brand-color-dark-primary-300: #2b2b2b;
+  --ds-brand-color-dark-primary-400: #404040;
+  --ds-brand-color-dark-primary-500: #595959;
+  --ds-brand-color-dark-primary-600: #7a7a7a;
+  --ds-brand-color-dark-primary-700: #a0a0a0;
+  --ds-brand-color-dark-primary-800: #bfbfbf;
+  --ds-brand-color-dark-primary-900: #d9d9d9;
+  --ds-brand-color-dark-primary-1000: #f0f0f0;
 
   /* -------------------------------------------------------------------------
-   * Secondary scale — soft violet (light mode)
+   * Secondary scale — lime (light mode)
    * ------------------------------------------------------------------------- */
-  --ds-brand-color-light-secondary-100: #f5f0ff;
-  --ds-brand-color-light-secondary-200: #e8deff;
-  --ds-brand-color-light-secondary-300: #d2bfff;
-  --ds-brand-color-light-secondary-400: #b89afc;
-  --ds-brand-color-light-secondary-500: #9d7bf5;
-  --ds-brand-color-light-secondary-600: #8560e8;
-  --ds-brand-color-light-secondary-700: #6d47cc;
-  --ds-brand-color-light-secondary-800: #5533aa;
-  --ds-brand-color-light-secondary-900: #3d2280;
-  --ds-brand-color-light-secondary-1000: #261255;
+  --ds-brand-color-light-secondary-100: #f5ffe6;
+  --ds-brand-color-light-secondary-200: #e5ffc0;
+  --ds-brand-color-light-secondary-300: #d4ff99;
+  --ds-brand-color-light-secondary-400: #c0f570;
+  --ds-brand-color-light-secondary-500: #aae84a;
+  --ds-brand-color-light-secondary-600: #92d62e;
+  --ds-brand-color-light-secondary-700: #72b01a;
+  --ds-brand-color-light-secondary-800: #558a0f;
+  --ds-brand-color-light-secondary-900: #3a6306;
+  --ds-brand-color-light-secondary-1000: #112200;
 
-  /* Secondary scale — soft violet (dark mode) */
-  --ds-brand-color-dark-secondary-100: #261255;
-  --ds-brand-color-dark-secondary-200: #3d2280;
-  --ds-brand-color-dark-secondary-300: #5533aa;
-  --ds-brand-color-dark-secondary-400: #6d47cc;
-  --ds-brand-color-dark-secondary-500: #8560e8;
-  --ds-brand-color-dark-secondary-600: #9d7bf5;
-  --ds-brand-color-dark-secondary-700: #b89afc;
-  --ds-brand-color-dark-secondary-800: #d2bfff;
-  --ds-brand-color-dark-secondary-900: #e8deff;
-  --ds-brand-color-dark-secondary-1000: #f5f0ff;
+  /* Secondary scale — lime (dark mode) */
+  --ds-brand-color-dark-secondary-100: #112200;
+  --ds-brand-color-dark-secondary-200: #3a6306;
+  --ds-brand-color-dark-secondary-300: #558a0f;
+  --ds-brand-color-dark-secondary-400: #72b01a;
+  --ds-brand-color-dark-secondary-500: #92d62e;
+  --ds-brand-color-dark-secondary-600: #aae84a;
+  --ds-brand-color-dark-secondary-700: #c0f570;
+  --ds-brand-color-dark-secondary-800: #d4ff99;
+  --ds-brand-color-dark-secondary-900: #e5ffc0;
+  --ds-brand-color-dark-secondary-1000: #f5ffe6;
 
   /* -------------------------------------------------------------------------
    * Neutral scale — blue-tinted grey (light mode)
