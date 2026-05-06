@@ -291,7 +291,16 @@ Also audit the component's Figma component properties against the property table
 
 Using `references/COMPONENT_SPECS.md` §1 and the per-component layer guide:
 - For each changed or unbound property, identify the corresponding `Semantic` Variable name (e.g. `color/action/primary`, `spacing/6`, `radius/full`)
-- For `color-mix()` derived values (tinted backgrounds, hover states), no Variable exists — these are the only exception. Compute the resulting color from the token values and note in the report that it is a derived value with no Variable binding
+- **No raw values allowed in components.** If a design value is derived (e.g. `color-mix()`, an alpha blend, or any computed color/number) and no existing Variable matches it, you must **create a Variable** for it before touching component layers:
+  - Prefer creating a new `Semantic` Variable that aliases to existing Variables when possible.
+  - If it cannot be expressed as an alias (true computed value), create a new Variable with the computed value and a clear semantic name (as defined in `references/COMPONENT_SPECS.md`), then bind layers to that Variable.
+  - **Approval required:** before creating any new Variable in Figma (Semantic/Primitives/Global), you must first propose:
+    - the Variable name(s)
+    - collection + mode(s)
+    - resolved type
+    - value(s) or alias target(s)
+    Then wait for explicit user approval to create them. Until approved, do not create Variables and do not fall back to raw hex/px in component layers.
+  - If the correct Variable name is unclear, stop and extend `references/COMPONENT_SPECS.md` first — do not fall back to raw hex/px in component layers.
 
 ### A3. Locate the Figma nodes
 
@@ -305,7 +314,7 @@ For each changed property:
 - **Bind the layer to the corresponding `Semantic` Variable** — do not set raw hex, px, or numeric values directly. Use the Figma MCP's variable binding API to attach the layer property to the Variable by name
 - **Bind every text layer to its named Text Style** — use the Figma MCP's text style binding API. Do not set font family, size, weight, line height, or letter spacing as raw values. Text Style assignments are listed in `references/COMPONENT_SPECS.md` §2. After binding, if the component applies `uppercase` or other text decorations, set those as layer-level overrides on top of the bound style (text decoration overrides are valid; font property overrides are not).
 - Apply to all affected layers across variants, sizes, and states
-- **Exception:** `color-mix()` derived fills have no Variable — apply the computed color as a raw fill value and flag it in the report as a derived value
+- **Hard rule:** never apply raw hex/px/numbers inside component layers, including for derived values. Derived values must be represented as Variables first (see A2).
 
 ### A5. Report
 
@@ -331,7 +340,10 @@ Read `src/components/ui/<name>/<name>.jsx` thoroughly. Extract:
 
 ### B2. Resolve all token values
 
-For every `--farco-*` token found in the JSX, look up its resolved value in `src/tokens/themes/farco.css`. For `color-mix()` expressions, compute the resulting color manually.
+For every `--farco-*` token found in the JSX, look up its resolved value in `src/tokens/themes/farco.css`.
+
+- For derived expressions (e.g. `color-mix()`), compute the resulting value **only to validate correctness**, then ensure there is a corresponding Figma Variable representing that derived value (or a Variable alias chain that resolves to it). Do not plan to apply the computed value directly to a component layer.
+- **Approval required:** if that Variable does not exist yet, propose the new Variable(s) (name, collection, modes, type, value/alias) and wait for explicit approval before creating them.
 
 ### B3. Create the Figma page
 
@@ -343,7 +355,7 @@ On the new page, create one frame per variant × size × state combination. Foll
 - Arrange frames in a grid: variants along the X axis, sizes along the Y axis
 - Label each frame clearly (e.g. `Button / Primary / MD / Default`)
 - Apply all visual properties using the resolved token values from B2: fills, strokes, typography, spacing, border radii, shadows, opacity
-- Bind every fill, stroke, spacing, and radius value to the corresponding `Semantic` Variable — do not use raw values. Flag any `color-mix()` derived fills in the B6 report.
+- Bind every fill, stroke, spacing, and radius value to the corresponding `Semantic` Variable — do not use raw values. For any derived value, create the needed Variable(s) first (see B2).
 - **Bind every text layer to its named Text Style** from the §3 matrix — do not set raw font properties. Text Style assignments are specified in `references/COMPONENT_SPECS.md` §2. Apply uppercase and other text decorations as layer-level overrides after binding the style.
 - Include all interactive states as separate frames or variants within the Figma component
 
@@ -464,6 +476,8 @@ For each component Workflow D ran on, list:
 ---
 
 - **Work with Variable bindings, not raw values** — component layer properties must be bound to `Semantic` Variables. The only exception is `color-mix()` derived fills, which must be flagged in the report.
+- **No raw component values (hard rule):** Workflows A/B must never write raw hex/px/numbers into component layers. If a value is derived and no Variable exists yet, create a Variable first, then bind.
+- **No silent token creation:** Creating new Variables is a schema change. Always ask for approval first (propose names/types/values), then create.
 - **Text layers must use named Text Styles, not raw font properties** — every text layer in every component must be bound to a Text Style from the §3 matrix (`text/xs-regular`, `text/sm-regular`, `text/sm-medium`, etc.). Setting font family, size, weight, line height, or letter spacing directly on a layer is prohibited. A layer using any font other than `Overused Grotesk` (e.g. `Inter`) is a sync violation and must be corrected. Per-component Text Style assignments are in `COMPONENT_SPECS.md` §2.
 - **Never modify nodes outside DS-Lab-Components** — do not touch any other Figma file. The Phosphor Icons library file may be queried/read (via library search) to resolve icon component keys, but must never be modified.
 - **Always execute in order: Phase 1 (tokens) → Phase 2 (components)** — never start a component workflow before Workflow T is complete.
