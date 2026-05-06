@@ -20,17 +20,12 @@ const ICON_SIZE = {
 function getVariantClasses(variant, intent) {
   const isDanger = intent === 'danger'
 
-  const subtleFrom = (cssVar) =>
-    `enabled:hover:bg-[color-mix(in_oklab,var(${cssVar})_10%,transparent)]`
-  const pressedFrom = (cssVar) =>
-    `enabled:active:bg-[color-mix(in_oklab,var(${cssVar})_88%,var(--farco-color-text-primary))]`
-
   if (variant === 'primary') {
     return isDanger
       ? {
           base: 'bg-[var(--farco-color-feedback-danger)] text-[var(--farco-color-text-on-action)] border-[var(--farco-color-feedback-danger)]',
-          hover: 'enabled:hover:bg-[color-mix(in_oklab,var(--farco-color-feedback-danger)_92%,var(--farco-color-text-primary))] enabled:hover:border-[color-mix(in_oklab,var(--farco-color-feedback-danger)_92%,var(--farco-color-text-primary))]',
-          active: 'enabled:active:bg-[color-mix(in_oklab,var(--farco-color-feedback-danger)_84%,var(--farco-color-text-primary))] enabled:active:border-[color-mix(in_oklab,var(--farco-color-feedback-danger)_84%,var(--farco-color-text-primary))] enabled:active:scale-[0.98]',
+          hover: 'enabled:hover:bg-[var(--farco-color-action-destructive-hover)] enabled:hover:border-[var(--farco-color-action-destructive-hover)]',
+          active: 'enabled:active:bg-[var(--farco-color-action-destructive-pressed)] enabled:active:border-[var(--farco-color-action-destructive-pressed)] enabled:active:scale-[0.98]',
         }
       : {
           base: 'bg-[var(--farco-color-action-primary)] text-[var(--farco-color-text-on-action)] border-[var(--farco-color-action-primary)]',
@@ -44,18 +39,18 @@ function getVariantClasses(variant, intent) {
       ? {
           base: 'bg-transparent text-[var(--farco-color-feedback-danger)] border-[var(--farco-color-feedback-danger)]',
           hover: cn(
-            subtleFrom('--farco-color-feedback-danger'),
+            'enabled:hover:bg-[var(--farco-color-feedback-danger-bg)]',
             'enabled:hover:border-[var(--farco-color-feedback-danger)]'
           ),
           active: cn(
-            pressedFrom('--farco-color-feedback-danger'),
+            'enabled:active:bg-[var(--farco-color-feedback-danger-subtle)]',
             'enabled:active:text-[var(--farco-color-text-on-action)] enabled:active:border-[var(--farco-color-feedback-danger)] enabled:active:scale-[0.98]'
           ),
         }
       : {
           base: 'bg-transparent text-[var(--farco-color-text-primary)] border-[var(--farco-color-border)]',
-          hover: cn(subtleFrom('--farco-color-border'), 'enabled:hover:border-[var(--farco-color-border)]'),
-          active: cn(pressedFrom('--farco-color-border'), 'enabled:active:border-[var(--farco-color-border)] enabled:active:scale-[0.98]'),
+          hover: cn('enabled:hover:bg-[var(--farco-color-action-ghost-hover-bg)]', 'enabled:hover:border-[var(--farco-color-border)]'),
+          active: cn('enabled:active:bg-[var(--farco-color-action-ghost-pressed-bg)]', 'enabled:active:border-[var(--farco-color-border)] enabled:active:scale-[0.98]'),
         }
   }
 
@@ -63,13 +58,13 @@ function getVariantClasses(variant, intent) {
   return isDanger
     ? {
         base: 'bg-transparent text-[var(--farco-color-feedback-danger)] border-transparent',
-        hover: cn(subtleFrom('--farco-color-feedback-danger'), 'enabled:hover:border-transparent'),
-        active: cn(pressedFrom('--farco-color-feedback-danger'), 'enabled:active:border-transparent enabled:active:scale-[0.98]'),
+        hover: cn('enabled:hover:bg-[var(--farco-color-feedback-danger-bg)]', 'enabled:hover:border-transparent'),
+        active: cn('enabled:active:bg-[var(--farco-color-feedback-danger-subtle)]', 'enabled:active:border-transparent enabled:active:scale-[0.98]'),
       }
     : {
         base: 'bg-transparent text-[var(--farco-color-text-primary)] border-transparent',
-        hover: cn(subtleFrom('--farco-color-border'), 'enabled:hover:border-transparent'),
-        active: cn(pressedFrom('--farco-color-border'), 'enabled:active:border-transparent enabled:active:scale-[0.98]'),
+        hover: cn('enabled:hover:bg-[var(--farco-color-action-ghost-hover-bg)]', 'enabled:hover:border-transparent'),
+        active: cn('enabled:active:bg-[var(--farco-color-action-ghost-pressed-bg)]', 'enabled:active:border-transparent enabled:active:scale-[0.98]'),
       }
 }
 

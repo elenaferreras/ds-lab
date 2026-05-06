@@ -302,36 +302,33 @@ toast({
 })
 ```
 
-Built on `@radix-ui/react-toast`. Toast items stack from the bottom-right corner. Each variant has an icon (CheckCircleOutlined / WarningOutlined / XCircleOutlined).
+Built on `@radix-ui/react-toast`. Toast items stack from the bottom-right corner. Each variant has an icon (`CheckCircle` / `Warning` / `XCircle` from Phosphor).
 
 ---
 
 ## 5. Icon System
 
-**Location:** `src/components/ui/icons/`
-**Figma page:** `Icons`
+**Code source of truth:** `@phosphor-icons/react`
+**Figma source of truth:** Phosphor icon components from the `DS Lab: Phosphor Icons` library (instances inside DS-Lab components)
 
-**Available icons:**
-- `ArrowRightOutlined`
-- `CheckCircleOutlined`
-- `CloseOutlined`
-- `PlusOutlined`
-- `WarningOutlined`
-- `XCircleOutlined`
+**Icon usage rules (Figma):**
+- When a UI component uses an icon (Button icon slots, Badge dismiss ×, Toast status icons), the icon layer must be a **nested instance** of the correct Phosphor library icon component — not a raw vector copy and not a detached instance.
+- Icon colour must be controlled by the consuming component (typically via `color` / text colour). If a specific icon layer needs a different Variable binding, apply it as an **instance override** (do not detach).
 
-**Figma component rules:**
-- One Figma component per `.jsx` file — 14×14 frame, named after the icon
-- Constraints set to **Scale** on both axes so the component resizes proportionally when used inside other components
-- All stroke/fill layers bound to `DS-Lab Tokens` Variable `color/neutral-100` by default; consuming components override color at the instance level
-- When a UI component uses an icon as a child (Button icon slots, Badge dismiss ×, Toast status icons), the icon slot must be a **nested instance** of the Figma icon component — not a raw vector copy
+**Default weight policy (code → Figma):**
+- Status icons (Toast variants) use `weight=\"fill\"`
+- UI chrome icons (dismiss/close, generic affordances) use `weight=\"regular\"`
+
+**Default format policy (Phosphor in Figma):**
+- Always use **`Format = Outline`** for nested icon instances. Never use `Stroke`.
 
 **Usage:**
 ```jsx
-import { PlusOutlined } from '../components/ui/icons'
-<PlusOutlined width={16} height={16} />
+import { PlusIcon } from '@phosphor-icons/react'
+<PlusIcon size={16} weight="regular" />
 ```
 
-All icons are plain SVG React components accepting `width` and `height` props.
+All icons are Phosphor React components accepting `size` and `weight` props.
 
 ---
 
@@ -385,12 +382,6 @@ The design file is: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-
 | Card | `6:4` | `10:2` | COMPONENT |
 | Input | `6:5` | `11:27` | COMPONENT_SET |
 | Toast | `6:6` | `12:25` | COMPONENT_SET |
-| Icons / ArrowRightOutlined | `43:2` | `43:9` | COMPONENT |
-| Icons / CheckCircleOutlined | `43:2` | `43:14` | COMPONENT |
-| Icons / CloseOutlined | `43:2` | `43:18` | COMPONENT |
-| Icons / PlusOutlined | `43:2` | `43:22` | COMPONENT |
-| Icons / WarningOutlined | `43:2` | `43:28` | COMPONENT |
-| Icons / XCircleOutlined | `43:2` | `43:33` | COMPONENT |
 | Button / Documentation | `0:1` | `172:116` | FRAME |
 | Badge / Documentation | `6:2` | `172:205` | FRAME |
 | Avatar / Documentation | `6:3` | `172:290` | FRAME |
@@ -399,3 +390,16 @@ The design file is: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-
 | Toast / Documentation | `6:6` | `172:525` | FRAME |
 
 To get design context for a specific component, open the Figma file in the Figma Desktop app, select the component frame, then call `get_design_context` (the node ID will be in the selection).
+
+### Phosphor icon references (authoritative for icons)
+
+The DS-Lab-Components file uses the subscribed library `DS Lab: Phosphor Icons`. These keys are used by the `figma-sync` skill (Workflow I) to import and wire icon instances.
+
+| Code import name | Phosphor component set name | Library name | Library key | Component key |
+|---|---|---|---|---|
+| `XIcon` | `X` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `71645eedc1868f7b94a3e1284a73070733e951bc` |
+| `CheckCircleIcon` | `CheckCircle` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `600cf90069a057235f5675a55c3a56592691544f` |
+| `WarningIcon` | `Warning` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `eb0fd29ef6d5df262601e0ea7025b6517403b31f` |
+| `XCircleIcon` | `XCircle` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `5557c9aa1f5aa166243bca01a2107496666f2632` |
+| `PlusIcon` | `Plus` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `c1b8a390deee2ebb32f6d22211b031833595619a` |
+| `ArrowRightIcon` | `ArrowRight` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `c838cca546e0059b52148b958ab3e0749c5d0132` |

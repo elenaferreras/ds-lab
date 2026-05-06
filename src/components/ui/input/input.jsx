@@ -67,7 +67,7 @@ export function Input({
           !hasError && 'focus:border-[var(--farco-color-border-focus)] focus:ring-2 focus:ring-[var(--farco-color-border-focus)] focus:ring-offset-0',
           // error border + focus
           hasError && 'border-[var(--farco-color-feedback-danger)]',
-          hasError && 'focus:border-[var(--farco-color-feedback-danger)] focus:ring-2 focus:ring-[color-mix(in_oklab,var(--farco-color-feedback-danger)_30%,transparent)] focus:ring-offset-0',
+          hasError && 'focus:border-[var(--farco-color-feedback-danger)] focus:ring-2 focus:ring-[var(--farco-color-feedback-danger-border)] focus:ring-offset-0',
           // disabled
           'disabled:opacity-[var(--farco-opacity-disabled)] disabled:cursor-not-allowed disabled:bg-[var(--farco-color-surface-subtle)]',
           inputClassName

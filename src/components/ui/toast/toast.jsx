@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useState } from 'react'
 import * as RadixToast from '@radix-ui/react-toast'
 import { cn } from '../../../lib/cn'
 import { Button } from '../button'
-import { AxeIcon, CheckCircleIcon, WarningIcon, XCircleIcon, XIcon } from '@phosphor-icons/react'
+import { CheckCircleIcon, WarningIcon, XCircleIcon, XIcon } from '@phosphor-icons/react'
 
 // ─── Variant styles ──────────────────────────────────────────────────────────
 
@@ -10,28 +10,16 @@ const VARIANTS = /** @type {const} */ (['default', 'success', 'warning', 'danger
 
 const VARIANT_CLASSES = {
   default: 'bg-[var(--farco-color-surface-overlay)] text-[var(--farco-color-text-inverse)] border-[var(--farco-color-border)]',
-  success: [
-    'bg-[color-mix(in_oklab,var(--farco-color-feedback-success)_12%,var(--farco-color-surface-base))]',
-    'text-[var(--farco-color-text-primary)]',
-    'border-[color-mix(in_oklab,var(--farco-color-feedback-success)_40%,transparent)]',
-  ].join(' '),
-  warning: [
-    'bg-[color-mix(in_oklab,var(--farco-color-feedback-warning)_12%,var(--farco-color-surface-base))]',
-    'text-[var(--farco-color-text-primary)]',
-    'border-[color-mix(in_oklab,var(--farco-color-feedback-warning)_40%,transparent)]',
-  ].join(' '),
-  danger: [
-    'bg-[color-mix(in_oklab,var(--farco-color-feedback-danger)_10%,var(--farco-color-surface-base))]',
-    'text-[var(--farco-color-text-primary)]',
-    'border-[color-mix(in_oklab,var(--farco-color-feedback-danger)_35%,transparent)]',
-  ].join(' '),
+  success: 'bg-[var(--farco-color-feedback-success-bg)] text-[var(--farco-color-text-primary)] border-[var(--farco-color-feedback-success-border)]',
+  warning: 'bg-[var(--farco-color-feedback-warning-bg)] text-[var(--farco-color-text-primary)] border-[var(--farco-color-feedback-warning-border)]',
+  danger:  'bg-[var(--farco-color-feedback-danger-bg)] text-[var(--farco-color-text-primary)] border-[var(--farco-color-feedback-danger-border)]',
 }
 
 const ICON_MAP = {
   default: null,
   success: () => <CheckCircleIcon size={16} weight="fill" />,
   warning: () => <WarningIcon size={16} weight="fill" />,
-  danger: () => <AxeIcon size={16} weight="fill" />,
+  danger: () => <XCircleIcon size={16} weight="fill" />,
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────

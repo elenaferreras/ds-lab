@@ -18,9 +18,11 @@ Keeps the DS-Lab Figma file in sync with the codebase. Handles three scenarios:
 
 - Figma Desktop app must be running with the local MCP server active at `http://127.0.0.1:3845/mcp`
 - Figma file: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-Components`
+- Phosphor Icons library file (read-only reference): `https://www.figma.com/design/DgCvciYAzYDi5jNMyt14t2/DS-Lab--Phosphor-Icons`
 - Token source of truth: `src/tokens/themes/farco.css` (Farco theme) and `src/tokens/themes/white-label.css` (White Label theme)
 - Component implementations: `src/components/ui/<name>/<name>.jsx`
 - Node ID registry: `FIGMA_RULES.md` §8
+- Local font access: the Figma plugin runtime must be able to load `Overused Grotesk` (e.g. `figma.listAvailableFontsAsync()` should include it). If it is missing in the plugin runtime, any workflow that creates instances or updates text layers may fail with `unloaded font "Overused Grotesk Regular"`; fix local font access in Figma Desktop (or use a font the plugin runtime can load) before retrying.
 
 Before doing anything else, load `references/COMPONENT_SPECS.md` — it contains the full token-to-Figma mapping table, the token sync reference, and per-component property guides needed for all workflows.
 
@@ -42,7 +44,6 @@ Tokens must be fully synced before components are touched — component layers w
 
 1. List all folder names inside `src/components/ui/`. Call the Figma MCP to enumerate all pages in DS-Lab-Components.
 2. For each component folder, check whether a page with a matching name (PascalCase) exists in Figma:
-   - Folder is `icons` → **Workflow I** (regardless of whether an `Icons` page exists — Workflow I handles both create and update). Do **not** run Workflow D for the Icons page.
    - Page exists → **Workflow A**, then immediately **Workflow D**
    - No page found → **Workflow B**, then immediately **Workflow D**
 3. Report which components go to which workflow, then execute them.
@@ -50,7 +51,7 @@ Tokens must be fully synced before components are touched — component layers w
 ### Phase 3 — Page order (runs after all component workflows are complete)
 
 1. Retrieve the current page list and order from the Figma MCP
-2. Build the set of **known component pages** — the PascalCase page names that correspond to folders in `src/components/ui/` plus `Icons`. These are the only pages this skill manages.
+2. Build the set of **known component pages** — the PascalCase page names that correspond to folders in `src/components/ui/`. These are the only pages this skill manages. Any other pages in the Figma file (e.g. `Icons`) are unmanaged and must not be touched.
 3. Identify any **unmanaged pages** — pages present in the file that are not in the known component set. Their positions must not change.
 4. Sort the known component pages case-insensitively A→Z to produce the desired component order.
 5. Re-sequence only the known component pages into sorted order while leaving all unmanaged pages in their current absolute positions. If the known pages are already in sorted order relative to each other → skip.
@@ -163,66 +164,99 @@ List every Variable created, updated, or skipped across all three collections (`
 
 ---
 
-## Workflow I — Sync icons to Figma
+## Workflow I — Wire Phosphor icon instances in consuming components
 
-Run this when the folder being synced is `src/components/ui/icons/`. Icons are treated as a separate workflow from regular components — they have no token-driven variants or states, but they must be proper scalable Figma components so other components can nest them as instances.
+Run this as a **sub-procedure** called from within Workflow A or Workflow B whenever a component has icon slots that need wiring (Button, Badge, Toast). It is not a top-level workflow triggered by a folder scan — the `icons` folder no longer exists in `src/components/ui/`.
 
-Refer to `references/COMPONENT_SPECS.md` §5 for the SVG layer breakdown, constraint rules, and nested-instance requirements for each icon.
+Refer to `references/COMPONENT_SPECS.md` §5 for the icon mapping table and nested-instance requirements.
 
-### I0. Triage the Icons page
+### I0. Triage icon requirements
 
-- Call the Figma MCP to check if a page named `Icons` exists in DS-Lab-Components
-- **Page exists** → enumerate all components currently on it. Compare against the `.jsx` files in `src/components/ui/icons/` (exclude `index.js` and any `*.stories.jsx` files). For each icon:
-  - Present in Figma and unchanged → skip
-  - Present in Figma but SVG paths differ from source → update the vector layers (step I2)
-  - Missing from Figma → create it (step I2)
-- **Page does not exist** → create it now, then create all 6 icon components from scratch (step I2)
+- Icons come from `@phosphor-icons/react` and must be represented in Figma as **instances of the Phosphor Icons library** (not DS-Lab-owned vector components).
+- The `Icons` page in the Figma file is unmanaged — leave it untouched. Do not create, modify, or delete it.
+- Confirm the library `DS Lab: Phosphor Icons` is subscribed to the DS-Lab-Components file:
+  - If present → proceed to I1
+  - If missing → add the library, then proceed
 
-### I1. Parse icon sources
+### I1. Build the required icon set from code
 
-For each `.jsx` file in `src/components/ui/icons/` (skip `index.js` and `*.stories.jsx`):
-- Read the file and extract the SVG structure: viewBox, all child elements (`<path>`, `<circle>`, `<ellipse>`, `<g>`, `<clipPath>`), and their attributes (`d`, `stroke`, `fill`, `strokeWidth`, `strokeLinecap`, `strokeLinejoin`, `opacity`, `cx`, `cy`, `r`, `fillRule`, `clipRule`)
-- Build a record: `{ name, viewBox, layers: [...] }`
+- Scan `src/components/ui/**/*.jsx` for `from '@phosphor-icons/react'` imports and usages.
+- Build a unique list of required icons as records: `{ codeName, phosphorName, weightPolicy }`.
+- Apply the default mapping rules unless explicitly overridden in `COMPONENT_SPECS.md`:
+  - `XIcon` → `X` (UI chrome, default weight: `regular`)
+  - `CheckCircleIcon` → `CheckCircle` (status, default weight: `fill`)
+  - `WarningIcon` → `Warning` (status, default weight: `fill`)
+  - `XCircleIcon` → `XCircle` (status, default weight: `fill`)
+  - `PlusIcon` → `Plus` (UI chrome, default weight: `regular`)
+  - `ArrowRightIcon` → `ArrowRight` (UI chrome, default weight: `regular`)
 
-### I2. Create or update icon components
+### I2. Resolve Phosphor component keys
 
-For each icon that needs creating or updating:
-
-1. **Root frame:** 14×14, named after the icon (e.g. `ArrowRightOutlined`). Set constraints to **Scale** on both horizontal and vertical axes.
-2. **Vector layers:** translate each SVG child element to a Figma vector node using the layer names and attributes from `COMPONENT_SPECS.md` §5. Preserve `opacity`, `strokeWidth`, `strokeLinecap`, `strokeLinejoin`, and `fillRule` exactly.
-3. **Color binding:** bind every `stroke` and `fill` color on every layer to the `Semantic` Variable **`color/text/primary`**. Do not set raw hex values.
-4. **Clip masks:** if the SVG uses a `<clipPath>` (e.g. `ArrowRightOutlined`), apply the clip mask rectangle to the root frame.
-5. **Layout:** arrange all icon components in a single row on the `Icons` page, spaced 40px apart. Place a text label below each frame showing the component name.
+- For each required icon record, resolve the corresponding Phosphor library asset:
+  - Use `search_design_system` scoped to the `DS Lab: Phosphor Icons` library key.
+  - Prefer `assetType: component_set` results.
+  - Record `componentKey` for each icon.
+- If any icon cannot be found by exact name, retry with common normalizations:
+  - Strip a trailing `Icon` suffix
+  - Try both `XIcon` and `X`
+- Persist the resolved mapping in `FIGMA_RULES.md` (Workflow I4).
 
 ### I3. Wire nested instances in consuming components
 
-After all icon components exist on the `Icons` page, check each consuming component listed in `COMPONENT_SPECS.md` §5:
+After all required icon component keys are resolved, check each consuming component listed in `COMPONENT_SPECS.md`:
 
 - Use `get_design_context` on the consuming component's page (node IDs from `FIGMA_RULES.md` §8)
 - For each icon slot in the consuming component, check whether it is already a live instance of the icon component:
-  - **Already a live instance pointing to the correct icon component** → proceed to color override check below
-  - **Raw vector or wrong instance** → replace it with an instance of the correct icon component from the `Icons` page
-- After confirming the slot is a live instance, **override the fill/stroke Variable on the instance's vector layers** to the Variable specified in the `Fill Variable override` column of the nested instances table in `COMPONENT_SPECS.md` §5. Use the Figma MCP's instance override API — do not detach the instance. If the override already matches the correct Variable, skip it.
+  - **Already a live instance pointing to the correct Phosphor library component (by component key)** → proceed to override check below
+  - **Raw vector or wrong instance** → replace it with an instance of the correct Phosphor library component (import the component set by key if needed; do not recreate vectors)
+- After confirming the slot is a live instance, apply instance-level Variable overrides as specified by `COMPONENT_SPECS.md` for that component/slot. Do not detach instances.
+- Always enforce the Phosphor icon variant property `Format = Outline` on every nested icon instance. Never use `Stroke`.
+- Enforce slot-to-icon rewiring (authoritative mapping):
+  - **Button icon slots:** left slot must be Phosphor `Plus`, right slot must be Phosphor `ArrowRight`
+  - **Badge dismiss:** must be Phosphor `X`
+  - **Toast status icons:** `success` → Phosphor `CheckCircle`, `warning` → Phosphor `Warning`, `danger` → Phosphor `XCircle`
+- Enforce Button icon constraints (must match code + library policy):
+  - `Icon Left` / `Icon Right` must always be **instances from the Phosphor library** (never raw vectors, never local SVG components).
+  - Phosphor instance properties must be enforced:
+    - `Format = Outline` (never `Stroke`)
+    - `Weight = Regular` for Button chrome icons (Plus, ArrowRight)
+  - If a Button icon slot contains a non-Phosphor instance, replace it with the correct Phosphor instance and reapply the paint variable override for that variant/intent.
+- Enforce Toast close-button structure (must match code):
+  - The Toast component’s `CloseButton` must contain a **nested `Button` instance** configured as `variant=ghost`, `size=sm`, `Has Icon Left=true`, `Icon Left = X (Phosphor)`, and no visible label.
+  - The close icon colour must inherit the Toast text colour (`Variant=default` → `color/text/inverse`, otherwise → `color/text/primary`).
+- If the plugin runtime cannot load the project font (commonly `Overused Grotesk`) and instance creation fails, do **not** attempt to script around it (it will keep failing). Apply the close-button structure **manually in Figma UI** (place a Button instance and set its properties), then re-run `figma-sync` to apply Variable bindings and Phosphor instance overrides.
 - Apply this to all variant frames in the consuming component that contain that icon slot
 
-### I4. Record node IDs
+---
 
-After creating or updating icon components:
-1. Call `get_design_context` on each new or updated icon component to retrieve its node ID
-2. Add or update rows in `FIGMA_RULES.md` §8:
+## Workflow Y — Typography audit (global enforcement)
 
-```markdown
-| Icons / ArrowRightOutlined | `<node-id>` |
-| Icons / CheckCircleOutlined | `<node-id>` |
-| Icons / CloseOutlined | `<node-id>` |
-| Icons / PlusOutlined | `<node-id>` |
-| Icons / WarningOutlined | `<node-id>` |
-| Icons / XCircleOutlined | `<node-id>` |
-```
+Run this once after all Phase 2 component workflows have completed.
+
+### Y1. Allowed Text Styles
+
+- Enumerate local Text Styles in the DS-Lab-Components file.
+- The only allowed styles are the named `text/*` styles from `references/COMPONENT_SPECS.md` §3.
+
+### Y2. Audit and enforce
+
+- For every DS-Lab component set/component (including all variants), enumerate all descendant `TEXT` nodes.
+- Every `TEXT` node must be bound to a named Text Style from the allowed set.
+- If a `TEXT` node is unstyled, uses `Inter`, or has raw font properties not matching a named style → bind it to the closest matching named style by size + weight (see §3 matrix).
+- Do not leave any `TEXT` node with `fontName.family` containing quotes or fallbacks (e.g. `"'Overused Grotesk', sans-serif"`). It must resolve to `Overused Grotesk`.
+
+### Y3. Report
+
+- List each text node updated (node ID, old style/font, new Text Style).
+- List any node that could not be updated due to font loading errors, with the exact error.
+
+### I4. Record icon references
+
+After resolving component keys, update `FIGMA_RULES.md` §8 with a Phosphor icon reference table storing `{ libraryName, libraryKey, componentKey }` per icon name. The Phosphor icon component keys already recorded in §8 are authoritative — only update if a key has changed.
 
 ### I5. Report
 
-List every icon component created or updated, the node ID recorded, every consuming component where an icon slot was wired to a live instance, and every fill Variable override applied. Flag any MCP call that failed with the exact node ID and error — do not skip failures silently.
+List every icon resolved (name → componentKey), every consuming component where an icon slot was wired to a live instance, and every Variable override applied. Flag any MCP call that failed with the exact node ID/componentKey and error — do not skip failures silently.
 
 ---
 
@@ -236,10 +270,19 @@ Read the component's JSX file. For each visual property used (fill, border, radi
 
 Do not work with raw hex values — work with token names. The question to answer for each property is: "which `Semantic` Variable should this layer be bound to, and is it currently bound to the right one with the right value?"
 
+Also audit every **text layer** in the component for Text Style compliance:
+- Every text layer must be bound to a named Text Style from the §3 matrix (e.g. `text/sm-regular`, `text/md-medium`). Raw font properties set directly on a layer — family, size, weight, line height, letter spacing — are a violation equivalent to an unbound Variable.
+- A text layer using any font other than `Overused Grotesk` (e.g. `Inter`, `Roboto`, system fonts) is a sync violation regardless of other properties.
+- Per-component Text Style assignments are listed in `references/COMPONENT_SPECS.md` §2. Any text layer not bound to its specified Text Style must be treated as a change to apply in A4.
+
 Also audit the component's Figma component properties against the property table in `references/COMPONENT_SPECS.md` §4:
 - Retrieve the current properties defined on the component set using the Figma MCP
 - Compare them against the §4 table for this component
 - Any property in §4 that is missing from the Figma component set must be added as part of this sync run — treat missing properties as changes to apply, using the same type, options, and default value specified in §4
+- If a property exists but is **not referenced by any layer** (i.e. the component property appears in the right panel but does nothing), it is a sync violation. Wire it immediately:
+  - For `BOOLEAN` properties: bind to the target layer’s `visible` reference (or to the appropriate variant dimension if the state is represented as variants).
+  - For `INSTANCE_SWAP` properties: bind to the slot instance’s `mainComponent` reference.
+  - For `TEXT` properties: bind to the target text layer’s `characters` reference.
 - When adding a missing `BOOLEAN` property: after creating it, also apply the full boolean setup — set any required fills on the controlled layer first (e.g. image fills), then set the layer's visibility to match the boolean's default value, and wire the property to the layer. Do not create the property in isolation.
 - When adding a missing `TEXT` property: check whether the binding target layer exists in the component. If it does not exist (as is the case for accessibility annotation layers such as `Alt`), first create the layer — a text node named after the prop in title case, `visibility: true` with **`opacity: 0`**, font `font/family-base`, size `font/size-sm`, color `color/text/secondary` — then bind the property to it. Use opacity 0, not `visibility: false` — Figma requires the layer to be in the visible layer tree to accept a component property binding.
 - Any property that already exists with the correct type and default → skip it (do not recreate or overwrite)
@@ -260,6 +303,7 @@ Using the component's known node ID from `FIGMA_RULES.md` §8:
 
 For each changed property:
 - **Bind the layer to the corresponding `Semantic` Variable** — do not set raw hex, px, or numeric values directly. Use the Figma MCP's variable binding API to attach the layer property to the Variable by name
+- **Bind every text layer to its named Text Style** — use the Figma MCP's text style binding API. Do not set font family, size, weight, line height, or letter spacing as raw values. Text Style assignments are listed in `references/COMPONENT_SPECS.md` §2. After binding, if the component applies `uppercase` or other text decorations, set those as layer-level overrides on top of the bound style (text decoration overrides are valid; font property overrides are not).
 - Apply to all affected layers across variants, sizes, and states
 - **Exception:** `color-mix()` derived fills have no Variable — apply the computed color as a raw fill value and flag it in the report as a derived value
 
@@ -300,6 +344,7 @@ On the new page, create one frame per variant × size × state combination. Foll
 - Label each frame clearly (e.g. `Button / Primary / MD / Default`)
 - Apply all visual properties using the resolved token values from B2: fills, strokes, typography, spacing, border radii, shadows, opacity
 - Bind every fill, stroke, spacing, and radius value to the corresponding `Semantic` Variable — do not use raw values. Flag any `color-mix()` derived fills in the B6 report.
+- **Bind every text layer to its named Text Style** from the §3 matrix — do not set raw font properties. Text Style assignments are specified in `references/COMPONENT_SPECS.md` §2. Apply uppercase and other text decorations as layer-level overrides after binding the style.
 - Include all interactive states as separate frames or variants within the Figma component
 
 Once all frames are scaffolded, define Figma component properties on the **component set** (the parent wrapper node, not individual frames) using the property table in `references/COMPONENT_SPECS.md` §4 for this component:
@@ -419,7 +464,8 @@ For each component Workflow D ran on, list:
 ---
 
 - **Work with Variable bindings, not raw values** — component layer properties must be bound to `Semantic` Variables. The only exception is `color-mix()` derived fills, which must be flagged in the report.
-- **Never modify nodes outside DS-Lab-Components** — do not touch any other Figma file.
+- **Text layers must use named Text Styles, not raw font properties** — every text layer in every component must be bound to a Text Style from the §3 matrix (`text/xs-regular`, `text/sm-regular`, `text/sm-medium`, etc.). Setting font family, size, weight, line height, or letter spacing directly on a layer is prohibited. A layer using any font other than `Overused Grotesk` (e.g. `Inter`) is a sync violation and must be corrected. Per-component Text Style assignments are in `COMPONENT_SPECS.md` §2.
+- **Never modify nodes outside DS-Lab-Components** — do not touch any other Figma file. The Phosphor Icons library file may be queried/read (via library search) to resolve icon component keys, but must never be modified.
 - **Always execute in order: Phase 1 (tokens) → Phase 2 (components)** — never start a component workflow before Workflow T is complete.
 - **For Workflow B**, new pages must use the same grid/frame conventions as existing component pages in the file. Call `get_design_context` on an existing component page first to observe the layout pattern.
 - **On any MCP failure**, report the error with the exact node ID, variable name, or style name and the error message — do not silently skip or partially apply changes.

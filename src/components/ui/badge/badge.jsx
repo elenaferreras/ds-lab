@@ -7,26 +7,10 @@ const SIZES = /** @type {const} */ (['sm', 'md'])
 
 const VARIANT_CLASSES = {
   default: 'bg-[var(--farco-color-surface-subtle)] text-[var(--farco-color-text-secondary)] border-[var(--farco-color-border-subtle)]',
-  success: [
-    'bg-[color-mix(in_oklab,var(--farco-color-feedback-success)_12%,transparent)]',
-    'text-[color-mix(in_oklab,var(--farco-color-feedback-success)_80%,var(--farco-color-text-primary))]',
-    'border-[color-mix(in_oklab,var(--farco-color-feedback-success)_30%,transparent)]',
-  ].join(' '),
-  warning: [
-    'bg-[color-mix(in_oklab,var(--farco-color-feedback-warning)_12%,transparent)]',
-    'text-[color-mix(in_oklab,var(--farco-color-feedback-warning)_80%,var(--farco-color-text-primary))]',
-    'border-[color-mix(in_oklab,var(--farco-color-feedback-warning)_30%,transparent)]',
-  ].join(' '),
-  danger: [
-    'bg-[color-mix(in_oklab,var(--farco-color-feedback-danger)_10%,transparent)]',
-    'text-[var(--farco-color-feedback-danger)]',
-    'border-[color-mix(in_oklab,var(--farco-color-feedback-danger)_30%,transparent)]',
-  ].join(' '),
-  accent: [
-    'bg-[color-mix(in_oklab,var(--farco-color-action-secondary)_40%,transparent)]',
-    'text-[var(--farco-color-text-primary)]',
-    'border-[color-mix(in_oklab,var(--farco-color-action-secondary)_60%,transparent)]',
-  ].join(' '),
+  success: 'bg-[var(--farco-color-feedback-success-bg)] text-[var(--farco-color-feedback-success-emphasis)] border-[var(--farco-color-feedback-success-border)]',
+  warning: 'bg-[var(--farco-color-feedback-warning-bg)] text-[var(--farco-color-feedback-warning-emphasis)] border-[var(--farco-color-feedback-warning-border)]',
+  danger:  'bg-[var(--farco-color-feedback-danger-bg)] text-[var(--farco-color-feedback-danger)] border-[var(--farco-color-feedback-danger-border)]',
+  accent:  'bg-[var(--farco-color-action-secondary-bg)] text-[var(--farco-color-text-primary)] border-[var(--farco-color-action-secondary-border)]',
 }
 
 const SIZE_CLASSES = {

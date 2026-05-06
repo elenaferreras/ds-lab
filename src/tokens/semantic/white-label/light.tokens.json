@@ -14,14 +14,20 @@
         "hover":    { "$value": "{secondary.400}" },
         "pressed":  { "$value": "{secondary.600}" },
         "focus":    { "$value": "{secondary.500}" },
-        "disabled": { "$value": "{neutral.300}" }
+        "disabled": { "$value": "{neutral.300}" },
+        "bg":       { "$value": "{secondary.100}" },
+        "border":   { "$value": "{secondary.300}" }
       },
       "destructive": {
         "default":  { "$value": "{danger.500}" },
-        "hover":    { "$value": "{danger.400}" },
-        "pressed":  { "$value": "{danger.600}" },
+        "hover":    { "$value": "{danger.600}" },
+        "pressed":  { "$value": "{danger.700}" },
         "focus":    { "$value": "{danger.500}" },
         "disabled": { "$value": "{neutral.300}" }
+      },
+      "ghost": {
+        "hover-bg":   { "$value": "{neutral.100}" },
+        "pressed-bg": { "$value": "{neutral.200}" }
       }
     },
     "surface": {
@@ -47,22 +53,30 @@
       "success": {
         "default":  { "$value": "{success.500}" },
         "subtle":   { "$value": "{success.50}" },
-        "emphasis": { "$value": "{success.700}" }
+        "emphasis": { "$value": "{success.700}" },
+        "bg":       { "$value": "{success.100}" },
+        "border":   { "$value": "{success.200}" }
       },
       "warning": {
         "default":  { "$value": "{warning.500}" },
         "subtle":   { "$value": "{warning.50}" },
-        "emphasis": { "$value": "{warning.700}" }
+        "emphasis": { "$value": "{warning.700}" },
+        "bg":       { "$value": "{warning.100}" },
+        "border":   { "$value": "{warning.200}" }
       },
       "danger": {
         "default":  { "$value": "{danger.500}" },
         "subtle":   { "$value": "{danger.50}" },
-        "emphasis": { "$value": "{danger.700}" }
+        "emphasis": { "$value": "{danger.700}" },
+        "bg":       { "$value": "{danger.100}" },
+        "border":   { "$value": "{danger.200}" }
       },
       "info": {
         "default":  { "$value": "{info.500}" },
         "subtle":   { "$value": "{info.50}" },
-        "emphasis": { "$value": "{info.700}" }
+        "emphasis": { "$value": "{info.700}" },
+        "bg":       { "$value": "{info.100}" },
+        "border":   { "$value": "{info.200}" }
       }
     }
   }
