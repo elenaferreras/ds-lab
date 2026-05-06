@@ -6,9 +6,9 @@ const INTENTS = /** @type {const} */ (['regular', 'danger'])
 const SIZES = /** @type {const} */ (['sm', 'md', 'lg'])
 
 const SIZE_CLASSES = {
-  sm: 'h-[var(--farco-spacing-8)] px-[var(--farco-spacing-3)] text-[var(--farco-font-size-sm)] gap-[var(--farco-spacing-1)]',
-  md: 'h-[var(--farco-spacing-10)] px-[var(--farco-spacing-6)] text-[var(--farco-font-size-md)] gap-[var(--farco-spacing-2)]',
-  lg: 'h-[var(--farco-spacing-12)] px-[var(--farco-spacing-8)] text-[var(--farco-font-size-md)] gap-[var(--farco-spacing-2)]',
+  sm: 'h-[var(--ds-spacing-32)] px-[var(--ds-spacing-12)] text-[var(--ds-font-size-sm)] gap-[var(--ds-spacing-4)]',
+  md: 'h-[var(--ds-spacing-40)] px-[var(--ds-spacing-24)] text-[var(--ds-font-size-md)] gap-[var(--ds-spacing-8)]',
+  lg: 'h-[var(--ds-spacing-48)] px-[var(--ds-spacing-32)] text-[var(--ds-font-size-md)] gap-[var(--ds-spacing-8)]',
 }
 
 const ICON_SIZE = {
@@ -23,53 +23,53 @@ function getVariantClasses(variant, intent) {
   const subtleFrom = (cssVar) =>
     `enabled:hover:bg-[color-mix(in_oklab,var(${cssVar})_10%,transparent)]`
   const pressedFrom = (cssVar) =>
-    `enabled:active:bg-[color-mix(in_oklab,var(${cssVar})_88%,var(--farco-color-text-primary))]`
+    `enabled:active:bg-[color-mix(in_oklab,var(${cssVar})_88%,var(--ds-color-foreground-text-primary))]`
 
   if (variant === 'primary') {
     return isDanger
       ? {
-          base: 'bg-[var(--farco-color-feedback-danger)] text-[var(--farco-color-text-on-action)] border-[var(--farco-color-feedback-danger)]',
-          hover: 'enabled:hover:bg-[color-mix(in_oklab,var(--farco-color-feedback-danger)_92%,var(--farco-color-text-primary))] enabled:hover:border-[color-mix(in_oklab,var(--farco-color-feedback-danger)_92%,var(--farco-color-text-primary))]',
-          active: 'enabled:active:bg-[color-mix(in_oklab,var(--farco-color-feedback-danger)_84%,var(--farco-color-text-primary))] enabled:active:border-[color-mix(in_oklab,var(--farco-color-feedback-danger)_84%,var(--farco-color-text-primary))] enabled:active:scale-[0.98]',
+          base: 'bg-[var(--ds-color-background-feedback-error-emphasis)] text-[var(--ds-color-foreground-action-on-primary)] border-[var(--ds-color-background-feedback-error-emphasis)]',
+          hover: 'enabled:hover:bg-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_92%,var(--ds-color-foreground-text-primary))] enabled:hover:border-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_92%,var(--ds-color-foreground-text-primary))]',
+          active: 'enabled:active:bg-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_84%,var(--ds-color-foreground-text-primary))] enabled:active:border-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_84%,var(--ds-color-foreground-text-primary))] enabled:active:scale-[0.98]',
         }
       : {
-          base: 'bg-[var(--farco-color-action-primary)] text-[var(--farco-color-text-on-action)] border-[var(--farco-color-action-primary)]',
-          hover: 'enabled:hover:bg-[var(--farco-color-action-primary-hover)] enabled:hover:border-[var(--farco-color-action-primary-hover)]',
-          active: 'enabled:active:bg-[var(--farco-color-action-primary-pressed)] enabled:active:border-[var(--farco-color-action-primary-pressed)] enabled:active:scale-[0.98]',
+          base: 'bg-[var(--ds-color-background-action-primary)] text-[var(--ds-color-foreground-action-on-primary)] border-[var(--ds-color-background-action-primary)]',
+          hover: 'enabled:hover:bg-[var(--ds-color-background-action-primary-hover)] enabled:hover:border-[var(--ds-color-background-action-primary-hover)]',
+          active: 'enabled:active:bg-[var(--ds-color-background-action-primary-pressed)] enabled:active:border-[var(--ds-color-background-action-primary-pressed)] enabled:active:scale-[0.98]',
         }
   }
 
   if (variant === 'secondary') {
     return isDanger
       ? {
-          base: 'bg-transparent text-[var(--farco-color-feedback-danger)] border-[var(--farco-color-feedback-danger)]',
+          base: 'bg-transparent text-[var(--ds-color-background-feedback-error-emphasis)] border-[var(--ds-color-background-feedback-error-emphasis)]',
           hover: cn(
-            subtleFrom('--farco-color-feedback-danger'),
-            'enabled:hover:border-[var(--farco-color-feedback-danger)]'
+            subtleFrom('--ds-color-background-feedback-error-emphasis'),
+            'enabled:hover:border-[var(--ds-color-background-feedback-error-emphasis)]'
           ),
           active: cn(
-            pressedFrom('--farco-color-feedback-danger'),
-            'enabled:active:text-[var(--farco-color-text-on-action)] enabled:active:border-[var(--farco-color-feedback-danger)] enabled:active:scale-[0.98]'
+            pressedFrom('--ds-color-background-feedback-error-emphasis'),
+            'enabled:active:text-[var(--ds-color-foreground-action-on-primary)] enabled:active:border-[var(--ds-color-background-feedback-error-emphasis)] enabled:active:scale-[0.98]'
           ),
         }
       : {
-          base: 'bg-transparent text-[var(--farco-color-text-primary)] border-[var(--farco-color-border)]',
-          hover: cn(subtleFrom('--farco-color-border'), 'enabled:hover:border-[var(--farco-color-border)]'),
-          active: cn(pressedFrom('--farco-color-border'), 'enabled:active:border-[var(--farco-color-border)] enabled:active:scale-[0.98]'),
+          base: 'bg-transparent text-[var(--ds-color-foreground-text-primary)] border-[var(--ds-color-border-surface-strong)]',
+          hover: cn(subtleFrom('--ds-color-border-surface-strong'), 'enabled:hover:border-[var(--ds-color-border-surface-strong)]'),
+          active: cn(pressedFrom('--ds-color-border-surface-strong'), 'enabled:active:border-[var(--ds-color-border-surface-strong)] enabled:active:scale-[0.98]'),
         }
   }
 
   // ghost
   return isDanger
     ? {
-        base: 'bg-transparent text-[var(--farco-color-feedback-danger)] border-transparent',
-        hover: cn(subtleFrom('--farco-color-feedback-danger'), 'enabled:hover:border-transparent'),
-        active: cn(pressedFrom('--farco-color-feedback-danger'), 'enabled:active:border-transparent enabled:active:scale-[0.98]'),
+        base: 'bg-transparent text-[var(--ds-color-background-feedback-error-emphasis)] border-transparent',
+        hover: cn(subtleFrom('--ds-color-background-feedback-error-emphasis'), 'enabled:hover:border-transparent'),
+        active: cn(pressedFrom('--ds-color-background-feedback-error-emphasis'), 'enabled:active:border-transparent enabled:active:scale-[0.98]'),
       }
     : {
-        base: 'bg-transparent text-[var(--farco-color-text-primary)] border-transparent',
-        hover: cn(subtleFrom('--farco-color-border'), 'enabled:hover:border-transparent'),
-        active: cn(pressedFrom('--farco-color-border'), 'enabled:active:border-transparent enabled:active:scale-[0.98]'),
+        base: 'bg-transparent text-[var(--ds-color-foreground-text-primary)] border-transparent',
+        hover: cn(subtleFrom('--ds-color-border-surface-strong'), 'enabled:hover:border-transparent'),
+        active: cn(pressedFrom('--ds-color-border-surface-strong'), 'enabled:active:border-transparent enabled:active:scale-[0.98]'),
       }
 }
 
@@ -116,12 +116,12 @@ export function Button({
     // layout
     'inline-flex items-center justify-center rounded-full border select-none transition-[transform,background-color,border-color,color] duration-150',
     // typography
-    'font-[var(--farco-font-family-base)] font-normal uppercase tracking-[var(--farco-letter-spacing-base)] leading-none',
+    'font-[var(--ds-font-family-body)] font-normal uppercase tracking-[var(--ds-base-letter-spacing-wide)] leading-none',
     // focus
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--farco-color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--farco-color-surface-base)]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-border-action-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ds-color-background-surface-page)]',
     // disabled
     'disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none',
-    // loading (distinct from disabled)
+    // loading
     isLoading && 'opacity-70 cursor-wait pointer-events-none',
     // size
     SIZE_CLASSES[resolvedSize],
