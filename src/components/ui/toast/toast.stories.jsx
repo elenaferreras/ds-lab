@@ -1,3 +1,4 @@
+import { userEvent, within } from 'storybook/test'
 import { ToastProvider, useToast } from './toast'
 import { Button } from '../button'
 
@@ -36,32 +37,48 @@ export const Playground = {
       title="Changes saved"
       description="Your changes have been saved successfully."
       variant="default"
-      duration={4000}
+      duration={Infinity}
       label="Show toast"
     />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: /show toast/i }))
+  },
 }
 
 export const Variants = {
   render: () => (
     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
-      <ToastTrigger title="Default" description="A neutral notification." variant="default" label="Default" />
-      <ToastTrigger title="Success" description="Operation completed." variant="success" label="Success" />
-      <ToastTrigger title="Warning" description="Proceed with caution." variant="warning" label="Warning" />
-      <ToastTrigger title="Error" description="Something went wrong." variant="danger" label="Danger" />
+      <ToastTrigger title="Default" description="A neutral notification." variant="default" label="Default" duration={Infinity} />
+      <ToastTrigger title="Success" description="Operation completed." variant="success" label="Success" duration={Infinity} />
+      <ToastTrigger title="Warning" description="Proceed with caution." variant="warning" label="Warning" duration={Infinity} />
+      <ToastTrigger title="Error" description="Something went wrong." variant="danger" label="Danger" duration={Infinity} />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    for (const label of ['Default', 'Success', 'Warning', 'Danger']) {
+      await userEvent.click(canvas.getByRole('button', { name: label }))
+    }
+  },
 }
 
 export const TitleOnly = {
   name: 'Title only (no description)',
   render: () => (
     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
-      <ToastTrigger title="Saved" variant="default" label="Default" />
-      <ToastTrigger title="Uploaded!" variant="success" label="Success" />
-      <ToastTrigger title="Deleted" variant="danger" label="Danger" />
+      <ToastTrigger title="Saved" variant="default" label="Default" duration={Infinity} />
+      <ToastTrigger title="Uploaded!" variant="success" label="Success" duration={Infinity} />
+      <ToastTrigger title="Deleted" variant="danger" label="Danger" duration={Infinity} />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    for (const label of ['Default', 'Success', 'Danger']) {
+      await userEvent.click(canvas.getByRole('button', { name: label }))
+    }
+  },
 }
 
 export const Permanent = {
@@ -75,6 +92,10 @@ export const Permanent = {
       label="Show permanent toast"
     />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: /show permanent toast/i }))
+  },
 }
 
 export const ShortDuration = {
@@ -98,9 +119,9 @@ export const Multiple = {
         <Button
           variant="secondary"
           onClick={() => {
-            toast({ title: 'First notification', variant: 'default', duration: 5000 })
-            setTimeout(() => toast({ title: 'Second notification', variant: 'success', description: 'All done.', duration: 5000 }), 300)
-            setTimeout(() => toast({ title: 'Third notification', variant: 'warning', description: 'Check this out.', duration: 5000 }), 600)
+            toast({ title: 'First notification', variant: 'default', duration: Infinity })
+            setTimeout(() => toast({ title: 'Second notification', variant: 'success', description: 'All done.', duration: Infinity }), 300)
+            setTimeout(() => toast({ title: 'Third notification', variant: 'warning', description: 'Check this out.', duration: Infinity }), 600)
           }}
         >
           Fire 3 toasts
@@ -108,5 +129,9 @@ export const Multiple = {
       )
     }
     return <MultiTrigger />
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: /fire 3 toasts/i }))
   },
 }
