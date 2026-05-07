@@ -1,4 +1,4 @@
-import { userEvent, within, waitFor } from '@storybook/test'
+import { userEvent, within, waitFor } from 'storybook/test'
 import { ToastProvider, useToast } from './toast'
 import { Button } from '../button'
 
