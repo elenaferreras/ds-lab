@@ -32,15 +32,15 @@ export function Input({
   const bottomText = error || helperText
 
   return (
-    <div className={cn('flex flex-col gap-[var(--farco-spacing-1)]', className)}>
+    <div className={cn('flex flex-col gap-[var(--ds-spacing-4)]', className)}>
       {label && (
         <label
           htmlFor={id}
           className={cn(
-            'text-[var(--farco-font-size-sm)] font-medium font-[var(--farco-font-family-base)] leading-none',
+            'text-[var(--ds-font-size-sm)] font-medium font-[var(--ds-font-family-body)] leading-none',
             disabled
-              ? 'opacity-[var(--farco-opacity-disabled)] cursor-not-allowed'
-              : 'text-[var(--farco-color-text-primary)]'
+              ? 'opacity-40 cursor-not-allowed'
+              : 'text-[var(--ds-color-foreground-text-primary)]'
           )}
         >
           {label}
@@ -55,21 +55,21 @@ export function Input({
         aria-describedby={bottomText ? `${id}-helper` : undefined}
         className={cn(
           // base
-          'w-full h-[var(--farco-spacing-10)] rounded-[var(--farco-radius-md)] border px-[var(--farco-spacing-4)]',
-          'bg-[var(--farco-color-surface-base)] text-[var(--farco-color-text-primary)]',
-          'text-[var(--farco-font-size-sm)] font-[var(--farco-font-family-base)] leading-none',
+          'w-full h-[var(--ds-spacing-40)] rounded-[var(--ds-radius-md)] border px-[var(--ds-spacing-16)]',
+          'bg-[var(--ds-color-background-surface-page)] text-[var(--ds-color-foreground-text-primary)]',
+          'text-[var(--ds-font-size-sm)] font-[var(--ds-font-family-body)] leading-none',
           'transition-[border-color,box-shadow] duration-150 outline-none',
           // placeholder
-          'placeholder:text-[var(--farco-color-text-disabled)]',
+          'placeholder:text-[var(--ds-color-foreground-text-disabled)]',
           // default border
-          !hasError && 'border-[var(--farco-color-border-subtle)]',
+          !hasError && 'border-[var(--ds-color-border-surface-default)]',
           // focus (no error)
-          !hasError && 'focus:border-[var(--farco-color-border-focus)] focus:ring-2 focus:ring-[var(--farco-color-border-focus)] focus:ring-offset-0',
+          !hasError && 'focus:border-[var(--ds-color-border-action-focus)] focus:ring-2 focus:ring-[var(--ds-color-border-action-focus)] focus:ring-offset-0',
           // error border + focus
-          hasError && 'border-[var(--farco-color-feedback-danger)]',
-          hasError && 'focus:border-[var(--farco-color-feedback-danger)] focus:ring-2 focus:ring-[var(--farco-color-feedback-danger-border)] focus:ring-offset-0',
+          hasError && 'border-[var(--ds-color-border-input-error)]',
+          hasError && 'focus:border-[var(--ds-color-border-input-error)] focus:ring-2 focus:ring-[color-mix(in_oklab,var(--ds-color-border-input-error)_30%,transparent)] focus:ring-offset-0',
           // disabled
-          'disabled:opacity-[var(--farco-opacity-disabled)] disabled:cursor-not-allowed disabled:bg-[var(--farco-color-surface-subtle)]',
+          'disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-[var(--ds-color-background-surface-subtle)]',
           inputClassName
         )}
         {...props}
@@ -79,10 +79,10 @@ export function Input({
         <span
           id={`${id}-helper`}
           className={cn(
-            'text-[var(--farco-font-size-xs)] font-[var(--farco-font-family-base)] leading-tight',
+            'text-[var(--ds-font-size-xs)] font-[var(--ds-font-family-body)] leading-tight',
             hasError
-              ? 'text-[var(--farco-color-feedback-danger)]'
-              : 'text-[var(--farco-color-text-secondary)]'
+              ? 'text-[var(--ds-color-background-feedback-error-emphasis)]'
+              : 'text-[var(--ds-color-foreground-text-secondary)]'
           )}
         >
           {bottomText}

@@ -1,4 +1,3 @@
-import { XIcon } from '@phosphor-icons/react'
 import { cn } from '../../../lib/cn'
 import { Button } from '../button'
 
@@ -6,16 +5,32 @@ const VARIANTS = /** @type {const} */ (['default', 'success', 'warning', 'danger
 const SIZES = /** @type {const} */ (['sm', 'md'])
 
 const VARIANT_CLASSES = {
-  default: 'bg-[var(--farco-color-surface-subtle)] text-[var(--farco-color-text-secondary)] border-[var(--farco-color-border-subtle)]',
-  success: 'bg-[var(--farco-color-feedback-success-bg)] text-[var(--farco-color-feedback-success-emphasis)] border-[var(--farco-color-feedback-success-border)]',
-  warning: 'bg-[var(--farco-color-feedback-warning-bg)] text-[var(--farco-color-feedback-warning-emphasis)] border-[var(--farco-color-feedback-warning-border)]',
-  danger:  'bg-[var(--farco-color-feedback-danger-bg)] text-[var(--farco-color-feedback-danger)] border-[var(--farco-color-feedback-danger-border)]',
-  accent:  'bg-[var(--farco-color-action-secondary-bg)] text-[var(--farco-color-text-primary)] border-[var(--farco-color-action-secondary-border)]',
+  default: 'bg-[var(--ds-color-background-surface-subtle)] text-[var(--ds-color-foreground-text-secondary)] border-[var(--ds-color-border-surface-default)]',
+  success: [
+    'bg-[color-mix(in_oklab,var(--ds-color-background-feedback-success-emphasis)_12%,transparent)]',
+    'text-[color-mix(in_oklab,var(--ds-color-background-feedback-success-emphasis)_80%,var(--ds-color-foreground-text-primary))]',
+    'border-[color-mix(in_oklab,var(--ds-color-background-feedback-success-emphasis)_30%,transparent)]',
+  ].join(' '),
+  warning: [
+    'bg-[color-mix(in_oklab,var(--ds-color-background-feedback-warning-emphasis)_12%,transparent)]',
+    'text-[color-mix(in_oklab,var(--ds-color-background-feedback-warning-emphasis)_80%,var(--ds-color-foreground-text-primary))]',
+    'border-[color-mix(in_oklab,var(--ds-color-background-feedback-warning-emphasis)_30%,transparent)]',
+  ].join(' '),
+  danger: [
+    'bg-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_10%,transparent)]',
+    'text-[var(--ds-color-background-feedback-error-emphasis)]',
+    'border-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_30%,transparent)]',
+  ].join(' '),
+  accent: [
+    'bg-[color-mix(in_oklab,var(--ds-color-background-action-secondary-hover)_40%,transparent)]',
+    'text-[var(--ds-color-foreground-text-primary)]',
+    'border-[color-mix(in_oklab,var(--ds-color-background-action-secondary-hover)_60%,transparent)]',
+  ].join(' '),
 }
 
 const SIZE_CLASSES = {
-  sm: 'h-[var(--farco-spacing-5)] px-[var(--farco-spacing-2)] text-[var(--farco-font-size-xs)] gap-[6px]',
-  md: 'h-[var(--farco-spacing-6)] px-[var(--farco-spacing-3)] text-[var(--farco-font-size-sm)] gap-[var(--farco-spacing-1)]',
+  sm: 'h-[var(--ds-spacing-20)] px-[var(--ds-spacing-8)] text-[var(--ds-font-size-xs)] gap-[6px]',
+  md: 'h-[var(--ds-spacing-24)] px-[var(--ds-spacing-12)] text-[var(--ds-font-size-sm)] gap-[var(--ds-spacing-4)]',
 }
 
 /**
@@ -40,8 +55,8 @@ export function Badge({
   return (
     <span
       className={cn(
-        'inline-flex items-center justify-center rounded-full border font-[var(--farco-font-family-base)] font-medium leading-none select-none whitespace-nowrap',
-        'tracking-[var(--farco-letter-spacing-base)] uppercase',
+        'inline-flex items-center justify-center rounded-full border font-[var(--ds-font-family-body)] font-medium leading-none select-none whitespace-nowrap',
+        'tracking-[var(--ds-base-letter-spacing-wide)] uppercase',
         SIZE_CLASSES[resolvedSize],
         VARIANT_CLASSES[resolvedVariant],
         className
@@ -52,18 +67,29 @@ export function Badge({
         <Button
           variant="ghost"
           size="sm"
-          iconLeft={<XIcon size={resolvedSize === 'sm' ? 10 : 12} weight="regular" />}
+          iconLeft={
+            <svg
+              width={resolvedSize === 'sm' ? 10 : 12}
+              height={resolvedSize === 'sm' ? 10 : 12}
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            >
+              <path d="M2 2l8 8M10 2l-8 8" />
+            </svg>
+          }
           onClick={onDismiss}
           aria-label="Dismiss"
           className={cn(
             'ml-[2px] -mr-[2px]',
             resolvedSize === 'sm'
-              ? 'w-[var(--farco-spacing-4)] h-[var(--farco-spacing-4)]'
-              : 'w-[var(--farco-spacing-5)] h-[var(--farco-spacing-5)]'
+              ? 'w-[var(--ds-spacing-16)] h-[var(--ds-spacing-16)]'
+              : 'w-[var(--ds-spacing-20)] h-[var(--ds-spacing-20)]'
           )}
         >
           {null}
-          
         </Button>
       )}
     </span>

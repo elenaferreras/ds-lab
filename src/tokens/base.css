@@ -1,7 +1,79 @@
+/*
+ * LAYER: Base
+ * Universal tokens — never change by brand or mode.
+ * Includes: font-face, spacing, font-size, line-height,
+ * letter-spacing, animation duration and easing.
+ * Consumed via theme/light.css and theme/dark.css — never directly.
+ */
+
 @font-face {
   font-family: 'Overused Grotesk';
   src: url('/fonts/OverusedGrotesk-VF.woff2') format('woff2');
   font-weight: 400 700;
   font-style: normal;
   font-display: swap;
+}
+
+:root {
+  /* Spacing — base 4px, steps 0–120 */
+  --ds-base-spacing-0: 0px;
+  --ds-base-spacing-4: 4px;
+  --ds-base-spacing-8: 8px;
+  --ds-base-spacing-12: 12px;
+  --ds-base-spacing-16: 16px;
+  --ds-base-spacing-20: 20px;
+  --ds-base-spacing-24: 24px;
+  --ds-base-spacing-28: 28px;
+  --ds-base-spacing-32: 32px;
+  --ds-base-spacing-36: 36px;
+  --ds-base-spacing-40: 40px;
+  --ds-base-spacing-44: 44px;
+  --ds-base-spacing-48: 48px;
+  --ds-base-spacing-52: 52px;
+  --ds-base-spacing-56: 56px;
+  --ds-base-spacing-60: 60px;
+  --ds-base-spacing-64: 64px;
+  --ds-base-spacing-68: 68px;
+  --ds-base-spacing-72: 72px;
+  --ds-base-spacing-76: 76px;
+  --ds-base-spacing-80: 80px;
+  --ds-base-spacing-84: 84px;
+  --ds-base-spacing-88: 88px;
+  --ds-base-spacing-92: 92px;
+  --ds-base-spacing-96: 96px;
+  --ds-base-spacing-100: 100px;
+  --ds-base-spacing-104: 104px;
+  --ds-base-spacing-108: 108px;
+  --ds-base-spacing-112: 112px;
+  --ds-base-spacing-116: 116px;
+  --ds-base-spacing-120: 120px;
+
+  /* Font size */
+  --ds-base-font-size-xs: 12px;
+  --ds-base-font-size-sm: 14px;
+  --ds-base-font-size-md: 16px;
+  --ds-base-font-size-lg: 20px;
+  --ds-base-font-size-xl: 24px;
+  --ds-base-font-size-2xl: 32px;
+  --ds-base-font-size-3xl: 40px;
+
+  /* Line height */
+  --ds-base-line-height-tight: 1.2;
+  --ds-base-line-height-base: 1.5;
+  --ds-base-line-height-relaxed: 1.75;
+
+  /* Letter spacing */
+  --ds-base-letter-spacing-tight: -0.01em;
+  --ds-base-letter-spacing-normal: 0em;
+  --ds-base-letter-spacing-wide: 0.02em;
+
+  /* Animation duration */
+  --ds-base-duration-fast: 100ms;
+  --ds-base-duration-normal: 200ms;
+  --ds-base-duration-slow: 400ms;
+
+  /* Animation easing */
+  --ds-base-easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ds-base-easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --ds-base-easing-out: cubic-bezier(0, 0, 0.2, 1);
 }

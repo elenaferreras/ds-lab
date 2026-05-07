@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import '../src/styles/global.css'
-import { switchTheme } from '../src/tokens/tokens.js'
+import { switchBrand, switchMode } from '../src/tokens/tokens.js'
 import theme from './theme'
 
-function ThemeDecorator({ themeName, children }) {
+function ThemeDecorator({ brandId, modeId, children }) {
   useEffect(() => {
-    switchTheme(themeName)
-  }, [themeName])
+    switchBrand(brandId)
+    switchMode(modeId)
+  }, [brandId, modeId])
 
   return children
 }
@@ -30,15 +31,28 @@ export default {
   },
 
   globalTypes: {
-    theme: {
-      name: 'Theme',
-      description: 'Global theme for components',
+    brand: {
+      name: 'Brand',
+      description: 'Active brand',
       defaultValue: 'farco',
       toolbar: {
         icon: 'paintbrush',
         items: [
-          { value: 'farco', title: 'Farco' },
-          { value: 'white-label', title: 'White Label' },
+          { value: 'farco',   title: 'Farco' },
+          { value: 'neutral', title: 'Neutral' },
+        ],
+        showName: true,
+      },
+    },
+    mode: {
+      name: 'Mode',
+      description: 'Light or dark mode',
+      defaultValue: 'light',
+      toolbar: {
+        icon: 'circlehollow',
+        items: [
+          { value: 'light', title: 'Light' },
+          { value: 'dark',  title: 'Dark' },
         ],
         showName: true,
       },
@@ -47,10 +61,11 @@ export default {
 
   decorators: [
     (Story, context) => {
-      const theme = context.globals.theme || 'farco'
+      const brandId = context.globals.brand || 'farco'
+      const modeId  = context.globals.mode  || 'light'
 
       return (
-        <ThemeDecorator themeName={theme}>
+        <ThemeDecorator brandId={brandId} modeId={modeId}>
           <Story />
         </ThemeDecorator>
       )

@@ -8,10 +8,10 @@ function CardRoot({ children, className }) {
     <div
       className={cn(
         'flex flex-col',
-        'bg-[var(--farco-color-surface-base)]',
-        'border border-[var(--farco-color-border-subtle)]',
-        'rounded-[var(--farco-radius-xl)]',
-        'shadow-[var(--farco-shadow-sm)]',
+        'bg-[var(--ds-color-background-surface-page)]',
+        'border border-[var(--ds-color-border-surface-default)]',
+        'rounded-[var(--ds-radius-lg)]',
+        'shadow-sm',
         'overflow-hidden',
         className
       )}
@@ -28,8 +28,8 @@ function CardHeader({ children, className }) {
   return (
     <div
       className={cn(
-        'px-[var(--farco-spacing-6)] pt-[var(--farco-spacing-6)] pb-[var(--farco-spacing-4)]',
-        'border-b border-[var(--farco-color-border-subtle)]',
+        'px-[var(--ds-spacing-24)] pt-[var(--ds-spacing-24)] pb-[var(--ds-spacing-16)]',
+        'border-b border-[var(--ds-color-border-surface-default)]',
         className
       )}
     >
@@ -45,7 +45,7 @@ function CardBody({ children, className }) {
   return (
     <div
       className={cn(
-        'flex-1 px-[var(--farco-spacing-6)] py-[var(--farco-spacing-5)]',
+        'flex-1 px-[var(--ds-spacing-24)] py-[var(--ds-spacing-20)]',
         className
       )}
     >
@@ -61,8 +61,8 @@ function CardFooter({ children, className }) {
   return (
     <div
       className={cn(
-        'px-[var(--farco-spacing-6)] pt-[var(--farco-spacing-4)] pb-[var(--farco-spacing-6)]',
-        'border-t border-[var(--farco-color-border-subtle)]',
+        'px-[var(--ds-spacing-24)] pt-[var(--ds-spacing-16)] pb-[var(--ds-spacing-24)]',
+        'border-t border-[var(--ds-color-border-surface-default)]',
         className
       )}
     >
@@ -71,7 +71,6 @@ function CardFooter({ children, className }) {
   )
 }
 
-// Attach sub-components
 CardRoot.Header = CardHeader
 CardRoot.Body = CardBody
 CardRoot.Footer = CardFooter

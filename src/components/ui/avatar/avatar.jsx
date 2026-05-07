@@ -4,10 +4,10 @@ import { cn } from '../../../lib/cn'
 const SIZES = /** @type {const} */ (['sm', 'md', 'lg', 'xl'])
 
 const SIZE_CLASSES = {
-  sm: 'w-[var(--farco-spacing-6)] h-[var(--farco-spacing-6)] text-[10px]',
-  md: 'w-[var(--farco-spacing-8)] h-[var(--farco-spacing-8)] text-[12px]',
-  lg: 'w-[var(--farco-spacing-10)] h-[var(--farco-spacing-10)] text-[14px]',
-  xl: 'w-[var(--farco-spacing-12)] h-[var(--farco-spacing-12)] text-[16px]',
+  sm: 'w-[var(--ds-spacing-24)] h-[var(--ds-spacing-24)] text-[10px]',
+  md: 'w-[var(--ds-spacing-32)] h-[var(--ds-spacing-32)] text-[12px]',
+  lg: 'w-[var(--ds-spacing-40)] h-[var(--ds-spacing-40)] text-[14px]',
+  xl: 'w-[var(--ds-spacing-48)] h-[var(--ds-spacing-48)] text-[16px]',
 }
 
 /**
@@ -32,35 +32,34 @@ export function Avatar({
     <RadixAvatar.Root
       className={cn(
         'relative inline-flex items-center justify-center rounded-full overflow-hidden select-none shrink-0',
-        'bg-[var(--farco-color-surface-subtle)]',
+        'bg-[var(--ds-color-background-surface-subtle)]',
         SIZE_CLASSES[resolvedSize],
         className
       )}
     >
-      {/* Actual image */}
       <RadixAvatar.Image
         src={src}
         alt={alt}
         className="w-full h-full object-cover rounded-full"
       />
 
-      {/* Skeleton pulse shown immediately while image is loading */}
+      {/* Skeleton pulse while image loads */}
       <RadixAvatar.Fallback
         delayMs={0}
         className={cn(
           'absolute inset-0 rounded-full',
-          'bg-[var(--farco-color-surface-subtle)] animate-pulse',
+          'bg-[var(--ds-color-background-surface-subtle)] animate-pulse',
         )}
       />
 
-      {/* Initials / icon fallback shown after image fails (with a small delay to avoid flash) */}
+      {/* Initials fallback after image fails */}
       {fallback && (
         <RadixAvatar.Fallback
           delayMs={300}
           className={cn(
             'absolute inset-0 flex items-center justify-center rounded-full',
-            'bg-[var(--farco-color-surface-subtle)] text-[var(--farco-color-text-secondary)]',
-            'font-[var(--farco-font-family-base)] font-medium uppercase tracking-wide leading-none',
+            'bg-[var(--ds-color-background-surface-subtle)] text-[var(--ds-color-foreground-text-secondary)]',
+            'font-[var(--ds-font-family-body)] font-medium uppercase tracking-wide leading-none',
           )}
         >
           {fallback}

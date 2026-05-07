@@ -1,0 +1,186 @@
+/*
+ * LAYER: Theme — Dark
+ * Activated via [data-mode="dark"].
+ * Semantic role tokens — the ONLY layer components consume.
+ * All values are var() references — never raw hex.
+ * Color tokens point to brand/color/dark/* scales.
+ * Radius, font-family point to brand/* (no mode split).
+ * Spacing, font-size, etc. point to base/*.
+ *
+ * Naming pattern: --ds-color-{property}-{role}-{variant}
+ *   property: background, foreground, border
+ *   role: action, feedback, surface, text, input
+ */
+
+[data-mode="dark"] {
+
+  /* -----------------------------------------------------------------------
+   * Action — Button primary
+   * ----------------------------------------------------------------------- */
+  /* In dark mode the button sits on a very dark surface, so we use a lighter
+     step from the dark scale (700–800) to make it stand out. */
+  --ds-color-background-action-primary:          var(--ds-brand-color-dark-primary-700);
+  --ds-color-background-action-primary-hover:    var(--ds-brand-color-dark-primary-800);
+  --ds-color-background-action-primary-pressed:  var(--ds-brand-color-dark-primary-900);
+  --ds-color-background-action-primary-disabled: var(--ds-brand-color-dark-neutral-300);
+
+  /* Text on top of the button — must contrast against the lighter button bg.
+     dark-primary-100 is the darkest step in the dark scale. */
+  --ds-color-foreground-action-on-primary:          var(--ds-brand-color-dark-primary-100);
+  --ds-color-foreground-action-on-primary-disabled: var(--ds-brand-color-dark-neutral-500);
+
+  --ds-color-border-action-primary:          var(--ds-brand-color-dark-primary-700);
+  --ds-color-border-action-primary-hover:    var(--ds-brand-color-dark-primary-800);
+  --ds-color-border-action-primary-pressed:  var(--ds-brand-color-dark-primary-900);
+  --ds-color-border-action-primary-disabled: var(--ds-brand-color-dark-neutral-300);
+
+  /* Action — Button secondary */
+  --ds-color-background-action-secondary:          transparent;
+  --ds-color-background-action-secondary-hover:    var(--ds-brand-color-dark-primary-300);
+  --ds-color-background-action-secondary-pressed:  var(--ds-brand-color-dark-primary-400);
+  --ds-color-background-action-secondary-disabled: transparent;
+
+  --ds-color-foreground-action-on-secondary:          var(--ds-brand-color-dark-primary-800);
+  --ds-color-foreground-action-on-secondary-hover:    var(--ds-brand-color-dark-primary-900);
+  --ds-color-foreground-action-on-secondary-disabled: var(--ds-brand-color-dark-neutral-500);
+
+  --ds-color-border-action-secondary:          var(--ds-brand-color-dark-primary-700);
+  --ds-color-border-action-secondary-hover:    var(--ds-brand-color-dark-primary-800);
+  --ds-color-border-action-secondary-pressed:  var(--ds-brand-color-dark-primary-900);
+  --ds-color-border-action-secondary-disabled: var(--ds-brand-color-dark-neutral-300);
+
+  /* Action — focus ring */
+  --ds-color-border-action-focus: var(--ds-brand-color-dark-primary-700);
+
+  /* -----------------------------------------------------------------------
+   * Input
+   * ----------------------------------------------------------------------- */
+  --ds-color-background-input-default:  var(--ds-brand-color-dark-neutral-200);
+  --ds-color-background-input-hover:    var(--ds-brand-color-dark-neutral-300);
+  --ds-color-background-input-focused:  var(--ds-brand-color-dark-neutral-200);
+  --ds-color-background-input-disabled: var(--ds-brand-color-dark-neutral-200);
+  --ds-color-background-input-error:    var(--ds-brand-color-dark-error-150);
+
+  --ds-color-foreground-input-default:     var(--ds-brand-color-dark-neutral-1000);
+  --ds-color-foreground-input-placeholder: var(--ds-brand-color-dark-neutral-600);
+  --ds-color-foreground-input-disabled:    var(--ds-brand-color-dark-neutral-500);
+
+  --ds-color-border-input-default:  var(--ds-brand-color-dark-neutral-500);
+  --ds-color-border-input-hover:    var(--ds-brand-color-dark-neutral-700);
+  --ds-color-border-input-focused:  var(--ds-brand-color-dark-primary-700);
+  --ds-color-border-input-disabled: var(--ds-brand-color-dark-neutral-300);
+  --ds-color-border-input-error:    var(--ds-brand-color-dark-error-500);
+
+  /* -----------------------------------------------------------------------
+   * Surface
+   * ----------------------------------------------------------------------- */
+  --ds-color-background-surface-page:    var(--ds-brand-color-dark-neutral-100);
+  --ds-color-background-surface-subtle:  var(--ds-brand-color-dark-neutral-200);
+  --ds-color-background-surface-raised:  var(--ds-brand-color-dark-neutral-300);
+  --ds-color-background-surface-overlay: var(--ds-brand-color-dark-neutral-400);
+
+  --ds-color-foreground-surface-on-page:    var(--ds-brand-color-dark-neutral-1000);
+  --ds-color-foreground-surface-on-subtle:  var(--ds-brand-color-dark-neutral-1000);
+  --ds-color-foreground-surface-on-raised:  var(--ds-brand-color-dark-neutral-1000);
+  --ds-color-foreground-surface-on-overlay: var(--ds-brand-color-dark-neutral-1000);
+
+  --ds-color-border-surface-default: var(--ds-brand-color-dark-neutral-300);
+  --ds-color-border-surface-strong:  var(--ds-brand-color-dark-neutral-500);
+
+  /* -----------------------------------------------------------------------
+   * Text
+   * ----------------------------------------------------------------------- */
+  --ds-color-foreground-text-primary:    var(--ds-brand-color-dark-neutral-1000);
+  --ds-color-foreground-text-secondary:  var(--ds-brand-color-dark-neutral-700);
+  --ds-color-foreground-text-disabled:   var(--ds-brand-color-dark-neutral-500);
+  --ds-color-foreground-text-inverse:    var(--ds-brand-color-dark-neutral-100);
+  --ds-color-foreground-text-link:       var(--ds-brand-color-dark-primary-700);
+  --ds-color-foreground-text-link-hover: var(--ds-brand-color-dark-primary-800);
+
+  /* -----------------------------------------------------------------------
+   * Feedback
+   * ----------------------------------------------------------------------- */
+  --ds-color-background-feedback-error:             var(--ds-brand-color-dark-error-150);
+  --ds-color-background-feedback-error-emphasis:    var(--ds-brand-color-dark-error-500);
+  --ds-color-foreground-feedback-on-error:          var(--ds-brand-color-dark-error-700);
+  --ds-color-foreground-feedback-on-error-emphasis: white;
+  --ds-color-border-feedback-error:                 var(--ds-brand-color-dark-error-300);
+
+  --ds-color-background-feedback-success:             var(--ds-brand-color-dark-success-150);
+  --ds-color-background-feedback-success-emphasis:    var(--ds-brand-color-dark-success-500);
+  --ds-color-foreground-feedback-on-success:          var(--ds-brand-color-dark-success-700);
+  --ds-color-foreground-feedback-on-success-emphasis: white;
+  --ds-color-border-feedback-success:                 var(--ds-brand-color-dark-success-300);
+
+  --ds-color-background-feedback-warning:             var(--ds-brand-color-dark-warning-150);
+  --ds-color-background-feedback-warning-emphasis:    var(--ds-brand-color-dark-warning-500);
+  --ds-color-foreground-feedback-on-warning:          var(--ds-brand-color-dark-warning-700);
+  --ds-color-foreground-feedback-on-warning-emphasis: white;
+  --ds-color-border-feedback-warning:                 var(--ds-brand-color-dark-warning-300);
+
+  --ds-color-background-feedback-info:             var(--ds-brand-color-dark-info-150);
+  --ds-color-background-feedback-info-emphasis:    var(--ds-brand-color-dark-info-500);
+  --ds-color-foreground-feedback-on-info:          var(--ds-brand-color-dark-info-700);
+  --ds-color-foreground-feedback-on-info-emphasis: white;
+  --ds-color-border-feedback-info:                 var(--ds-brand-color-dark-info-300);
+
+  /* -----------------------------------------------------------------------
+   * Radius — maps brand tokens (same for light and dark)
+   * ----------------------------------------------------------------------- */
+  --ds-radius-sm:   var(--ds-brand-radius-sm);
+  --ds-radius-md:   var(--ds-brand-radius-md);
+  --ds-radius-lg:   var(--ds-brand-radius-lg);
+  --ds-radius-full: var(--ds-brand-radius-full);
+
+  /* -----------------------------------------------------------------------
+   * Font family — maps brand tokens (same for light and dark)
+   * ----------------------------------------------------------------------- */
+  --ds-font-family-body: var(--ds-brand-font-family-body);
+  --ds-font-family-mono: var(--ds-brand-font-family-mono);
+
+  /* -----------------------------------------------------------------------
+   * Font size — maps base tokens
+   * ----------------------------------------------------------------------- */
+  --ds-font-size-xs:  var(--ds-base-font-size-xs);
+  --ds-font-size-sm:  var(--ds-base-font-size-sm);
+  --ds-font-size-md:  var(--ds-base-font-size-md);
+  --ds-font-size-lg:  var(--ds-base-font-size-lg);
+  --ds-font-size-xl:  var(--ds-base-font-size-xl);
+  --ds-font-size-2xl: var(--ds-base-font-size-2xl);
+  --ds-font-size-3xl: var(--ds-base-font-size-3xl);
+
+  /* -----------------------------------------------------------------------
+   * Spacing — maps base tokens
+   * ----------------------------------------------------------------------- */
+  --ds-spacing-0:   var(--ds-base-spacing-0);
+  --ds-spacing-4:   var(--ds-base-spacing-4);
+  --ds-spacing-8:   var(--ds-base-spacing-8);
+  --ds-spacing-12:  var(--ds-base-spacing-12);
+  --ds-spacing-16:  var(--ds-base-spacing-16);
+  --ds-spacing-20:  var(--ds-base-spacing-20);
+  --ds-spacing-24:  var(--ds-base-spacing-24);
+  --ds-spacing-28:  var(--ds-base-spacing-28);
+  --ds-spacing-32:  var(--ds-base-spacing-32);
+  --ds-spacing-36:  var(--ds-base-spacing-36);
+  --ds-spacing-40:  var(--ds-base-spacing-40);
+  --ds-spacing-44:  var(--ds-base-spacing-44);
+  --ds-spacing-48:  var(--ds-base-spacing-48);
+  --ds-spacing-52:  var(--ds-base-spacing-52);
+  --ds-spacing-56:  var(--ds-base-spacing-56);
+  --ds-spacing-60:  var(--ds-base-spacing-60);
+  --ds-spacing-64:  var(--ds-base-spacing-64);
+  --ds-spacing-68:  var(--ds-base-spacing-68);
+  --ds-spacing-72:  var(--ds-base-spacing-72);
+  --ds-spacing-76:  var(--ds-base-spacing-76);
+  --ds-spacing-80:  var(--ds-base-spacing-80);
+  --ds-spacing-84:  var(--ds-base-spacing-84);
+  --ds-spacing-88:  var(--ds-base-spacing-88);
+  --ds-spacing-92:  var(--ds-base-spacing-92);
+  --ds-spacing-96:  var(--ds-base-spacing-96);
+  --ds-spacing-100: var(--ds-base-spacing-100);
+  --ds-spacing-104: var(--ds-base-spacing-104);
+  --ds-spacing-108: var(--ds-base-spacing-108);
+  --ds-spacing-112: var(--ds-base-spacing-112);
+  --ds-spacing-116: var(--ds-base-spacing-116);
+  --ds-spacing-120: var(--ds-base-spacing-120);
+}

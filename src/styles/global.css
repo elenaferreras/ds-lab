@@ -1,6 +1,8 @@
 @import '../tokens/base.css';
-@import '../tokens/themes/white-label.css';
-@import '../tokens/themes/farco.css';
+@import '../tokens/brand/farco.css';
+@import '../tokens/brand/neutral.css';
+@import '../tokens/theme/light.css';
+@import '../tokens/theme/dark.css';
 
 @tailwind base;
 @tailwind components;
@@ -14,9 +16,9 @@
 
 body {
   margin: 0;
-  font-family: var(--farco-font-family-base);
-  color: var(--farco-color-text-primary);
-  background-color: var(--farco-color-surface-base);
+  font-family: var(--ds-font-family-body);
+  color: var(--ds-color-foreground-text-primary);
+  background-color: var(--ds-color-background-surface-page);
 }
 
 @keyframes spin {
