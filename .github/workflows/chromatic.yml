@@ -2,9 +2,7 @@ name: "Chromatic"
 
 on:
   push:
-    branches:
-      - main
-      - NEW-Token-architecture
+
 
 jobs:
   chromatic:
