@@ -1,5 +1,5 @@
 import { Button } from './button'
-import { ArrowRightOutlined, PlusOutlined } from '../icons'
+import { ArrowRightIcon, PlusIcon } from '@phosphor-icons/react'
 
 export default {
   title: 'Components/Button',
@@ -89,11 +89,11 @@ export const SizesSecondary = {
 export const WithIcons = {
   render: () => (
     <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-      <Button iconLeft={<PlusOutlined />}>Add item</Button>
-      <Button variant="secondary" iconRight={<ArrowRightOutlined />}>Continue</Button>
-      <Button variant="ghost" iconLeft={<PlusOutlined />} iconRight={<ArrowRightOutlined />}>Both</Button>
-      <Button size="sm" iconLeft={<PlusOutlined />}>Small</Button>
-      <Button size="lg" iconRight={<ArrowRightOutlined />}>Large</Button>
+      <Button iconLeft={<PlusIcon />}>Add item</Button>
+      <Button variant="secondary" iconRight={<ArrowRightIcon />}>Continue</Button>
+      <Button variant="ghost" iconLeft={<PlusIcon />} iconRight={<ArrowRightIcon />}>Both</Button>
+      <Button size="sm" iconLeft={<PlusIcon />}>Small</Button>
+      <Button size="lg" iconRight={<ArrowRightIcon />}>Large</Button>
     </div>
   ),
 }
@@ -101,9 +101,9 @@ export const WithIcons = {
 export const IconOnly = {
   render: () => (
     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-      <Button size="sm" iconLeft={<PlusOutlined />} className="px-0 w-[var(--farco-spacing-8)]">{null}</Button>
-      <Button size="md" iconLeft={<PlusOutlined />} className="px-0 w-[var(--farco-spacing-10)]">{null}</Button>
-      <Button size="lg" iconLeft={<PlusOutlined />} className="px-0 w-[var(--farco-spacing-12)]">{null}</Button>
+      <Button size="sm" iconLeft={<PlusIcon />} className="px-0 w-[var(--farco-spacing-8)]">{null}</Button>
+      <Button size="md" iconLeft={<PlusIcon />} className="px-0 w-[var(--farco-spacing-10)]">{null}</Button>
+      <Button size="lg" iconLeft={<PlusIcon />} className="px-0 w-[var(--farco-spacing-12)]">{null}</Button>
     </div>
   ),
 }
