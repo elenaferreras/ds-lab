@@ -8,7 +8,7 @@ import { Button } from '../button'
 const VARIANTS = /** @type {const} */ (['default', 'success', 'warning', 'danger'])
 
 const VARIANT_CLASSES = {
-  default: 'bg-[var(--ds-color-background-surface-overlay)] text-[var(--ds-color-foreground-text-inverse)] border-[var(--ds-color-border-surface-strong)]',
+  default: 'bg-[var(--ds-color-background-surface-overlay)] text-[var(--ds-color-foreground-text-primary)] border-[var(--ds-color-border-surface-strong)]',
   success: [
     'bg-[color-mix(in_oklab,var(--ds-color-background-feedback-success-emphasis)_12%,var(--ds-color-background-surface-page))]',
     'text-[var(--ds-color-foreground-text-primary)]',
