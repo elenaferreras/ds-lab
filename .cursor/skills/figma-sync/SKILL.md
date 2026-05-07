@@ -223,7 +223,7 @@ After all required icon component keys are resolved, check each consuming compon
   - If a Button icon slot contains a non-Phosphor instance, replace it with the correct Phosphor instance and reapply the paint variable override for that variant/intent.
 - Enforce Toast close-button structure (must match code):
   - The Toast component’s `CloseButton` must contain a **nested `Button` instance** configured as `variant=ghost`, `size=sm`, `Has Icon Left=true`, `Icon Left = X (Phosphor)`, and no visible label.
-  - The close icon colour must inherit the Toast text colour (`Variant=default` → `color/text/inverse`, otherwise → `color/text/primary`).
+  - The close icon colour must inherit the Toast text colour (`color/text/primary` for all variants).
 - If the plugin runtime cannot load the project font (commonly `Overused Grotesk`) and instance creation fails, do **not** attempt to script around it (it will keep failing). Apply the close-button structure **manually in Figma UI** (place a Button instance and set its properties), then re-run `figma-sync` to apply Variable bindings and Phosphor instance overrides.
 - Apply this to all variant frames in the consuming component that contain that icon slot
 
