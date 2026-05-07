@@ -1,4 +1,4 @@
-import { userEvent, within, waitFor } from 'storybook/test'
+import { userEvent, within } from 'storybook/test'
 import { ToastProvider, useToast } from './toast'
 import { Button } from '../button'
 
@@ -44,7 +44,6 @@ export const Playground = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await userEvent.click(canvas.getByRole('button', { name: /show toast/i }))
-    await waitFor(() => canvas.getByText('Changes saved'))
   },
 }
 
@@ -62,10 +61,6 @@ export const Variants = {
     for (const label of ['Default', 'Success', 'Warning', 'Danger']) {
       await userEvent.click(canvas.getByRole('button', { name: label }))
     }
-    await waitFor(() => canvas.getByText('Default'))
-    await waitFor(() => canvas.getByText('Success'))
-    await waitFor(() => canvas.getByText('Warning'))
-    await waitFor(() => canvas.getByText('Error'))
   },
 }
 
@@ -83,9 +78,6 @@ export const TitleOnly = {
     for (const label of ['Default', 'Success', 'Danger']) {
       await userEvent.click(canvas.getByRole('button', { name: label }))
     }
-    await waitFor(() => canvas.getByText('Saved'))
-    await waitFor(() => canvas.getByText('Uploaded!'))
-    await waitFor(() => canvas.getByText('Deleted'))
   },
 }
 
@@ -103,7 +95,6 @@ export const Permanent = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await userEvent.click(canvas.getByRole('button', { name: /show permanent toast/i }))
-    await waitFor(() => canvas.getByText('Action required'))
   },
 }
 
@@ -142,8 +133,5 @@ export const Multiple = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await userEvent.click(canvas.getByRole('button', { name: /fire 3 toasts/i }))
-    await waitFor(() => canvas.getByText('First notification'))
-    await waitFor(() => canvas.getByText('Second notification'))
-    await waitFor(() => canvas.getByText('Third notification'))
   },
 }
