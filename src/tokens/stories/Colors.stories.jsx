@@ -67,7 +67,7 @@ function ColorSection({ title, description, colors }) {
 // ---------------------------------------------------------------------------
 // Scale helpers
 // ---------------------------------------------------------------------------
-const BRAND_STEPS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+const BRAND_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 const FEEDBACK_STEPS = [150, 300, 500, 700, 950];
 
 function brandScale(mode, palette) {
@@ -97,18 +97,18 @@ export const BrandScalesLight = {
       </p>
 
       <ColorSection
-        title="Primary (100–1000)"
-        description="Core brand hue."
+        title="Primary (50–950)"
+        description="Core brand hue. Farco: lime green. Neutral (white-label): orange-red."
         colors={brandScale('light', 'primary')}
       />
       <ColorSection
-        title="Secondary (100–1000)"
-        description="Supporting brand hue."
+        title="Secondary (50–950)"
+        description="Supporting brand hue. Both brands: steel blue."
         colors={brandScale('light', 'secondary')}
       />
       <ColorSection
-        title="Neutral (100–1000)"
-        description="Greyscale ramp — tinted for Farco, pure for Neutral."
+        title="Neutral (50–950)"
+        description="UI greyscale ramp — warm taupe for both brands."
         colors={brandScale('light', 'neutral')}
       />
       <ColorSection
@@ -142,15 +142,15 @@ export const BrandScalesDark = {
       </p>
 
       <ColorSection
-        title="Primary (100–1000)"
+        title="Primary (50–950)"
         colors={brandScale('dark', 'primary')}
       />
       <ColorSection
-        title="Secondary (100–1000)"
+        title="Secondary (50–950)"
         colors={brandScale('dark', 'secondary')}
       />
       <ColorSection
-        title="Neutral (100–1000)"
+        title="Neutral (50–950)"
         colors={brandScale('dark', 'neutral')}
       />
       <ColorSection

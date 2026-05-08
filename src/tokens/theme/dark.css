@@ -18,84 +18,84 @@
    * Action — Button primary
    * ----------------------------------------------------------------------- */
   /* In dark mode the button sits on a very dark surface, so we use a lighter
-     step from the dark scale (700–800) to make it stand out. */
-  --ds-color-background-action-primary:          var(--ds-brand-color-dark-primary-700);
-  --ds-color-background-action-primary-hover:    var(--ds-brand-color-dark-primary-800);
-  --ds-color-background-action-primary-pressed:  var(--ds-brand-color-dark-primary-900);
-  --ds-color-background-action-primary-disabled: var(--ds-brand-color-dark-neutral-300);
+     step from the dark scale (600–800) to make it stand out. */
+  --ds-color-background-action-primary:          var(--ds-brand-color-dark-primary-600);
+  --ds-color-background-action-primary-hover:    var(--ds-brand-color-dark-primary-700);
+  --ds-color-background-action-primary-pressed:  var(--ds-brand-color-dark-primary-800);
+  --ds-color-background-action-primary-disabled: var(--ds-brand-color-dark-neutral-200);
 
   /* Text on top of the button — must contrast against the lighter button bg.
-     dark-primary-100 is the darkest step in the dark scale. */
-  --ds-color-foreground-action-on-primary:          var(--ds-brand-color-dark-primary-100);
-  --ds-color-foreground-action-on-primary-disabled: var(--ds-brand-color-dark-neutral-500);
+     dark-primary-50 is the darkest step in the dark scale. */
+  --ds-color-foreground-action-on-primary:          var(--ds-brand-color-dark-primary-50);
+  --ds-color-foreground-action-on-primary-disabled: var(--ds-brand-color-dark-neutral-400);
 
-  --ds-color-border-action-primary:          var(--ds-brand-color-dark-primary-700);
-  --ds-color-border-action-primary-hover:    var(--ds-brand-color-dark-primary-800);
-  --ds-color-border-action-primary-pressed:  var(--ds-brand-color-dark-primary-900);
-  --ds-color-border-action-primary-disabled: var(--ds-brand-color-dark-neutral-300);
+  --ds-color-border-action-primary:          var(--ds-brand-color-dark-primary-600);
+  --ds-color-border-action-primary-hover:    var(--ds-brand-color-dark-primary-700);
+  --ds-color-border-action-primary-pressed:  var(--ds-brand-color-dark-primary-800);
+  --ds-color-border-action-primary-disabled: var(--ds-brand-color-dark-neutral-200);
 
   /* Action — Button secondary */
   --ds-color-background-action-secondary:          transparent;
-  --ds-color-background-action-secondary-hover:    var(--ds-brand-color-dark-primary-300);
-  --ds-color-background-action-secondary-pressed:  var(--ds-brand-color-dark-primary-400);
+  --ds-color-background-action-secondary-hover:    var(--ds-brand-color-dark-primary-200);
+  --ds-color-background-action-secondary-pressed:  var(--ds-brand-color-dark-primary-300);
   --ds-color-background-action-secondary-disabled: transparent;
 
-  --ds-color-foreground-action-on-secondary:          var(--ds-brand-color-dark-primary-800);
-  --ds-color-foreground-action-on-secondary-hover:    var(--ds-brand-color-dark-primary-900);
-  --ds-color-foreground-action-on-secondary-disabled: var(--ds-brand-color-dark-neutral-500);
+  --ds-color-foreground-action-on-secondary:          var(--ds-brand-color-dark-primary-700);
+  --ds-color-foreground-action-on-secondary-hover:    var(--ds-brand-color-dark-primary-800);
+  --ds-color-foreground-action-on-secondary-disabled: var(--ds-brand-color-dark-neutral-400);
 
-  --ds-color-border-action-secondary:          var(--ds-brand-color-dark-primary-700);
-  --ds-color-border-action-secondary-hover:    var(--ds-brand-color-dark-primary-800);
-  --ds-color-border-action-secondary-pressed:  var(--ds-brand-color-dark-primary-900);
-  --ds-color-border-action-secondary-disabled: var(--ds-brand-color-dark-neutral-300);
+  --ds-color-border-action-secondary:          var(--ds-brand-color-dark-primary-600);
+  --ds-color-border-action-secondary-hover:    var(--ds-brand-color-dark-primary-700);
+  --ds-color-border-action-secondary-pressed:  var(--ds-brand-color-dark-primary-800);
+  --ds-color-border-action-secondary-disabled: var(--ds-brand-color-dark-neutral-200);
 
   /* Action — focus ring */
-  --ds-color-border-action-focus: var(--ds-brand-color-dark-primary-700);
+  --ds-color-border-action-focus: var(--ds-brand-color-dark-primary-600);
 
   /* -----------------------------------------------------------------------
    * Input
    * ----------------------------------------------------------------------- */
-  --ds-color-background-input-default:  var(--ds-brand-color-dark-neutral-200);
-  --ds-color-background-input-hover:    var(--ds-brand-color-dark-neutral-300);
-  --ds-color-background-input-focused:  var(--ds-brand-color-dark-neutral-200);
-  --ds-color-background-input-disabled: var(--ds-brand-color-dark-neutral-200);
+  --ds-color-background-input-default:  var(--ds-brand-color-dark-neutral-100);
+  --ds-color-background-input-hover:    var(--ds-brand-color-dark-neutral-200);
+  --ds-color-background-input-focused:  var(--ds-brand-color-dark-neutral-100);
+  --ds-color-background-input-disabled: var(--ds-brand-color-dark-neutral-100);
   --ds-color-background-input-error:    var(--ds-brand-color-dark-error-150);
 
-  --ds-color-foreground-input-default:     var(--ds-brand-color-dark-neutral-1000);
-  --ds-color-foreground-input-placeholder: var(--ds-brand-color-dark-neutral-600);
-  --ds-color-foreground-input-disabled:    var(--ds-brand-color-dark-neutral-500);
+  --ds-color-foreground-input-default:     var(--ds-brand-color-dark-neutral-950);
+  --ds-color-foreground-input-placeholder: var(--ds-brand-color-dark-neutral-500);
+  --ds-color-foreground-input-disabled:    var(--ds-brand-color-dark-neutral-400);
 
-  --ds-color-border-input-default:  var(--ds-brand-color-dark-neutral-500);
-  --ds-color-border-input-hover:    var(--ds-brand-color-dark-neutral-700);
-  --ds-color-border-input-focused:  var(--ds-brand-color-dark-primary-700);
-  --ds-color-border-input-disabled: var(--ds-brand-color-dark-neutral-300);
+  --ds-color-border-input-default:  var(--ds-brand-color-dark-neutral-400);
+  --ds-color-border-input-hover:    var(--ds-brand-color-dark-neutral-600);
+  --ds-color-border-input-focused:  var(--ds-brand-color-dark-primary-600);
+  --ds-color-border-input-disabled: var(--ds-brand-color-dark-neutral-200);
   --ds-color-border-input-error:    var(--ds-brand-color-dark-error-500);
 
   /* -----------------------------------------------------------------------
    * Surface
    * ----------------------------------------------------------------------- */
-  --ds-color-background-surface-page:    var(--ds-brand-color-dark-neutral-100);
-  --ds-color-background-surface-subtle:  var(--ds-brand-color-dark-neutral-200);
-  --ds-color-background-surface-raised:  var(--ds-brand-color-dark-neutral-300);
-  --ds-color-background-surface-overlay: var(--ds-brand-color-dark-neutral-400);
+  --ds-color-background-surface-page:    var(--ds-brand-color-dark-neutral-50);
+  --ds-color-background-surface-subtle:  var(--ds-brand-color-dark-neutral-100);
+  --ds-color-background-surface-raised:  var(--ds-brand-color-dark-neutral-200);
+  --ds-color-background-surface-overlay: var(--ds-brand-color-dark-neutral-300);
 
-  --ds-color-foreground-surface-on-page:    var(--ds-brand-color-dark-neutral-1000);
-  --ds-color-foreground-surface-on-subtle:  var(--ds-brand-color-dark-neutral-1000);
-  --ds-color-foreground-surface-on-raised:  var(--ds-brand-color-dark-neutral-1000);
-  --ds-color-foreground-surface-on-overlay: var(--ds-brand-color-dark-neutral-1000);
+  --ds-color-foreground-surface-on-page:    var(--ds-brand-color-dark-neutral-950);
+  --ds-color-foreground-surface-on-subtle:  var(--ds-brand-color-dark-neutral-950);
+  --ds-color-foreground-surface-on-raised:  var(--ds-brand-color-dark-neutral-950);
+  --ds-color-foreground-surface-on-overlay: var(--ds-brand-color-dark-neutral-950);
 
-  --ds-color-border-surface-default: var(--ds-brand-color-dark-neutral-300);
-  --ds-color-border-surface-strong:  var(--ds-brand-color-dark-neutral-500);
+  --ds-color-border-surface-default: var(--ds-brand-color-dark-neutral-200);
+  --ds-color-border-surface-strong:  var(--ds-brand-color-dark-neutral-400);
 
   /* -----------------------------------------------------------------------
    * Text
    * ----------------------------------------------------------------------- */
-  --ds-color-foreground-text-primary:    var(--ds-brand-color-dark-neutral-1000);
-  --ds-color-foreground-text-secondary:  var(--ds-brand-color-dark-neutral-700);
-  --ds-color-foreground-text-disabled:   var(--ds-brand-color-dark-neutral-500);
-  --ds-color-foreground-text-inverse:    var(--ds-brand-color-dark-neutral-100);
-  --ds-color-foreground-text-link:       var(--ds-brand-color-dark-primary-700);
-  --ds-color-foreground-text-link-hover: var(--ds-brand-color-dark-primary-800);
+  --ds-color-foreground-text-primary:    var(--ds-brand-color-dark-neutral-950);
+  --ds-color-foreground-text-secondary:  var(--ds-brand-color-dark-neutral-600);
+  --ds-color-foreground-text-disabled:   var(--ds-brand-color-dark-neutral-400);
+  --ds-color-foreground-text-inverse:    var(--ds-brand-color-dark-neutral-50);
+  --ds-color-foreground-text-link:       var(--ds-brand-color-dark-primary-600);
+  --ds-color-foreground-text-link-hover: var(--ds-brand-color-dark-primary-700);
 
   /* -----------------------------------------------------------------------
    * Feedback

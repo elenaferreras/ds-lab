@@ -19,7 +19,7 @@ Keeps the DS-Lab Figma file in sync with the codebase. Handles three scenarios:
 - Figma Desktop app must be running with the local MCP server active at `http://127.0.0.1:3845/mcp`
 - Figma file: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-Components`
 - Phosphor Icons library file (read-only reference): `https://www.figma.com/design/DgCvciYAzYDi5jNMyt14t2/DS-Lab--Phosphor-Icons`
-- Token source of truth: `src/tokens/themes/farco.css` (Farco theme) and `src/tokens/themes/white-label.css` (White Label theme)
+- Token source of truth: `src/tokens/brand/farco.css` (Farco brand primitives) and `src/tokens/brand/neutral.css` (White Label brand primitives), plus `src/tokens/theme/light.css` and `src/tokens/theme/dark.css` (semantic layer, shared across brands)
 - Component implementations: `src/components/ui/<name>/<name>.jsx`
 - Node ID registry: `FIGMA_RULES.md` §8
 - Local font access: the Figma plugin runtime must be able to load `Overused Grotesk` (e.g. `figma.listAvailableFontsAsync()` should include it). If it is missing in the plugin runtime, any workflow that creates instances or updates text layers may fail with `unloaded font "Overused Grotesk Regular"`; fix local font access in Figma Desktop (or use a font the plugin runtime can load) before retrying.
@@ -66,11 +66,16 @@ Run both phases even if the user specifies a single component or token — other
 
 Refer to `references/COMPONENT_SPECS.md` §3 for the full collection/mode architecture, Variable type map, bridge variable table, Semantic color alias table, shadow effect format, and text style matrix.
 
-### T0. Delete the legacy collection
+### T0. Delete the legacy collection and clean up malformed variables
 
 - Call the Figma MCP to check if a Variable collection named `DS-Lab Tokens` exists in the file
 - If it exists → delete it entirely before proceeding. All existing Variable bindings on component layers will break; they will be rebound in Phase 2 (Workflows A/B/I).
-- If it does not exist → proceed to T1.
+- If it does not exist → proceed to the cleanup step below.
+
+**Primitives collection cleanup — remove incorrectly named variables:**
+- Call the Figma MCP to list all variables in the `Primitives` collection.
+- The only valid top-level groups in `Primitives` are `light/` and `dark/`. Any variable whose name does not start with `light/` or `dark/` is malformed (e.g. flat names like `neutral/50`, or a `resolved/` group from a previous run). Delete every such variable before proceeding to T4.
+- After cleanup, proceed to T1.
 
 ### T1. Create three Variable collections
 
@@ -84,50 +89,51 @@ Create the following collections. If a collection already exists with the correc
 
 ### T2. Parse all four theme CSS files
 
-- Read `src/tokens/themes/farco.css` → extract the `:root, .theme-farco` block (Light semantics + all Global/Primitives values) and the `.theme-farco-dark` block (Dark semantic overrides)
-- Read `src/tokens/themes/white-label.css` → extract the `:root, .theme-white-label` block and the `.theme-white-label-dark` block
-- Alternatively use the pre-split temp files in `src/tokens/temp/`: `farco-light.css`, `farco-dark.css`, `white-label-light.css`, `white-label-dark.css`
-- For each variable, determine which collection it belongs to and its resolved value per relevant mode
+- Read `src/tokens/brand/farco.css` → extract all `[data-brand="farco"]` primitive color scales (light + dark for primary, secondary, neutral) and brand-specific radius/font tokens
+- Read `src/tokens/brand/neutral.css` → extract all `[data-brand="neutral"]` primitive color scales (light + dark) and brand-specific radius/font tokens
+- Read `src/tokens/theme/light.css` → extract all `[data-mode="light"]` semantic token values (these are `var()` aliases — resolve them against the brand primitives for each brand mode)
+- Read `src/tokens/theme/dark.css` → extract all `[data-mode="dark"]` semantic token overrides
+- The token architecture uses four CSS files: brand primitives are split per brand (`farco.css`, `neutral.css`), semantic aliases are shared across brands (`light.css`, `dark.css`). There are no per-theme monolithic files.
+- For each variable, determine which Figma collection it belongs to and its resolved value per relevant mode
 
 ### T3. Populate Global collection (single `Default` mode)
 
-For each Global variable listed in §3 — sizes (`size/0`–`size/30`), font numerics (`font/size-*`, `font/weight-*`, `font/line-height-*`, `font/letter-spacing-*`), radii (`radius/*`), `opacity/disabled`, `color/black`, `color/white`, and all `color/success-*`, `color/warning-*`, `color/danger-*`, `color/info-*` palette entries:
+For each Global variable listed in §3 — sizes (`size/0`–`size/30`), font numerics (`font/size-*`, `font/weight-*`, `font/line-height-*`, `font/letter-spacing-*`), radii (`radius/*`), `opacity/disabled`, `color/black`, `color/white`:
 
 - **Exists with correct value** → skip
 - **Exists with wrong value** → update
 - **Missing** → create with the correct type (`COLOR`, `FLOAT`, or `STRING`) and value
 
-### T4. Populate Primitives collection — palette group
+**Global color cleanup:** The Global collection must contain only `color/black` and `color/white`. If any `color/success-*`, `color/warning-*`, `color/danger-*`, `color/info-*`, or legacy flat `color/feedback/*` variables exist in Global from a previous sync run, delete them now. Feedback colors are raw hex values stored directly in the Semantic collection — they do not belong in Global.
 
-For each palette variable listed in §3 (`neutral/50`–`neutral/950`, `primary/50`–`primary/950`, `secondary/50`–`secondary/950`):
+### T4. Populate Primitives collection — palette and feedback groups
 
-- Set the `Farco` mode value to the raw hex from `farco.css`
-- Set the `White Label` mode value to the raw hex from `white-label.css`
+For each variable listed in §3 under the Primitives palette and feedback groups (`light/neutral/*`, `light/primary/*`, `light/secondary/*`, `light/feedback/*`, and the corresponding `dark/*` counterparts):
+
+- **Variable naming:** names must use the `light/` or `dark/` prefix exactly as shown in §3 — e.g. `light/neutral/50`, `dark/feedback/error-500`. Do NOT create flat names without a mode prefix.
+- **Do NOT create new groups or subgroups beyond this structure.** The only valid top-level groups in `Primitives` are `light/` and `dark/`. Any variable whose name does not start with one of these prefixes is wrong.
+- **Before creating any variable**, call the Figma MCP to list all existing variables in the Primitives collection. Match by exact name. If a variable already exists → update its mode values. If it does not exist → create it. Never create a duplicate.
+- For `light/*` variables: set the `Farco` mode value to the raw hex from `src/tokens/brand/farco.css` (light scale), and `White Label` mode to the raw hex from `src/tokens/brand/neutral.css` (light scale)
+- For `dark/*` variables: set the `Farco` mode value to the raw hex from `src/tokens/brand/farco.css` (dark scale), and `White Label` mode to the raw hex from `src/tokens/brand/neutral.css` (dark scale)
 - Apply the same skip/update/create logic as T3
 
-### T5. Populate Primitives collection — resolved bridge group
+### T5. Repair and populate Semantic collection — color group
 
-For each of the 8 bridge Variables listed in the §3 resolved bridge table:
-
-- Type: `COLOR`, stored in `Primitives`
-- Both mode values are **aliases** to other Variables, not raw hex values
-- Set `Farco` mode as an alias to the Variable in the `Farco mode` column of the §3 bridge table
-- Set `White Label` mode as an alias to the Variable in the `White Label mode` column
-- Check/create/update using the same skip/update/create logic: if the alias target already matches → skip; if wrong → update; if missing → create
-
-### T6. Populate Semantic collection — color group
+**This step must always re-validate and repair every alias, even for variables that already exist.**
 
 For each Semantic color Variable listed in §3:
 
 - Type: `COLOR`
-- Both `Light` and `Dark` mode values are **aliases** pointing to:
-  - A `Primitives/resolved/*` bridge Variable — when the token's resolved palette stop differs between brands in that mode
-  - A `Primitives/palette/*` Variable directly — when both brands use the same palette stop in that mode
-  - A `Global/color/*` Variable directly — for feedback colors and black/white
-- Set aliases per the §3 Semantic color group table (Light mode alias column, Dark mode alias column)
-- Apply the same skip/update/create logic
+- All mode values are **aliases** — pointing to `Primitives/light/*`, `Primitives/dark/*`, `Global/color/white`, or `Global/color/black`. No raw hex values. No `Global/color/danger-*` or other feedback aliases — those now live in `Primitives/light/feedback/*` and `Primitives/dark/feedback/*`.
+- There is no `resolved` bridge group — do not create one, and do not reference `Primitives/resolved/*` paths.
+- **Any legacy `color/feedback/*` flat variables** (e.g. `color/feedback/success`, `color/feedback/danger-subtle`) that existed from a previous sync run must be deleted and replaced with the correct `color/background/feedback-*`, `color/foreground/feedback-*`, and `color/border/feedback-*` variables per §3.
+- For every variable in §3, **always check the current alias target** for each mode:
+  - **Alias target matches §3** → skip
+  - **Alias target is wrong, points to a non-existent variable, or is a raw hex value instead of an alias** → update the alias to the correct target from §3. This includes any variable previously linked to a deleted `Global/color/danger-*`, `Global/color/success-*`, `Global/color/warning-*`, or `Global/color/info-*` variable — re-link it to the correct `Primitives/light/feedback/*` or `Primitives/dark/feedback/*` variable.
+  - **Variable does not exist** → create it with the correct alias
+- Do not skip existing variables without inspecting their current alias targets. A variable that exists with a broken alias is treated the same as a variable with a wrong value — it must be updated.
 
-### T7. Populate Semantic collection — structural group
+### T6. Populate Semantic collection — structural group
 
 For each structural Variable listed in §3 (`spacing/*`, `radius/*`, `font/*`, `opacity/disabled`):
 
@@ -136,7 +142,7 @@ For each structural Variable listed in §3 (`spacing/*`, `radius/*`, `font/*`, `
 - Set both modes to alias the matching `Global` Variable
 - Apply the same skip/update/create logic
 
-### T8. Sync Effect Styles (shadows)
+### T7. Sync Effect Styles (shadows)
 
 For each `shadow/sm`, `shadow/md`, `shadow/lg` entry listed in §3:
 
@@ -145,7 +151,7 @@ For each `shadow/sm`, `shadow/md`, `shadow/lg` entry listed in §3:
 - **Does not exist** → create the Effect Style with a DROP_SHADOW effect
 - Shadows are theme-invariant — no mode handling needed
 
-### T9. Sync Text Styles (typography)
+### T8. Sync Text Styles (typography)
 
 For each entry in the §3 Text Style matrix:
 
@@ -154,11 +160,11 @@ For each entry in the §3 Text Style matrix:
 - **Does not exist** → create the Text Style
 - Typography is theme-invariant — no mode handling needed
 
-### T10. Update FIGMA_RULES.md
+### T9. Update FIGMA_RULES.md
 
 If any token's raw value changed in either theme CSS file, update the corresponding value in the token table in `FIGMA_RULES.md` §2.
 
-### T11. Report
+### T10. Report
 
 List every Variable created, updated, or skipped across all three collections (`Global`, `Primitives`, `Semantic`). List every Effect Style and Text Style created, updated, or skipped. Flag any MCP call that failed with the exact token name and error — do not skip failures silently.
 
