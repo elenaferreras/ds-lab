@@ -6,7 +6,7 @@ export default create({
   // Brand — wordmark from farcostudio.com, links to the DS lab root
   brandTitle: 'DS Lab',
   brandImage: '/farco-logo.svg',
-  brandUrl: '/',
+  brandUrl: '?path=/story/get-started--page',
   brandTarget: '_self',
 
   // Typography — mirrors --farco-font-family-base
