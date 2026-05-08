@@ -58,6 +58,12 @@
     color: #000000 !important;
   }
 
+  [data-selected="true"] svg,
+  [aria-selected="true"] svg {
+    color: #000000 !important;
+    fill: #000000 !important;
+  }
+
   [data-selected="true"]::before,
   [aria-selected="true"]::before {
     content: '';
@@ -81,6 +87,31 @@
   [data-nodetype="component"] button:hover {
     background-color: #e8e8e8 !important; /* --farco-color-neutral-20 */
     color: #000000 !important;
+  }
+
+  /* ─── Sidebar row "···" context menu button ─────────────────────────────── */
+  /* Storybook renders a floating action button on hover; restyle to match     */
+  [class*="ListItem"] button[aria-label],
+  [class*="listItem"] button[aria-label],
+  [data-nodetype] button[aria-label] {
+    background-color: #e8e8e8 !important; /* --farco-color-neutral-20 */
+    color: #000000 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  [class*="ListItem"] button[aria-label]:hover,
+  [class*="listItem"] button[aria-label]:hover,
+  [data-nodetype] button[aria-label]:hover {
+    background-color: #d9d9d9 !important; /* --farco-color-neutral-30 */
+  }
+
+  [data-selected="true"] button[aria-label],
+  [aria-selected="true"] button[aria-label] {
+    background-color: #e8e8e8 !important; /* --farco-color-neutral-20 */
+    color: #000000 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
   /* ─── Toolbar ────────────────────────────────────────────────────────────── */
@@ -118,8 +149,8 @@
   [class*="search"] input,
   [placeholder*="Find"],
   [placeholder*="Search"] {
+    border: none !important;
     border-radius: 4px !important; /* --farco-radius-sm */
-    border: 1px solid #d9d9d9 !important; /* --farco-color-neutral-30 */
     font-size: 14px !important; /* --farco-font-size-sm */
   }
 
