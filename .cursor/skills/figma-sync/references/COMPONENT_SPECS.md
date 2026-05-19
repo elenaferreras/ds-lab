@@ -10,11 +10,17 @@ This file is loaded on demand by the `figma-sync` skill. It contains:
 
 ## 1. Token → Figma Mapping
 
-The design token system uses three Figma Variable collections. Components may **only** reference `Semantic` Variables — never `Global` or `Primitives` directly.
+The design token system uses three Figma Variable collections aligned with the code token layers. Components may **only** reference `Theme (Semantic)` Variables — never `Base` or `Brand (Primitives)` directly. When publishing this file as a library, only `Theme (Semantic)` is visible to consumers; `Base` and `Brand (Primitives)` must have `hiddenFromPublishing: true`.
 
-### Collection: Global (single `Default` mode — invariant values)
+| Code source | Figma Variable collection |
+|---|---|
+| `src/tokens/base.css` | `Base` |
+| `src/tokens/brand/` | `Brand (Primitives)` |
+| `src/tokens/theme/` | `Theme (Semantic)` |
 
-The Global collection stores only non-color design primitives plus black and white. **No feedback or brand palette colors belong here.**
+### Collection: Base — from `base.css` (single `Default` mode — invariant values)
+
+The Base collection stores only non-color design primitives plus black and white. **No feedback or brand palette colors belong here.**
 
 | Figma Variable name | Type | Value |
 |---|---|---|
@@ -59,11 +65,11 @@ The Global collection stores only non-color design primitives plus black and whi
 | `color/black` | COLOR | `#000000` |
 | `color/white` | COLOR | `#ffffff` |
 
-> If any `color/success-*`, `color/warning-*`, `color/danger-*`, or `color/info-*` variables exist in Global from a previous sync run, delete them — they do not belong here.
+> If any `color/success-*`, `color/warning-*`, `color/danger-*`, or `color/info-*` variables exist in Base from a previous sync run, delete them — they do not belong here.
 
 ---
 
-### Collection: Primitives — Palette group (modes: `Farco` | `White Label`)
+### Collection: Brand (Primitives) — from `brand/` — Palette group (modes: `Farco` | `White Label`)
 
 These are raw brand palette values. Components must never reference these directly.
 Variable names use `light/` and `dark/` prefixes — this is the canonical structure. Do not create flat names without a prefix.
@@ -181,107 +187,107 @@ Variable names use `light/` and `dark/` prefixes — this is the canonical struc
 
 ---
 
-### Collection: Semantic — Color group (modes: `Light` | `Dark`)
+### Collection: Theme (Semantic) — from `theme/` — Color group (modes: `Light` | `Dark`)
 
-All component layers must bind to these Variables. Each mode value is an alias pointing directly to a `Primitives/light/*` or `Primitives/dark/*` variable, or `Global/color/white` / `Global/color/black`. There is no `resolved` bridge group and no `Global/color/feedback` variables — feedback colors alias `Primitives/light/feedback/*` or `Primitives/dark/feedback/*` directly.
+All component layers must bind to these Variables. Each mode value is an alias pointing directly to a `Brand (Primitives)/light/*` or `Brand (Primitives)/dark/*` variable, or `Base/color/white` / `Base/color/black`. There is no `resolved` bridge group and no `Base/color/feedback` variables — feedback colors alias `Brand (Primitives)/light/feedback/*` or `Brand (Primitives)/dark/feedback/*` directly.
 
 | Figma Variable name | Light mode (alias) | Dark mode (alias) |
 |---|---|---|
-| `color/action/primary` | `Primitives/light/primary/500` | `Primitives/dark/primary/600` |
-| `color/action/primary-hover` | `Primitives/light/primary/600` | `Primitives/dark/primary/700` |
-| `color/action/primary-pressed` | `Primitives/light/primary/700` | `Primitives/dark/primary/800` |
-| `color/action/primary-focus` | `Primitives/light/primary/400` | `Primitives/dark/primary/600` |
-| `color/action/primary-disabled` | `Primitives/light/neutral/200` | `Primitives/dark/neutral/300` |
-| `color/action/secondary` | `Primitives/light/secondary/300` | `Primitives/dark/secondary/600` |
-| `color/action/secondary-hover` | `Primitives/light/secondary/200` | `Primitives/dark/secondary/500` |
-| `color/action/secondary-pressed` | `Primitives/light/secondary/100` | `Primitives/dark/secondary/400` |
-| `color/action/secondary-focus` | `Primitives/light/secondary/300` | `Primitives/dark/secondary/600` |
-| `color/action/secondary-disabled` | `Primitives/light/neutral/200` | `Primitives/dark/neutral/300` |
-| `color/action/destructive` | `Primitives/light/feedback/error-500` | `Primitives/dark/feedback/error-500` |
-| `color/action/destructive-hover` | `Primitives/light/feedback/error-700` | `Primitives/dark/feedback/error-700` |
-| `color/action/destructive-pressed` | `Primitives/light/feedback/error-700` | `Primitives/dark/feedback/error-700` |
-| `color/action/destructive-focus` | `Primitives/light/feedback/error-500` | `Primitives/dark/feedback/error-500` |
-| `color/action/destructive-disabled` | `Primitives/light/neutral/200` | `Primitives/dark/neutral/300` |
-| `color/surface/base` | `Global/color/white` | `Primitives/dark/neutral/50` |
-| `color/surface/subtle` | `Primitives/light/neutral/50` | `Primitives/dark/neutral/100` |
-| `color/surface/raised` | `Global/color/white` | `Primitives/dark/neutral/200` |
-| `color/surface/overlay` | `Primitives/light/neutral/50` | `Primitives/dark/neutral/300` |
-| `color/text/primary` | `Primitives/light/neutral/950` | `Primitives/dark/neutral/950` |
-| `color/text/secondary` | `Primitives/light/neutral/500` | `Primitives/dark/neutral/600` |
-| `color/text/disabled` | `Primitives/light/neutral/300` | `Primitives/dark/neutral/400` |
-| `color/text/inverse` | `Global/color/white` | `Primitives/dark/neutral/50` |
-| `color/text/on-action` | `Primitives/light/neutral/50` | `Primitives/dark/neutral/950` |
-| `color/border` | `Primitives/light/neutral/300` | `Primitives/dark/neutral/400` |
-| `color/border/subtle` | `Primitives/light/neutral/100` | `Primitives/dark/neutral/200` |
-| `color/border/strong` | `Primitives/light/neutral/500` | `Primitives/dark/neutral/500` |
-| `color/border/focus` | `Primitives/light/primary/400` | `Primitives/dark/primary/600` |
-| `color/background/feedback-success`             | `Primitives/light/feedback/success-150` | `Primitives/dark/feedback/success-150` |
-| `color/background/feedback-success-emphasis`    | `Primitives/light/feedback/success-500` | `Primitives/dark/feedback/success-500` |
-| `color/foreground/feedback-on-success`          | `Primitives/light/feedback/success-700` | `Primitives/dark/feedback/success-700` |
-| `color/foreground/feedback-on-success-emphasis` | `Global/color/white`                    | `Global/color/white`                   |
-| `color/border/feedback-success`                 | `Primitives/light/feedback/success-300` | `Primitives/dark/feedback/success-300` |
-| `color/background/feedback-warning`             | `Primitives/light/feedback/warning-150` | `Primitives/dark/feedback/warning-150` |
-| `color/background/feedback-warning-emphasis`    | `Primitives/light/feedback/warning-500` | `Primitives/dark/feedback/warning-500` |
-| `color/foreground/feedback-on-warning`          | `Primitives/light/feedback/warning-700` | `Primitives/dark/feedback/warning-700` |
-| `color/foreground/feedback-on-warning-emphasis` | `Global/color/white`                    | `Global/color/white`                   |
-| `color/border/feedback-warning`                 | `Primitives/light/feedback/warning-300` | `Primitives/dark/feedback/warning-300` |
-| `color/background/feedback-error`               | `Primitives/light/feedback/error-150`   | `Primitives/dark/feedback/error-150`   |
-| `color/background/feedback-error-emphasis`      | `Primitives/light/feedback/error-500`   | `Primitives/dark/feedback/error-500`   |
-| `color/foreground/feedback-on-error`            | `Primitives/light/feedback/error-700`   | `Primitives/dark/feedback/error-700`   |
-| `color/foreground/feedback-on-error-emphasis`   | `Global/color/white`                    | `Global/color/white`                   |
-| `color/border/feedback-error`                   | `Primitives/light/feedback/error-300`   | `Primitives/dark/feedback/error-300`   |
-| `color/background/feedback-info`                | `Primitives/light/feedback/info-150`    | `Primitives/dark/feedback/info-150`    |
-| `color/background/feedback-info-emphasis`       | `Primitives/light/feedback/info-500`    | `Primitives/dark/feedback/info-500`    |
-| `color/foreground/feedback-on-info`             | `Primitives/light/feedback/info-700`    | `Primitives/dark/feedback/info-700`    |
-| `color/foreground/feedback-on-info-emphasis`    | `Global/color/white`                    | `Global/color/white`                   |
-| `color/border/feedback-info`                    | `Primitives/light/feedback/info-300`    | `Primitives/dark/feedback/info-300`    |
+| `color/action/primary` | `Brand (Primitives)/light/primary/500` | `Brand (Primitives)/dark/primary/600` |
+| `color/action/primary-hover` | `Brand (Primitives)/light/primary/600` | `Brand (Primitives)/dark/primary/700` |
+| `color/action/primary-pressed` | `Brand (Primitives)/light/primary/700` | `Brand (Primitives)/dark/primary/800` |
+| `color/action/primary-focus` | `Brand (Primitives)/light/primary/400` | `Brand (Primitives)/dark/primary/600` |
+| `color/action/primary-disabled` | `Brand (Primitives)/light/neutral/200` | `Brand (Primitives)/dark/neutral/300` |
+| `color/action/secondary` | `Brand (Primitives)/light/secondary/300` | `Brand (Primitives)/dark/secondary/600` |
+| `color/action/secondary-hover` | `Brand (Primitives)/light/secondary/200` | `Brand (Primitives)/dark/secondary/500` |
+| `color/action/secondary-pressed` | `Brand (Primitives)/light/secondary/100` | `Brand (Primitives)/dark/secondary/400` |
+| `color/action/secondary-focus` | `Brand (Primitives)/light/secondary/300` | `Brand (Primitives)/dark/secondary/600` |
+| `color/action/secondary-disabled` | `Brand (Primitives)/light/neutral/200` | `Brand (Primitives)/dark/neutral/300` |
+| `color/action/destructive` | `Brand (Primitives)/light/feedback/error-500` | `Brand (Primitives)/dark/feedback/error-500` |
+| `color/action/destructive-hover` | `Brand (Primitives)/light/feedback/error-700` | `Brand (Primitives)/dark/feedback/error-700` |
+| `color/action/destructive-pressed` | `Brand (Primitives)/light/feedback/error-700` | `Brand (Primitives)/dark/feedback/error-700` |
+| `color/action/destructive-focus` | `Brand (Primitives)/light/feedback/error-500` | `Brand (Primitives)/dark/feedback/error-500` |
+| `color/action/destructive-disabled` | `Brand (Primitives)/light/neutral/200` | `Brand (Primitives)/dark/neutral/300` |
+| `color/surface/base` | `Base/color/white` | `Brand (Primitives)/dark/neutral/50` |
+| `color/surface/subtle` | `Brand (Primitives)/light/neutral/50` | `Brand (Primitives)/dark/neutral/100` |
+| `color/surface/raised` | `Base/color/white` | `Brand (Primitives)/dark/neutral/200` |
+| `color/surface/overlay` | `Brand (Primitives)/light/neutral/50` | `Brand (Primitives)/dark/neutral/300` |
+| `color/text/primary` | `Brand (Primitives)/light/neutral/950` | `Brand (Primitives)/dark/neutral/950` |
+| `color/text/secondary` | `Brand (Primitives)/light/neutral/500` | `Brand (Primitives)/dark/neutral/600` |
+| `color/text/disabled` | `Brand (Primitives)/light/neutral/300` | `Brand (Primitives)/dark/neutral/400` |
+| `color/text/inverse` | `Base/color/white` | `Brand (Primitives)/dark/neutral/50` |
+| `color/text/on-action` | `Brand (Primitives)/light/neutral/50` | `Brand (Primitives)/dark/neutral/950` |
+| `color/border` | `Brand (Primitives)/light/neutral/300` | `Brand (Primitives)/dark/neutral/400` |
+| `color/border/subtle` | `Brand (Primitives)/light/neutral/100` | `Brand (Primitives)/dark/neutral/200` |
+| `color/border/strong` | `Brand (Primitives)/light/neutral/500` | `Brand (Primitives)/dark/neutral/500` |
+| `color/border/focus` | `Brand (Primitives)/light/primary/400` | `Brand (Primitives)/dark/primary/600` |
+| `color/background/feedback-success`             | `Brand (Primitives)/light/feedback/success-150` | `Brand (Primitives)/dark/feedback/success-150` |
+| `color/background/feedback-success-emphasis`    | `Brand (Primitives)/light/feedback/success-500` | `Brand (Primitives)/dark/feedback/success-500` |
+| `color/foreground/feedback-on-success`          | `Brand (Primitives)/light/feedback/success-700` | `Brand (Primitives)/dark/feedback/success-700` |
+| `color/foreground/feedback-on-success-emphasis` | `Base/color/white`                    | `Base/color/white`                   |
+| `color/border/feedback-success`                 | `Brand (Primitives)/light/feedback/success-300` | `Brand (Primitives)/dark/feedback/success-300` |
+| `color/background/feedback-warning`             | `Brand (Primitives)/light/feedback/warning-150` | `Brand (Primitives)/dark/feedback/warning-150` |
+| `color/background/feedback-warning-emphasis`    | `Brand (Primitives)/light/feedback/warning-500` | `Brand (Primitives)/dark/feedback/warning-500` |
+| `color/foreground/feedback-on-warning`          | `Brand (Primitives)/light/feedback/warning-700` | `Brand (Primitives)/dark/feedback/warning-700` |
+| `color/foreground/feedback-on-warning-emphasis` | `Base/color/white`                    | `Base/color/white`                   |
+| `color/border/feedback-warning`                 | `Brand (Primitives)/light/feedback/warning-300` | `Brand (Primitives)/dark/feedback/warning-300` |
+| `color/background/feedback-error`               | `Brand (Primitives)/light/feedback/error-150`   | `Brand (Primitives)/dark/feedback/error-150`   |
+| `color/background/feedback-error-emphasis`      | `Brand (Primitives)/light/feedback/error-500`   | `Brand (Primitives)/dark/feedback/error-500`   |
+| `color/foreground/feedback-on-error`            | `Brand (Primitives)/light/feedback/error-700`   | `Brand (Primitives)/dark/feedback/error-700`   |
+| `color/foreground/feedback-on-error-emphasis`   | `Base/color/white`                    | `Base/color/white`                   |
+| `color/border/feedback-error`                   | `Brand (Primitives)/light/feedback/error-300`   | `Brand (Primitives)/dark/feedback/error-300`   |
+| `color/background/feedback-info`                | `Brand (Primitives)/light/feedback/info-150`    | `Brand (Primitives)/dark/feedback/info-150`    |
+| `color/background/feedback-info-emphasis`       | `Brand (Primitives)/light/feedback/info-500`    | `Brand (Primitives)/dark/feedback/info-500`    |
+| `color/foreground/feedback-on-info`             | `Brand (Primitives)/light/feedback/info-700`    | `Brand (Primitives)/dark/feedback/info-700`    |
+| `color/foreground/feedback-on-info-emphasis`    | `Base/color/white`                    | `Base/color/white`                   |
+| `color/border/feedback-info`                    | `Brand (Primitives)/light/feedback/info-300`    | `Brand (Primitives)/dark/feedback/info-300`    |
 
 ---
 
-### Collection: Semantic — Structural group (modes: `Light` | `Dark`)
+### Collection: Theme (Semantic) — Structural group (modes: `Light` | `Dark`)
 
-Both modes use the **identical alias** to the corresponding `Global` Variable — structural values do not change between light and dark.
+Both modes use the **identical alias** to the corresponding `Base` Variable — structural values do not change between light and dark.
 
 | Figma Variable name | Alias (both modes) |
 |---|---|
-| `spacing/0` | `Global/size/0` |
-| `spacing/1` | `Global/size/1` |
-| `spacing/2` | `Global/size/2` |
-| `spacing/3` | `Global/size/3` |
-| `spacing/4` | `Global/size/4` |
-| `spacing/5` | `Global/size/5` |
-| `spacing/6` | `Global/size/6` |
-| `spacing/7` | `Global/size/7` |
-| `spacing/8` | `Global/size/8` |
-| `spacing/9` | `Global/size/9` |
-| `spacing/10` | `Global/size/10` |
-| `spacing/11` | `Global/size/11` |
-| `spacing/12` | `Global/size/12` |
-| `spacing/14` | `Global/size/14` |
-| `spacing/16` | `Global/size/16` |
-| `spacing/20` | `Global/size/20` |
-| `spacing/24` | `Global/size/24` |
-| `spacing/30` | `Global/size/30` |
-| `radius/none` | `Global/radius/none` |
-| `radius/sm` | `Global/radius/sm` |
-| `radius/md` | `Global/radius/md` |
-| `radius/lg` | `Global/radius/lg` |
-| `radius/xl` | `Global/radius/xl` |
-| `radius/full` | `Global/radius/full` |
-| `font/size-xs` | `Global/font/size-xs` |
-| `font/size-sm` | `Global/font/size-sm` |
-| `font/size-md` | `Global/font/size-md` |
-| `font/size-lg` | `Global/font/size-lg` |
-| `font/size-xl` | `Global/font/size-xl` |
-| `font/weight-regular` | `Global/font/weight-regular` |
-| `font/weight-medium` | `Global/font/weight-medium` |
-| `font/weight-bold` | `Global/font/weight-bold` |
-| `font/line-height-tight` | `Global/font/line-height-tight` |
-| `font/line-height-base` | `Global/font/line-height-base` |
-| `font/line-height-relaxed` | `Global/font/line-height-relaxed` |
-| `font/letter-spacing-tight` | `Global/font/letter-spacing-tight` |
-| `font/letter-spacing-base` | `Global/font/letter-spacing-base` |
-| `opacity/disabled` | `Global/opacity/disabled` |
+| `spacing/0` | `Base/size/0` |
+| `spacing/1` | `Base/size/1` |
+| `spacing/2` | `Base/size/2` |
+| `spacing/3` | `Base/size/3` |
+| `spacing/4` | `Base/size/4` |
+| `spacing/5` | `Base/size/5` |
+| `spacing/6` | `Base/size/6` |
+| `spacing/7` | `Base/size/7` |
+| `spacing/8` | `Base/size/8` |
+| `spacing/9` | `Base/size/9` |
+| `spacing/10` | `Base/size/10` |
+| `spacing/11` | `Base/size/11` |
+| `spacing/12` | `Base/size/12` |
+| `spacing/14` | `Base/size/14` |
+| `spacing/16` | `Base/size/16` |
+| `spacing/20` | `Base/size/20` |
+| `spacing/24` | `Base/size/24` |
+| `spacing/30` | `Base/size/30` |
+| `radius/none` | `Base/radius/none` |
+| `radius/sm` | `Base/radius/sm` |
+| `radius/md` | `Base/radius/md` |
+| `radius/lg` | `Base/radius/lg` |
+| `radius/xl` | `Base/radius/xl` |
+| `radius/full` | `Base/radius/full` |
+| `font/size-xs` | `Base/font/size-xs` |
+| `font/size-sm` | `Base/font/size-sm` |
+| `font/size-md` | `Base/font/size-md` |
+| `font/size-lg` | `Base/font/size-lg` |
+| `font/size-xl` | `Base/font/size-xl` |
+| `font/weight-regular` | `Base/font/weight-regular` |
+| `font/weight-medium` | `Base/font/weight-medium` |
+| `font/weight-bold` | `Base/font/weight-bold` |
+| `font/line-height-tight` | `Base/font/line-height-tight` |
+| `font/line-height-base` | `Base/font/line-height-base` |
+| `font/line-height-relaxed` | `Base/font/line-height-relaxed` |
+| `font/letter-spacing-tight` | `Base/font/letter-spacing-tight` |
+| `font/letter-spacing-base` | `Base/font/letter-spacing-base` |
+| `opacity/disabled` | `Base/opacity/disabled` |
 
 ---
 
@@ -615,11 +621,13 @@ Both modes use the **identical alias** to the corresponding `Global` Variable �
 
 ### Variable Collections
 
-| Collection | Modes | Purpose |
-|---|---|---|
-| `Global` | `Default` (1 mode) | Invariant raw values — sizes, font numerics, radii, opacity, black, white only |
-| `Primitives` | `Farco`, `White Label` | Per-brand palette scales (`light/*`, `dark/*`) including feedback colors |
-| `Semantic` | `Light`, `Dark` | Alias layer — the only collection components bind to |
+| Collection | Code source | Modes | Publish to library | Purpose |
+|---|---|---|---|---|
+| `Base` | `base.css` | `Default` (1 mode) | **No** (`hiddenFromPublishing: true`) | Invariant raw values — sizes, font numerics, radii, opacity, black, white only |
+| `Brand (Primitives)` | `brand/` | `Farco`, `White Label` | **No** (`hiddenFromPublishing: true`) | Per-brand palette scales (`light/*`, `dark/*`) including feedback colors |
+| `Theme (Semantic)` | `theme/` | `Light`, `Dark` | **Yes** (`hiddenFromPublishing: false`) | Alias layer — the only collection components bind to and the only layer published to consumers |
+
+> Internal layers (`Base`, `Brand (Primitives)`) stay in the file for aliases and component bindings but must not appear when this file is published as a library. Only `Theme (Semantic)` tokens are consumer-facing.
 
 ---
 
@@ -627,24 +635,24 @@ Both modes use the **identical alias** to the corresponding `Global` Variable �
 
 | Layer | Variables | Type |
 |---|---|---|
-| Global — sizes | `size/0`–`size/30` | `FLOAT` |
-| Global — font numerics | `font/size-*`, `font/weight-*`, `font/line-height-*` | `FLOAT` |
-| Global — letter spacing | `font/letter-spacing-tight`, `font/letter-spacing-base` | `STRING` (keep `em` unit) |
-| Global — radii | `radius/none`–`radius/full` (`radius/full` = 9999) | `FLOAT` |
-| Global — opacity | `opacity/disabled` | `FLOAT` |
-| Global — colors | `color/black`, `color/white` only | `COLOR` |
-| Primitives — palette | `light/neutral/*`, `light/primary/*`, `light/secondary/*`, `dark/neutral/*`, `dark/primary/*`, `dark/secondary/*` (raw hex per mode) | `COLOR` |
-| Primitives — feedback | `light/feedback/*`, `dark/feedback/*` (raw hex per mode) | `COLOR` |
-| Semantic — color | `color/action/*`, `color/surface/*`, `color/text/*`, `color/border/*`, `color/background/feedback-*`, `color/foreground/feedback-*`, `color/border/feedback-*` (alias) | `COLOR` |
-| Semantic — structural | `spacing/*`, `radius/*`, `font/*`, `opacity/disabled` (alias to Global) | `FLOAT` / `STRING` |
-| Font family | `--farco-font-family-base` | → `Primitives/font/family-base` (STRING, modes: Farco / White Label); Text Styles bind font family to this Variable |
+| Base — sizes | `size/0`–`size/30` | `FLOAT` |
+| Base — font numerics | `font/size-*`, `font/weight-*`, `font/line-height-*` | `FLOAT` |
+| Base — letter spacing | `font/letter-spacing-tight`, `font/letter-spacing-base` | `STRING` (keep `em` unit) |
+| Base — radii | `radius/none`–`radius/full` (`radius/full` = 9999) | `FLOAT` |
+| Base — opacity | `opacity/disabled` | `FLOAT` |
+| Base — colors | `color/black`, `color/white` only | `COLOR` |
+| Brand (Primitives) — palette | `light/neutral/*`, `light/primary/*`, `light/secondary/*`, `dark/neutral/*`, `dark/primary/*`, `dark/secondary/*` (raw hex per mode) | `COLOR` |
+| Brand (Primitives) — feedback | `light/feedback/*`, `dark/feedback/*` (raw hex per mode) | `COLOR` |
+| Theme (Semantic) — color | `color/action/*`, `color/surface/*`, `color/text/*`, `color/border/*`, `color/background/feedback-*`, `color/foreground/feedback-*`, `color/border/feedback-*` (alias) | `COLOR` |
+| Theme (Semantic) — structural | `spacing/*`, `radius/*`, `font/*`, `opacity/disabled` (alias to Base) | `FLOAT` / `STRING` |
+| Font family | `--farco-font-family-base` | → `Brand (Primitives)/font/family-base` (STRING, modes: Farco / White Label); Text Styles bind font family to this Variable |
 | Shadows | `shadow/sm`, `shadow/md`, `shadow/lg` | → Effect Styles only, not Variables |
 
 ---
 
 ### Resolved Bridge Variables — Why They Exist
 
-Eight Variables live in `Primitives/resolved/` to handle cases where the two brands require **different palette stops** for the same semantic meaning. Instead of duplicating the branching logic into every Semantic variable, Semantic aliases the bridge Variable once, and the bridge handles the per-brand resolution.
+Eight Variables live in `Brand (Primitives)/resolved/` to handle cases where the two brands require **different palette stops** for the same semantic meaning. Instead of duplicating the branching logic into every Theme (Semantic) variable, Theme (Semantic) aliases the bridge Variable once, and the bridge handles the per-brand resolution.
 
 | Bridge Variable | Farco resolves to | White Label resolves to |
 |---|---|---|
@@ -653,9 +661,9 @@ Eight Variables live in `Primitives/resolved/` to handle cases where the two bra
 | `resolved/action-primary-pressed-light` | `primary/700` (#333333) | `primary/600` (#0958d9) |
 | `resolved/action-primary-focus-light` | `primary/950` (#000) | `primary/500` (#1677ff) |
 | `resolved/border-light` | `neutral/950` (#000) | `neutral/300` (#d9d9d9) |
-| `resolved/border-strong-light` | `Global/color/black` | `neutral/500` (#8c8c8c) |
+| `resolved/border-strong-light` | `Base/color/black` | `neutral/500` (#8c8c8c) |
 | `resolved/border-focus-light` | `primary/950` (#000) | `primary/500` (#1677ff) |
-| `resolved/text-on-action-dark` | `Global/color/black` | `Global/color/white` |
+| `resolved/text-on-action-dark` | `Base/color/black` | `Base/color/white` |
 
 The last bridge variable (`text-on-action-dark`) handles a dark-mode mismatch: Farco's primary is black in dark mode (text on it must be white → actually inverted — black text reads on white backgrounds; confirm against CSS), White Label's primary is blue (text on it is white).
 
