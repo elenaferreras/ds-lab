@@ -55,6 +55,7 @@ Tokens must be fully synced before components are touched — component layers w
 
 ### Phase 2 — Components (only after Phase 1 is complete)
 
+0. Run **Workflow M** (global migration) to rebind any legacy spacing/radius variable bindings on component nodes to the current local `Theme (Semantic)` Variables.
 1. List all folder names inside `src/components/ui/`. Call the Figma MCP to enumerate all pages in DS-Lab-Components.
 2. For each component folder, check whether a page with a matching name (PascalCase) exists in Figma:
    - Page exists → **Workflow A**, then immediately **Workflow D**
@@ -148,7 +149,7 @@ return { updated };
 
 ### T2. Parse all token CSS files
 
-- Read `src/tokens/base.css` → extract invariant primitives (sizes, font numerics, radii, opacity, black/white) for the `Base` collection
+- Read `src/tokens/base.css` → extract invariant primitives (sizes, font numerics, opacity, black/white) for the `Base` collection
 - Read `src/tokens/brand/farco.css` → extract all `[data-brand="farco"]` primitive color scales (light + dark for primary, secondary, neutral), overlay shadow **tints** (raw hex from `--ds-brand-color-{light|dark}-overlays-shadow-{sm|md|lg}`), and brand-specific radius/font tokens
 - Read `src/tokens/brand/neutral.css` → extract all `[data-brand="neutral"]` primitive color scales (light + dark), overlay shadow tints, and brand-specific radius/font tokens
 - **Overlay shadow variables in Figma are derived, not copied from brand CSS:** for each `light/overlays/shadow/{sm|md|lg}` and `dark/overlays/shadow/{sm|md|lg}`, combine the brand tint with the theme `color-mix` alpha for that size (`sm` → 5%, `md` → 10%, `lg` → 12% from `theme/light.css` / `theme/dark.css`). Figma cannot run `color-mix`; bake the result into the variable RGBA (see T4b).
@@ -159,7 +160,7 @@ return { updated };
 
 ### T3. Populate Base collection from `base.css` (single `Default` mode)
 
-For each Base variable listed in §3 — sizes (`size/0`–`size/30`), font numerics (`font/size-*`, `font/weight-*`, `font/line-height-*`, `font/letter-spacing-*`), radii (`radius/*`), `opacity/disabled`, `color/black`, `color/white`:
+For each Base variable listed in §3 — sizes (`size/0`–`size/30`), font numerics (`font/size-*`, `font/weight-*`, `font/line-height-*`, `font/letter-spacing-*`), `opacity/disabled`, `color/black`, `color/white`:
 
 - **Exists with correct value** → skip
 - **Exists with wrong value** → update
@@ -192,6 +193,17 @@ For each variable listed in §3 under Brand overlays (`light/overlays/shadow/sm`
 - Apply the same skip/update/create logic as T3
 - Do **not** create shadow variables in Theme (Semantic) — code `--ds-shadow-*` tokens are CSS-only
 
+### T4c. Populate Brand (Primitives) collection — radius group
+
+Radius is brand-specific in code (`--ds-brand-radius-*`). Create the following FLOAT variables in `Brand (Primitives)` (modes: `Farco`, `White Label`) and keep them in sync:
+
+- `radius/sm`
+- `radius/md`
+- `radius/lg`
+- `radius/full`
+
+Set mode values from `src/tokens/brand/farco.css` and `src/tokens/brand/neutral.css`. Apply the same skip/update/create logic as T3.
+
 ### T5. Repair and populate Theme (Semantic) collection from `theme/` — color group
 
 **This step must always re-validate and repair every alias, even for variables that already exist.**
@@ -223,8 +235,9 @@ For each Theme (Semantic) color Variable listed in §3:
 For each structural Variable listed in §3 (`spacing/*`, `radius/*`, `font/*`, `opacity/disabled`):
 
 - Type: `FLOAT` (or `STRING` for letter-spacing)
-- Both `Light` and `Dark` modes use the **identical alias** to the corresponding `Base` Variable
-- Set both modes to alias the matching `Base` Variable
+- Both `Light` and `Dark` modes use the **identical alias** to the corresponding source Variable
+- **Spacing + base font numerics + disabled opacity** alias `Base/*`
+- **Radius** aliases `Brand (Primitives)/radius/*` (brand-specific; resolves via the active `Brand (Primitives)` mode)
 - Apply the same skip/update/create logic
 
 ### T7. Sync Effect Styles (shadows)
@@ -262,6 +275,29 @@ Re-run T1b to confirm publishing flags, then list:
 Flag any MCP call that failed with the exact token name and error — do not skip failures silently.
 
 ---
+
+## Workflow M — Migrate legacy structural bindings (spacing/radius)
+
+Some components may be bound to legacy Variable collections (e.g. old `spacing/*` and `radius/*` variables that are not part of the current local collections). This workflow repairs those bindings without changing the component layout intent.
+
+### M1. Build the canonical target set
+
+- Enumerate local Variables in `Theme (Semantic)` and build a lookup by name for:
+  - `spacing/*`
+  - `radius/*`
+
+### M2. Scan component nodes for legacy bindings
+
+- Enumerate all `COMPONENT_SET` and `COMPONENT` nodes in the DS-Lab-Components file.
+- For each descendant node, inspect `node.boundVariables` for:
+  - Layout: `itemSpacing`, `paddingLeft`, `paddingRight`, `paddingTop`, `paddingBottom`
+  - Radius: `cornerRadius`, `topLeftRadius`, `topRightRadius`, `bottomLeftRadius`, `bottomRightRadius`
+- If a binding points to a Variable whose **name** is `spacing/*` or `radius/*` but whose Variable ID is **not** the local `Theme (Semantic)` variable of that name, rebind it to the canonical local `Theme (Semantic)` variable with the same name.
+
+### M3. Verify
+
+- Re-scan component nodes and confirm there are **zero** bindings to non-local `spacing/*` and `radius/*` variables.
+- Report counts and a few example node IDs.
 
 ## Workflow I — Wire Phosphor icon instances in consuming components
 

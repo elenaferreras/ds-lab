@@ -56,10 +56,10 @@ The Base collection stores only non-color design primitives plus black and white
 | `font/letter-spacing-tight` | STRING | `-0.01em` |
 | `font/letter-spacing-base` | STRING | `0.01em` |
 | `radius/none` | FLOAT | 0 |
-| `radius/sm` | FLOAT | 4 |
-| `radius/md` | FLOAT | 6 |
-| `radius/lg` | FLOAT | 8 |
-| `radius/xl` | FLOAT | 12 |
+| `radius/sm` | FLOAT | Farco: 4 / White Label: 2 |
+| `radius/md` | FLOAT | Farco: 8 / White Label: 4 |
+| `radius/lg` | FLOAT | Farco: 12 / White Label: 8 |
+| `radius/xl` | FLOAT | Farco: 12 / White Label: 8 |
 | `radius/full` | FLOAT | 9999 |
 | `opacity/disabled` | FLOAT | 0.4 |
 | `color/black` | COLOR | `#000000` |
@@ -208,6 +208,21 @@ In **code**, brand CSS stores the raw tint (`#4A3F2F`); theme CSS applies `color
 
 ---
 
+### Collection: Brand (Primitives) — Radius group (modes: `Farco` | `White Label`)
+
+Radius is brand-specific in code (`--ds-brand-radius-*`). Components must never bind to Brand directly; Theme (Semantic) `radius/*` aliases these variables so radius resolves via the active Brand mode.
+
+| Figma Variable name | Farco mode | White Label mode |
+|---|---:|---:|
+| `radius/sm` | 4 | 2 |
+| `radius/md` | 8 | 4 |
+| `radius/lg` | 12 | 8 |
+| `radius/full` | 9999 | 9999 |
+
+> CSS source: `--ds-brand-radius-{sm|md|lg|full}` in `src/tokens/brand/farco.css` and `src/tokens/brand/neutral.css`.
+
+---
+
 ### Collection: Theme (Semantic) — from `theme/` — Color group (modes: `Light` | `Dark`)
 
 All component layers must bind to these Variables. Each mode value is an alias pointing directly to a `Brand (Primitives)/light/*` or `Brand (Primitives)/dark/*` variable, or `Base/color/white` / `Base/color/black`. There is no `resolved` bridge group and no `Base/color/feedback` variables — feedback colors alias `Brand (Primitives)/light/feedback/*` or `Brand (Primitives)/dark/feedback/*` directly.
@@ -289,11 +304,11 @@ Both modes use the **identical alias** to the corresponding `Base` Variable — 
 | `spacing/24` | `Base/size/24` |
 | `spacing/30` | `Base/size/30` |
 | `radius/none` | `Base/radius/none` |
-| `radius/sm` | `Base/radius/sm` |
-| `radius/md` | `Base/radius/md` |
-| `radius/lg` | `Base/radius/lg` |
-| `radius/xl` | `Base/radius/xl` |
-| `radius/full` | `Base/radius/full` |
+| `radius/sm` | `Brand (Primitives)/radius/sm` |
+| `radius/md` | `Brand (Primitives)/radius/md` |
+| `radius/lg` | `Brand (Primitives)/radius/lg` |
+| `radius/xl` | `Brand (Primitives)/radius/lg` |
+| `radius/full` | `Brand (Primitives)/radius/full` |
 | `font/size-xs` | `Base/font/size-xs` |
 | `font/size-sm` | `Base/font/size-sm` |
 | `font/size-md` | `Base/font/size-md` |

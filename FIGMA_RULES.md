@@ -59,6 +59,8 @@ Never used directly in components. Examples:
 
 Figma `Base`: `size/*`, `font/size-*`, `font/line-height-*`, `font/letter-spacing-*`, `radius/*`, `color/black`, `color/white`.
 
+**Structural binding rule (components):** Components must bind spacing + radius to `Theme (Semantic)` variables (`spacing/*`, `radius/*`) — never directly to `Base/*` or to legacy variable collections.
+
 ### Brand tokens (`src/tokens/brand/`)
 
 Raw palette and brand-specific values. Naming: `--ds-brand-color-{light|dark}-{palette}-{stop}`.
@@ -72,7 +74,7 @@ Raw palette and brand-specific values. Naming: `--ds-brand-color-{light|dark}-{p
 --ds-brand-font-family-body: 'Overused Grotesk', sans-serif
 ```
 
-Figma `Brand (Primitives)`: `light/neutral/*`, `light/primary/*`, `light/secondary/*`, `light/feedback/*`, `light/overlays/shadow/*`, and `dark/*` counterparts. Modes: `Farco`, `White Label`.
+Figma `Brand (Primitives)`: `light/neutral/*`, `light/primary/*`, `light/secondary/*`, `light/feedback/*`, `light/overlays/shadow/*`, `radius/*`, and `dark/*` counterparts. Modes: `Farco`, `White Label`.
 
 ### Theme — semantic color tokens (`src/tokens/theme/`)
 
@@ -136,6 +138,8 @@ Components bind to these. Pattern: `--ds-color-{property}-{role}-{variant}`.
 Figma `Theme (Semantic)`: aliases to `Brand (Primitives)/light/*` or `dark/*` per mode. See `.cursor/skills/figma-sync/references/COMPONENT_SPECS.md` §1 for the full alias table.
 
 **Deprecation:** The legacy Theme (Semantic) variable `color/border` has been removed from Figma. Use `color/border/subtle` instead.
+
+**Migration note:** Some older components were bound to legacy `spacing/*` and `radius/*` variables from a non-local collection. `figma-sync` Workflow M migrates those bindings to the current local `Theme (Semantic)` variables by name.
 
 ### Typography tokens (theme)
 
