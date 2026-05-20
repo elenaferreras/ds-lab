@@ -261,9 +261,9 @@ export const AllTokens = {
       <div className="token-section">
         <h3 className="token-section__title">Shadows</h3>
         {[
-          { token: '--farco-shadow-sm', value: '0 1px 2px …' },
-          { token: '--farco-shadow-md', value: '0 4px 8px …' },
-          { token: '--farco-shadow-lg', value: '0 8px 24px …' },
+          { token: '--ds-shadow-sm', value: '0 1px 2px 0 color-mix(… 5%)' },
+          { token: '--ds-shadow-md', value: '0 4px 8px 0 color-mix(… 10%)' },
+          { token: '--ds-shadow-lg', value: '0 8px 24px 0 color-mix(… 12%)' },
         ].map(({ token, value }) => (
           <TokenRow
             key={token}

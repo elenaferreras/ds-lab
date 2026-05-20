@@ -153,6 +153,16 @@
   --ds-brand-color-dark-info-950: #e8f5fb;
 
   /* -------------------------------------------------------------------------
+   * Overlays — shadow tint (light + dark)
+   * ------------------------------------------------------------------------- */
+  --ds-brand-color-light-overlays-shadow-sm: #4A3F2F;
+  --ds-brand-color-light-overlays-shadow-md: #4A3F2F;
+  --ds-brand-color-light-overlays-shadow-lg: #4A3F2F;
+  --ds-brand-color-dark-overlays-shadow-sm: #4A3F2F;
+  --ds-brand-color-dark-overlays-shadow-md: #4A3F2F;
+  --ds-brand-color-dark-overlays-shadow-lg: #4A3F2F;
+
+  /* -------------------------------------------------------------------------
    * Radius
    * ------------------------------------------------------------------------- */
   --ds-brand-radius-sm: 2px;

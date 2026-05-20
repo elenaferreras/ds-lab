@@ -9,18 +9,18 @@ export default {
 
 const shadowTokens = [
   {
-    token: '--farco-shadow-sm',
-    value: '0 1px 2px rgba(0,0,0,0.05)',
+    token: '--ds-shadow-sm',
+    value: '0 1px 2px 0 color-mix(… overlays-shadow-sm 5%)',
     description: 'Subtle elevation for cards and inputs.',
   },
   {
-    token: '--farco-shadow-md',
-    value: '0 4px 8px rgba(0,0,0,0.1)',
+    token: '--ds-shadow-md',
+    value: '0 4px 8px 0 color-mix(… overlays-shadow-md 10%)',
     description: 'Medium elevation for dropdowns and popovers.',
   },
   {
-    token: '--farco-shadow-lg',
-    value: '0 8px 24px rgba(0,0,0,0.12)',
+    token: '--ds-shadow-lg',
+    value: '0 8px 24px 0 color-mix(… overlays-shadow-lg 12%)',
     description: 'High elevation for modals and dialogs.',
   },
 ];
@@ -40,7 +40,7 @@ export const Scale = {
               style={{ boxShadow: `var(${token})` }}
             />
             <span className="shadow-card__name">
-              {token.replace('--farco-', '')}
+              {token.replace('--ds-', '')}
             </span>
             <span className="shadow-card__value">{value}</span>
           </div>
@@ -63,29 +63,29 @@ export const InContext = {
             <div style={{
               fontSize: '12px',
               fontFamily: 'monospace',
-              color: 'var(--farco-color-text-secondary)',
+              color: 'var(--ds-color-foreground-text-secondary)',
               marginBottom: '12px',
             }}>
-              {token.replace('--farco-', '')}
+              {token.replace('--ds-', '')}
             </div>
             <div
               style={{
-                padding: 'var(--farco-spacing-6)',
-                borderRadius: 'var(--farco-radius-lg)',
-                background: 'var(--farco-color-surface-base)',
+                padding: 'var(--ds-spacing-24)',
+                borderRadius: 'var(--ds-radius-lg)',
+                background: 'var(--ds-color-background-surface-page)',
                 boxShadow: `var(${token})`,
               }}
             >
               <div style={{
-                fontSize: 'var(--farco-font-size-md)',
-                fontWeight: 'var(--farco-font-weight-medium)',
+                fontSize: 'var(--ds-font-size-md)',
+                fontWeight: 500,
                 marginBottom: '4px',
               }}>
                 Card title
               </div>
               <div style={{
-                fontSize: 'var(--farco-font-size-sm)',
-                color: 'var(--farco-color-text-secondary)',
+                fontSize: 'var(--ds-font-size-sm)',
+                color: 'var(--ds-color-foreground-text-secondary)',
               }}>
                 {description}
               </div>
@@ -115,16 +115,16 @@ export const Stacked = {
           left: 0,
           width: '300px',
           height: '200px',
-          borderRadius: 'var(--farco-radius-lg)',
-          background: 'var(--farco-color-surface-base)',
-          boxShadow: 'var(--farco-shadow-sm)',
-          padding: 'var(--farco-spacing-4)',
-          border: '1px solid var(--farco-color-border-subtle)',
+          borderRadius: 'var(--ds-radius-lg)',
+          background: 'var(--ds-color-background-surface-page)',
+          boxShadow: 'var(--ds-shadow-sm)',
+          padding: 'var(--ds-spacing-16)',
+          border: '1px solid var(--ds-color-border-surface-default)',
         }}>
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: 'var(--farco-color-text-secondary)',
+            color: 'var(--ds-color-foreground-text-secondary)',
           }}>
             shadow-sm (base layer)
           </span>
@@ -136,15 +136,15 @@ export const Stacked = {
           left: '40px',
           width: '300px',
           height: '200px',
-          borderRadius: 'var(--farco-radius-lg)',
-          background: 'var(--farco-color-surface-base)',
-          boxShadow: 'var(--farco-shadow-md)',
-          padding: 'var(--farco-spacing-4)',
+          borderRadius: 'var(--ds-radius-lg)',
+          background: 'var(--ds-color-background-surface-page)',
+          boxShadow: 'var(--ds-shadow-md)',
+          padding: 'var(--ds-spacing-16)',
         }}>
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: 'var(--farco-color-text-secondary)',
+            color: 'var(--ds-color-foreground-text-secondary)',
           }}>
             shadow-md (middle layer)
           </span>
@@ -156,15 +156,15 @@ export const Stacked = {
           left: '80px',
           width: '300px',
           height: '200px',
-          borderRadius: 'var(--farco-radius-lg)',
-          background: 'var(--farco-color-surface-base)',
-          boxShadow: 'var(--farco-shadow-lg)',
-          padding: 'var(--farco-spacing-4)',
+          borderRadius: 'var(--ds-radius-lg)',
+          background: 'var(--ds-color-background-surface-page)',
+          boxShadow: 'var(--ds-shadow-lg)',
+          padding: 'var(--ds-spacing-16)',
         }}>
           <span style={{
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: 'var(--farco-color-text-secondary)',
+            color: 'var(--ds-color-foreground-text-secondary)',
           }}>
             shadow-lg (top layer)
           </span>

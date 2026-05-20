@@ -149,8 +149,9 @@ return { updated };
 ### T2. Parse all token CSS files
 
 - Read `src/tokens/base.css` → extract invariant primitives (sizes, font numerics, radii, opacity, black/white) for the `Base` collection
-- Read `src/tokens/brand/farco.css` → extract all `[data-brand="farco"]` primitive color scales (light + dark for primary, secondary, neutral) and brand-specific radius/font tokens
-- Read `src/tokens/brand/neutral.css` → extract all `[data-brand="neutral"]` primitive color scales (light + dark) and brand-specific radius/font tokens
+- Read `src/tokens/brand/farco.css` → extract all `[data-brand="farco"]` primitive color scales (light + dark for primary, secondary, neutral), overlay shadow **tints** (raw hex from `--ds-brand-color-{light|dark}-overlays-shadow-{sm|md|lg}`), and brand-specific radius/font tokens
+- Read `src/tokens/brand/neutral.css` → extract all `[data-brand="neutral"]` primitive color scales (light + dark), overlay shadow tints, and brand-specific radius/font tokens
+- **Overlay shadow variables in Figma are derived, not copied from brand CSS:** for each `light/overlays/shadow/{sm|md|lg}` and `dark/overlays/shadow/{sm|md|lg}`, combine the brand tint with the theme `color-mix` alpha for that size (`sm` → 5%, `md` → 10%, `lg` → 12% from `theme/light.css` / `theme/dark.css`). Figma cannot run `color-mix`; bake the result into the variable RGBA (see T4b).
 - Read `src/tokens/theme/light.css` → extract all `[data-mode="light"]` semantic token values (these are `var()` aliases — resolve them against the brand primitives for each brand mode)
 - Read `src/tokens/theme/dark.css` → extract all `[data-mode="dark"]` semantic token overrides
 - The token architecture uses five CSS files: `base.css` for invariant primitives; brand primitives split per brand (`farco.css`, `neutral.css`); semantic aliases shared across brands (`light.css`, `dark.css`).
@@ -171,15 +172,39 @@ For each Base variable listed in §3 — sizes (`size/0`–`size/30`), font nume
 For each variable listed in §3 under the Brand (Primitives) palette and feedback groups (`light/neutral/*`, `light/primary/*`, `light/secondary/*`, `light/feedback/*`, and the corresponding `dark/*` counterparts):
 
 - **Variable naming:** names must use the `light/` or `dark/` prefix exactly as shown in §3 — e.g. `light/neutral/50`, `dark/feedback/error-500`. Do NOT create flat names without a mode prefix.
-- **Do NOT create new groups or subgroups beyond this structure.** The only valid top-level groups in `Brand (Primitives)` are `light/` and `dark/`. Any variable whose name does not start with one of these prefixes is wrong.
+- **Do NOT create new top-level groups beyond `light/` and `dark/`.** Allowed subgroups include `neutral/*`, `primary/*`, `secondary/*`, `feedback/*`, and `overlays/shadow/*`. Any variable whose name does not start with `light/` or `dark/` is wrong.
 - **Before creating any variable**, call the Figma MCP to list all existing variables in the Brand (Primitives) collection. Match by exact name. If a variable already exists → update its mode values. If it does not exist → create it. Never create a duplicate.
 - For `light/*` variables: set the `Farco` mode value to the raw hex from `src/tokens/brand/farco.css` (light scale), and `White Label` mode to the raw hex from `src/tokens/brand/neutral.css` (light scale)
 - For `dark/*` variables: set the `Farco` mode value to the raw hex from `src/tokens/brand/farco.css` (dark scale), and `White Label` mode to the raw hex from `src/tokens/brand/neutral.css` (dark scale)
 - Apply the same skip/update/create logic as T3
 
+### T4b. Populate Brand (Primitives) collection — overlays / shadow group
+
+For each variable listed in §3 under Brand overlays (`light/overlays/shadow/sm`, `light/overlays/shadow/md`, `light/overlays/shadow/lg`, and the corresponding `dark/overlays/shadow/*` entries):
+
+- Type: `COLOR`
+- **Pre-mixed RGBA per brand mode** — Figma has no `color-mix`. Do **not** store the opaque brand tint (`#4A3F2F` @ α=1) in these variables.
+- Parse the raw tint from `src/tokens/brand/farco.css` / `neutral.css`: `--ds-brand-color-{light|dark}-overlays-shadow-{sm|md|lg}`
+- Apply size alpha from theme CSS: `sm` → `0.05`, `md` → `0.10`, `lg` → `0.12` (matches `color-mix(in srgb, {tint} N%, transparent)` in `theme/light.css` and `theme/dark.css`)
+- Compute Figma value: `{ r: R/255, g: G/255, b: B/255, a: alpha }` (non-premultiplied; RGB from tint, alpha from size)
+- Set `Farco` mode from `farco.css` tint + size alpha; `White Label` mode from `neutral.css` tint + size alpha (values differ only when brand tints diverge)
+- Compare/skip/update using full `{r,g,b,a}` — not hex-only
+- Apply the same skip/update/create logic as T3
+- Do **not** create shadow variables in Theme (Semantic) — code `--ds-shadow-*` tokens are CSS-only
+
 ### T5. Repair and populate Theme (Semantic) collection from `theme/` — color group
 
 **This step must always re-validate and repair every alias, even for variables that already exist.**
+
+#### T5a. Migrate legacy `color/border` → `color/border/subtle` and delete
+
+`color/border` is a legacy Theme (Semantic) Variable that is no longer part of the spec. If it exists:
+
+- Find every layer property in the file bound to Theme (Semantic)/`color/border` and re-bind it to Theme (Semantic)/`color/border/subtle`
+- Verify there are **zero** remaining bindings to `color/border`
+- Delete the `color/border` Variable
+
+Do not recreate `color/border` in subsequent T5 runs.
 
 For each Theme (Semantic) color Variable listed in §3:
 
@@ -206,10 +231,12 @@ For each structural Variable listed in §3 (`spacing/*`, `radius/*`, `font/*`, `
 
 For each `shadow/sm`, `shadow/md`, `shadow/lg` entry listed in §3:
 
-- **Exists, values match** → skip
-- **Exists, values differ** → update the effect (offset, blur, spread, color, opacity)
-- **Does not exist** → create the Effect Style with a DROP_SHADOW effect
-- Shadows are theme-invariant — no mode handling needed
+- **Exists, geometry + color binding match** (overlay variable already contains baked alpha) → skip
+- **Exists, values differ** → update the DROP_SHADOW effect: geometry (x, y, blur, spread) per §3; bind effect **color** to `Brand (Primitives)/light/overlays/shadow/{sm|md|lg}` (pre-mixed variable from T4b)
+- **Does not exist** → create the Effect Style with geometry from §3 and color bound to the matching overlay variable
+- Effect shadow `color.a` must be **1** after binding — alpha lives in the overlay variable, not on the effect. Do **not** apply a separate 5% / 10% / 12% multiplier on the effect.
+- Shadows are theme-invariant Effect Styles — no Theme (Semantic) variables; no light/dark mode on the style itself
+- Use `use_figma` Plugin API: assign `boundVariables: { color: figma.variables.createVariableAlias(colorVar) }` on the effect object before `style.effects = [effect]`. `setBoundVariableForEffect` does not persist on effect styles.
 
 ### T8. Sync Text Styles (typography)
 
@@ -228,9 +255,9 @@ If any token's raw value changed in either theme CSS file, update the correspond
 
 Re-run T1b to confirm publishing flags, then list:
 
-- Every Variable created, updated, or skipped across all three collections (`Base`, `Brand (Primitives)`, `Theme (Semantic)`)
+- Every Variable created, updated, or skipped across all three collections (`Base`, `Brand (Primitives)`, `Theme (Semantic)`), including overlay shadow variables (`light/overlays/shadow/*`, `dark/overlays/shadow/*`) reported separately from palette/feedback — list each overlay with its resolved RGBA or hex8 (pre-mixed), not the raw brand tint
 - Publishing visibility for each collection (`Base` and `Brand (Primitives)` must be hidden; `Theme (Semantic)` must be visible)
-- Every Effect Style and Text Style created, updated, or skipped
+- Every Effect Style and Text Style created, updated, or skipped (note Effect Style color bindings to overlay variables)
 
 Flag any MCP call that failed with the exact token name and error — do not skip failures silently.
 
@@ -535,7 +562,7 @@ For each component Workflow D ran on, list:
 
 ---
 
-- **Work with Variable bindings, not raw values** — component layer properties must be bound to `Theme (Semantic)` Variables. The only exception is `color-mix()` derived fills, which must be flagged in the report.
+- **Work with Variable bindings, not raw values** — component layer properties must be bound to `Theme (Semantic)` Variables. Exceptions: (1) `Brand (Primitives)/light|dark/overlays/shadow/*` store pre-mixed RGBA (tint + size alpha) because Figma cannot run `color-mix`; (2) other `color-mix()` derived fills on component layers (hover tints, etc.) have no Variable — compute and flag in the report.
 - **Text layers must use named Text Styles, not raw font properties** — every text layer in every component must be bound to a Text Style from the §3 matrix (`text/xs-regular`, `text/sm-regular`, `text/sm-medium`, etc.). Setting font family, size, weight, line height, or letter spacing directly on a layer is prohibited. A layer using any font other than `Overused Grotesk` (e.g. `Inter`) is a sync violation and must be corrected. Per-component Text Style assignments are in `COMPONENT_SPECS.md` §2.
 - **Never modify nodes outside DS-Lab-Components** — do not touch any other Figma file. The Phosphor Icons library file may be queried/read (via library search) to resolve icon component keys, but must never be modified.
 - **Always execute in order: Phase 1 (tokens) → Phase 2 (components)** — never start a component workflow before Workflow T is complete.

@@ -187,6 +187,27 @@ Variable names use `light/` and `dark/` prefixes — this is the canonical struc
 
 ---
 
+### Collection: Brand (Primitives) — Overlays / shadow group (modes: `Farco` | `White Label`)
+
+Pre-mixed shadow colors for Figma (tint + size alpha baked in). Used by Effect Styles. **Not** exposed in Theme (Semantic).
+
+In **code**, brand CSS stores the raw tint (`#4A3F2F`); theme CSS applies `color-mix` at 5% / 10% / 12% per size. In **Figma**, each variable stores the final RGBA because Variables cannot run `color-mix`.
+
+**Formula:** `color-mix(in srgb, {tint} {alpha}%, transparent)` → `{ r: R/255, g: G/255, b: B/255, a: alpha }` where alpha is `sm` → 0.05, `md` → 0.10, `lg` → 0.12.
+
+| Figma Variable name | Farco mode | White Label mode |
+|---|---|---|
+| `light/overlays/shadow/sm` | `#4A3F2F0D` (5%) | `#4A3F2F0D` (5%) |
+| `light/overlays/shadow/md` | `#4A3F2F1A` (10%) | `#4A3F2F1A` (10%) |
+| `light/overlays/shadow/lg` | `#4A3F2F1F` (12%) | `#4A3F2F1F` (12%) |
+| `dark/overlays/shadow/sm` | `#4A3F2F0D` (5%) | `#4A3F2F0D` (5%) |
+| `dark/overlays/shadow/md` | `#4A3F2F1A` (10%) | `#4A3F2F1A` (10%) |
+| `dark/overlays/shadow/lg` | `#4A3F2F1F` (12%) | `#4A3F2F1F` (12%) |
+
+> CSS brand source (raw tint only): `--ds-brand-color-{light|dark}-overlays-shadow-{sm|md|lg}` in `src/tokens/brand/farco.css` and `src/tokens/brand/neutral.css`. Recompute Figma values when tints or theme alphas change.
+
+---
+
 ### Collection: Theme (Semantic) — from `theme/` — Color group (modes: `Light` | `Dark`)
 
 All component layers must bind to these Variables. Each mode value is an alias pointing directly to a `Brand (Primitives)/light/*` or `Brand (Primitives)/dark/*` variable, or `Base/color/white` / `Base/color/black`. There is no `resolved` bridge group and no `Base/color/feedback` variables — feedback colors alias `Brand (Primitives)/light/feedback/*` or `Brand (Primitives)/dark/feedback/*` directly.
@@ -217,7 +238,6 @@ All component layers must bind to these Variables. Each mode value is an alias p
 | `color/text/disabled` | `Brand (Primitives)/light/neutral/300` | `Brand (Primitives)/dark/neutral/400` |
 | `color/text/inverse` | `Base/color/white` | `Brand (Primitives)/dark/neutral/50` |
 | `color/text/on-action` | `Brand (Primitives)/light/neutral/50` | `Brand (Primitives)/dark/neutral/950` |
-| `color/border` | `Brand (Primitives)/light/neutral/300` | `Brand (Primitives)/dark/neutral/400` |
 | `color/border/subtle` | `Brand (Primitives)/light/neutral/100` | `Brand (Primitives)/dark/neutral/200` |
 | `color/border/strong` | `Brand (Primitives)/light/neutral/500` | `Brand (Primitives)/dark/neutral/500` |
 | `color/border/focus` | `Brand (Primitives)/light/primary/400` | `Brand (Primitives)/dark/primary/600` |
@@ -293,11 +313,13 @@ Both modes use the **identical alias** to the corresponding `Base` Variable — 
 
 ### Effect Styles (theme-invariant)
 
-| Style name | Shadow |
-|---|---|
-| `shadow/sm` | DROP_SHADOW, x: 0, y: 1, blur: 2, spread: 0, #000000 @ 5% |
-| `shadow/md` | DROP_SHADOW, x: 0, y: 4, blur: 8, spread: 0, #000000 @ 10% |
-| `shadow/lg` | DROP_SHADOW, x: 0, y: 8, blur: 24, spread: 0, #000000 @ 12% |
+Shadows are **not** Theme (Semantic) variables. Components use Effect Styles; color binds to `Brand (Primitives)/light/overlays/shadow/{size}` (alpha baked into the variable).
+
+| Style name | Geometry | Color binding |
+|---|---|---|
+| `shadow/sm` | DROP_SHADOW, x: 0, y: 1, blur: 2, spread: 0 | `Brand (Primitives)/light/overlays/shadow/sm` |
+| `shadow/md` | DROP_SHADOW, x: 0, y: 4, blur: 8, spread: 0 | `Brand (Primitives)/light/overlays/shadow/md` |
+| `shadow/lg` | DROP_SHADOW, x: 0, y: 8, blur: 24, spread: 0 | `Brand (Primitives)/light/overlays/shadow/lg` |
 
 ---
 
@@ -643,10 +665,12 @@ Both modes use the **identical alias** to the corresponding `Base` Variable — 
 | Base — colors | `color/black`, `color/white` only | `COLOR` |
 | Brand (Primitives) — palette | `light/neutral/*`, `light/primary/*`, `light/secondary/*`, `dark/neutral/*`, `dark/primary/*`, `dark/secondary/*` (raw hex per mode) | `COLOR` |
 | Brand (Primitives) — feedback | `light/feedback/*`, `dark/feedback/*` (raw hex per mode) | `COLOR` |
+| Brand (Primitives) — overlays | `light/overlays/shadow/*`, `dark/overlays/shadow/*` (pre-mixed RGBA per mode; alpha by size) | `COLOR` |
 | Theme (Semantic) — color | `color/action/*`, `color/surface/*`, `color/text/*`, `color/border/*`, `color/background/feedback-*`, `color/foreground/feedback-*`, `color/border/feedback-*` (alias) | `COLOR` |
 | Theme (Semantic) — structural | `spacing/*`, `radius/*`, `font/*`, `opacity/disabled` (alias to Base) | `FLOAT` / `STRING` |
 | Font family | `--farco-font-family-base` | → `Brand (Primitives)/font/family-base` (STRING, modes: Farco / White Label); Text Styles bind font family to this Variable |
-| Shadows | `shadow/sm`, `shadow/md`, `shadow/lg` | → Effect Styles only, not Variables |
+| Shadows (code) | `--ds-shadow-sm`, `--ds-shadow-md`, `--ds-shadow-lg` | Composed in `theme/*.css` only — no Figma Theme (Semantic) variables |
+| Shadows (Figma) | `shadow/sm`, `shadow/md`, `shadow/lg` | Effect Styles — geometry + color bound to `Brand (Primitives)/light/overlays/shadow/{size}` |
 
 ---
 
@@ -671,13 +695,13 @@ The last bridge variable (`text-on-action-dark`) handles a dark-mode mismatch: F
 
 ### Effect Styles — Shadow Format
 
-Shadows are theme-invariant.
+Shadows are theme-invariant Effect Styles (not Theme Semantic variables). Bind effect **color** to the matching brand overlay variable (pre-mixed RGBA from T4b). Effect `color.a` is **1** — do not apply a separate opacity multiplier.
 
-| Style name | Figma DROP_SHADOW effect |
-|---|---|
-| `shadow/sm` | x: 0, y: 1, blur: 2, spread: 0, color: #000000, opacity: 0.05 |
-| `shadow/md` | x: 0, y: 4, blur: 8, spread: 0, color: #000000, opacity: 0.10 |
-| `shadow/lg` | x: 0, y: 8, blur: 24, spread: 0, color: #000000, opacity: 0.12 |
+| Style name | Geometry | Color variable |
+|---|---|---|
+| `shadow/sm` | x: 0, y: 1, blur: 2, spread: 0 | `Brand (Primitives)/light/overlays/shadow/sm` (`#4A3F2F0D`) |
+| `shadow/md` | x: 0, y: 4, blur: 8, spread: 0 | `Brand (Primitives)/light/overlays/shadow/md` (`#4A3F2F1A`) |
+| `shadow/lg` | x: 0, y: 8, blur: 24, spread: 0 | `Brand (Primitives)/light/overlays/shadow/lg` (`#4A3F2F1F`) |
 
 ---
 

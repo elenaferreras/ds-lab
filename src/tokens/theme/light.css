@@ -179,4 +179,11 @@
   --ds-spacing-112: var(--ds-base-spacing-112);
   --ds-spacing-116: var(--ds-base-spacing-116);
   --ds-spacing-120: var(--ds-base-spacing-120);
+
+  /* -----------------------------------------------------------------------
+   * Shadows — brand overlay tint + elevation geometry
+   * ----------------------------------------------------------------------- */
+  --ds-shadow-sm: 0 1px 2px 0 color-mix(in srgb, var(--ds-brand-color-light-overlays-shadow-sm) 5%, transparent);
+  --ds-shadow-md: 0 4px 8px 0 color-mix(in srgb, var(--ds-brand-color-light-overlays-shadow-md) 10%, transparent);
+  --ds-shadow-lg: 0 8px 24px 0 color-mix(in srgb, var(--ds-brand-color-light-overlays-shadow-lg) 12%, transparent);
 }
