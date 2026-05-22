@@ -153,6 +153,16 @@
   --ds-brand-color-dark-info-950: #eff6ff;
 
   /* -------------------------------------------------------------------------
+   * Overlays — shadow tint (light + dark)
+   * ------------------------------------------------------------------------- */
+  --ds-brand-color-light-overlays-shadow-sm: #4A3F2F;
+  --ds-brand-color-light-overlays-shadow-md: #4A3F2F;
+  --ds-brand-color-light-overlays-shadow-lg: #4A3F2F;
+  --ds-brand-color-dark-overlays-shadow-sm: #4A3F2F;
+  --ds-brand-color-dark-overlays-shadow-md: #4A3F2F;
+  --ds-brand-color-dark-overlays-shadow-lg: #4A3F2F;
+
+  /* -------------------------------------------------------------------------
    * Radius
    * ------------------------------------------------------------------------- */
   --ds-brand-radius-sm: 4px;
@@ -165,4 +175,8 @@
    * ------------------------------------------------------------------------- */
   --ds-brand-font-family-body: 'Overused Grotesk', sans-serif;
   --ds-brand-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Primary button label — dark text on light lime fill (light + dark modes) */
+  --ds-brand-foreground-on-primary-light: var(--ds-brand-color-light-neutral-950);
+  --ds-brand-foreground-on-primary-dark:  var(--ds-brand-color-dark-neutral-50);
 }

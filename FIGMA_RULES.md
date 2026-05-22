@@ -10,7 +10,7 @@ This document is used by AI agents and the Figma MCP server to understand how th
 |---|---|
 | Framework | React 19 |
 | Language | JavaScript (JSX) |
-| Styling | Tailwind CSS v4 + CSS custom properties (`--farco-*` tokens) |
+| Styling | Tailwind CSS v4 + CSS custom properties (`--ds-*` tokens) |
 | Bundler | Vite |
 | Component docs | Storybook 10 (`@storybook/react-vite`) |
 | Radix UI | Used for accessible primitives (Avatar, Toast) |
@@ -19,103 +19,222 @@ This document is used by AI agents and the Figma MCP server to understand how th
 
 ## 2. Design Token System
 
-All design values are defined as CSS custom properties prefixed with `--farco-`. Tokens are declared in theme files and consumed inline via Tailwind's arbitrary-value syntax.
+Tokens use the `--ds-*` prefix in three layers. **Components must only consume theme (semantic) tokens** — never brand or base directly.
+
+| Layer | CSS prefix | Figma collection | Who consumes |
+|---|---|---|---|
+| Base | `--ds-base-*` | `Base` | Theme aliases only |
+| Brand | `--ds-brand-*` | `Brand (Primitives)` | Theme `var()` references |
+| Theme | `--ds-*` (semantic) | `Theme (Semantic)` | Components, Tailwind |
+
+Activation: `data-brand="farco|neutral"` on `<body>` + `data-mode="light|dark"`. Helpers in `src/tokens/tokens.js`.
 
 ### Token files
-- `src/tokens/base.css` — font-face declarations
-- `src/tokens/tokens.css` — full token contract (documentation only)
-- `src/tokens/themes/farco.css` — default (Farco) theme values on `:root, .theme-farco`
-- `src/tokens/themes/white-label.css` — alternate White Label theme on `.theme-white-label`
 
-### Color Tokens
+| File | Layer | Contents |
+|---|---|---|
+| `src/tokens/base.css` | Base | Spacing (`--ds-base-spacing-*`), font-size, line-height, letter-spacing, animation |
+| `src/tokens/brand/farco.css` | Brand | Palette scales, feedback, overlay shadow tints, radius, font-family (`[data-brand="farco"]`) |
+| `src/tokens/brand/neutral.css` | Brand | Same structure for White Label (`[data-brand="neutral"]`) |
+| `src/tokens/theme/light.css` | Theme | Semantic colors, radius, typography, spacing, shadows (`[data-mode="light"]`) |
+| `src/tokens/theme/dark.css` | Theme | Dark overrides (`[data-mode="dark"]`) |
+| `src/tokens/tokens.js` | — | `switchBrand()` / `switchMode()` |
+
+### Base tokens (`src/tokens/base.css`)
+
+Never used directly in components. Examples:
 
 ```css
-/* Primary */
---farco-color-primary: #000000
---farco-color-primary-hover: #1a1a1a
---farco-color-primary-active: #333333
---farco-color-accent: #c9f29f        /* lime-green accent */
---farco-color-success: #52c41a
---farco-color-warning: #faad14
---farco-color-danger: #ff4d4f
-
-/* Neutrals (0 = white, 100 = black) */
---farco-color-neutral-0:   #ffffff
---farco-color-neutral-10:  #f5f5f5
---farco-color-neutral-20:  #e8e8e8
---farco-color-neutral-30:  #d9d9d9
---farco-color-neutral-40:  #bfbfbf
---farco-color-neutral-50:  #8c8c8c
---farco-color-neutral-60:  #595959
---farco-color-neutral-70:  #434343
---farco-color-neutral-80:  #262626
---farco-color-neutral-90:  #1f1f1f
---farco-color-neutral-100: #000000
-
-/* Semantic */
---farco-color-border:    #000000
---farco-color-bg-base:   #ffffff
---farco-color-bg-subtle: #f5f5f5
+--ds-base-spacing-4: 4px    /* through --ds-base-spacing-120: 120px */
+--ds-base-font-size-xs: 12px
+--ds-base-font-size-sm: 14px
+--ds-base-font-size-md: 16px
+--ds-base-font-size-lg: 20px
+--ds-base-font-size-xl: 24px
+--ds-base-line-height-tight: 1.2
+--ds-base-line-height-base: 1.5
+--ds-base-letter-spacing-tight: -0.01em
+--ds-base-letter-spacing-wide: 0.02em
 ```
 
-### Typography Tokens
+Figma `Base`: `size/*`, `font/size-*`, `font/line-height-*`, `font/letter-spacing-*`, `radius/*`, `color/black`, `color/white`.
+
+**Structural binding rule (components):** Components must bind spacing + radius to `Theme (Semantic)` variables (`spacing/*`, `radius/*`) — never directly to `Base/*` or to legacy variable collections.
+
+### Brand tokens (`src/tokens/brand/`)
+
+Raw palette and brand-specific values. Naming: `--ds-brand-color-{light|dark}-{palette}-{stop}`.
 
 ```css
---farco-font-family-base: 'Overused Grotesk', sans-serif
---farco-font-size-xs:  12px
---farco-font-size-sm:  14px
---farco-font-size-md:  16px
---farco-font-size-lg:  20px
---farco-font-size-xl:  24px
---farco-font-weight-regular: 400
---farco-font-weight-medium:  500
---farco-font-weight-bold:    700
---farco-line-height-tight:   1.2
---farco-line-height-base:    1.5
---farco-line-height-relaxed: 1.75
---farco-letter-spacing-tight: -0.01em
---farco-letter-spacing-base:   0.01em
+/* Examples — full scales in farco.css / neutral.css */
+--ds-brand-color-light-primary-500: #ACEA42   /* Farco */
+--ds-brand-color-light-neutral-950: #4A3F2F
+--ds-brand-color-light-error-500: #e53535
+--ds-brand-radius-sm: 4px   /* Farco; neutral brand may differ */
+--ds-brand-font-family-body: 'Overused Grotesk', sans-serif
 ```
 
-### Spacing Tokens (4 px grid)
+Figma `Brand (Primitives)`: `light/neutral/*`, `light/primary/*`, `light/secondary/*`, `light/feedback/*`, `light/overlays/shadow/*`, `radius/*`, and `dark/*` counterparts. Modes: `Farco`, `White Label`.
+
+### Theme — semantic color tokens (`src/tokens/theme/`)
+
+Components bind to these. Pattern: `--ds-color-{property}-{role}-{variant}`.
+
+**Action (buttons):**
 
 ```css
---farco-spacing-1:  4px
---farco-spacing-2:  8px
---farco-spacing-3:  12px
---farco-spacing-4:  16px
---farco-spacing-5:  20px
---farco-spacing-6:  24px
---farco-spacing-8:  32px
---farco-spacing-10: 40px
---farco-spacing-12: 48px
---farco-spacing-16: 64px
+--ds-color-background-action-primary
+--ds-color-background-action-primary-hover
+--ds-color-background-action-primary-pressed
+--ds-color-background-action-primary-disabled
+--ds-color-foreground-action-on-primary
+--ds-color-border-action-primary
+--ds-color-border-action-focus
+/* secondary + destructive variants — see theme/light.css */
 ```
 
-### Border Radius Tokens
+**Surface:**
 
 ```css
---farco-radius-none: 0
---farco-radius-sm:   4px
---farco-radius-md:   6px
---farco-radius-lg:   8px
---farco-radius-xl:   12px
---farco-radius-full: 9999px
+--ds-color-background-surface-page
+--ds-color-background-surface-subtle
+--ds-color-background-surface-raised
+--ds-color-background-surface-overlay
+--ds-color-border-surface-default
+--ds-color-border-surface-strong
+```
+
+**Text:**
+
+```css
+--ds-color-foreground-text-primary
+--ds-color-foreground-text-secondary
+--ds-color-foreground-text-disabled
+--ds-color-foreground-text-inverse
+--ds-color-foreground-text-link
+```
+
+**Feedback:**
+
+```css
+--ds-color-background-feedback-success
+--ds-color-background-feedback-success-emphasis
+--ds-color-background-feedback-error-emphasis
+--ds-color-foreground-feedback-on-error
+--ds-color-border-feedback-warning
+/* success, warning, info — see theme/light.css */
+```
+
+**Input:**
+
+```css
+--ds-color-background-input-default
+--ds-color-border-input-default
+--ds-color-border-input-focused
+--ds-color-border-input-error
+--ds-color-foreground-input-placeholder
+```
+
+Figma `Theme (Semantic)`: aliases to `Brand (Primitives)/light/*` or `dark/*` per mode. See `.cursor/skills/figma-sync/references/COMPONENT_SPECS.md` §1 for the full alias table.
+
+**Deprecation:** The legacy Theme (Semantic) variable `color/border` has been removed from Figma. Use `color/border/subtle` instead.
+
+**Migration note:** Some older components were bound to legacy `spacing/*` and `radius/*` variables from a non-local collection. `figma-sync` Workflow M migrates those bindings to the current local `Theme (Semantic)` variables by name.
+
+### Typography tokens (theme)
+
+```css
+--ds-font-family-body: var(--ds-brand-font-family-body)
+--ds-font-size-xs: var(--ds-base-font-size-xs)   /* 12px */
+--ds-font-size-sm: var(--ds-base-font-size-sm)   /* 14px */
+--ds-font-size-md: var(--ds-base-font-size-md)   /* 16px */
+--ds-font-size-lg: var(--ds-base-font-size-lg)   /* 20px */
+--ds-font-size-xl: var(--ds-base-font-size-xl)   /* 24px */
+```
+
+### Spacing tokens (theme, 4px grid)
+
+Theme exposes pixel-keyed aliases to base spacing:
+
+```css
+--ds-spacing-4: var(--ds-base-spacing-4)    /* 4px */
+--ds-spacing-8: var(--ds-base-spacing-8)    /* 8px */
+--ds-spacing-12: var(--ds-base-spacing-12)  /* 12px */
+--ds-spacing-16: var(--ds-base-spacing-16)  /* 16px */
+--ds-spacing-24: var(--ds-base-spacing-24)  /* 24px */
+--ds-spacing-32: var(--ds-base-spacing-32)  /* 32px */
+--ds-spacing-40: var(--ds-base-spacing-40)  /* 40px */
+--ds-spacing-48: var(--ds-base-spacing-48)  /* 48px */
+/* …through --ds-spacing-120 */
+```
+
+### Border radius tokens (theme)
+
+```css
+--ds-radius-sm: var(--ds-brand-radius-sm)
+--ds-radius-md: var(--ds-brand-radius-md)
+--ds-radius-lg: var(--ds-brand-radius-lg)
+--ds-radius-full: var(--ds-brand-radius-full)
 ```
 
 ### Shadow Tokens
 
+Shadows use a two-layer model: **brand overlay tint** (primitive color) + **theme elevation** (full `box-shadow`). Components consume `--ds-shadow-*` via Tailwind (`shadow-sm`, `shadow-md`, `shadow-lg`).
+
+#### Brand — overlay tint (`src/tokens/brand/farco.css`, `src/tokens/brand/neutral.css`)
+
+Raw shadow tint `#4A3F2F` in both brands (Farco and Neutral / White Label). Maps to Figma collection **Brand (Primitives)**.
+
+**Figma divergence:** Variables cannot run `color-mix`. Figma stores the **pre-mixed** result (tint + size alpha). Code keeps the raw tint; theme CSS applies the mix.
+
+| CSS token (raw tint) | Figma variable | Figma value (pre-mixed) |
+|---|---|---|
+| `--ds-brand-color-light-overlays-shadow-sm` | `light/overlays/shadow/sm` | `#4A3F2F0D` (5%) |
+| `--ds-brand-color-light-overlays-shadow-md` | `light/overlays/shadow/md` | `#4A3F2F1A` (10%) |
+| `--ds-brand-color-light-overlays-shadow-lg` | `light/overlays/shadow/lg` | `#4A3F2F1F` (12%) |
+| `--ds-brand-color-dark-overlays-shadow-sm` | `dark/overlays/shadow/sm` | `#4A3F2F0D` (5%) |
+| `--ds-brand-color-dark-overlays-shadow-md` | `dark/overlays/shadow/md` | `#4A3F2F1A` (10%) |
+| `--ds-brand-color-dark-overlays-shadow-lg` | `dark/overlays/shadow/lg` | `#4A3F2F1F` (12%) |
+
+#### Theme — composed shadows (`src/tokens/theme/light.css`, `src/tokens/theme/dark.css`)
+
+Semantic tokens only in **code** — no matching variables in Figma **Theme (Semantic)**.
+
+**Light mode** (`[data-mode="light"]`):
+
 ```css
---farco-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05)
---farco-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.10)
---farco-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12)
+--ds-shadow-sm: 0 1px 2px 0 color-mix(in srgb, var(--ds-brand-color-light-overlays-shadow-sm) 5%, transparent)
+--ds-shadow-md: 0 4px 8px 0 color-mix(in srgb, var(--ds-brand-color-light-overlays-shadow-md) 10%, transparent)
+--ds-shadow-lg: 0 8px 24px 0 color-mix(in srgb, var(--ds-brand-color-light-overlays-shadow-lg) 12%, transparent)
 ```
+
+**Dark mode** (`[data-mode="dark"]`):
+
+```css
+--ds-shadow-sm: 0 1px 2px 0 color-mix(in srgb, var(--ds-brand-color-dark-overlays-shadow-sm) 5%, transparent)
+--ds-shadow-md: 0 4px 8px 0 color-mix(in srgb, var(--ds-brand-color-dark-overlays-shadow-md) 10%, transparent)
+--ds-shadow-lg: 0 8px 24px 0 color-mix(in srgb, var(--ds-brand-color-dark-overlays-shadow-lg) 12%, transparent)
+```
+
+| Token | Offset / blur | Alpha (color-mix) | Used by |
+|---|---|---|---|
+| `--ds-shadow-sm` | `0 1px 2px 0` | 5% | Card root (`shadow-sm`) |
+| `--ds-shadow-md` | `0 4px 8px 0` | 10% | Toast (`shadow-md`) |
+| `--ds-shadow-lg` | `0 8px 24px 0` | 12% | Modals, dialogs |
+
+#### Figma — Effect Styles (not variables)
+
+Bind color to the overlay variable; effect opacity is **1** (alpha is baked into the variable).
+
+| Effect Style | Geometry | Color binding |
+|---|---|---|
+| `shadow/sm` | x: 0, y: 1, blur: 2, spread: 0 | `Brand (Primitives)/light/overlays/shadow/sm` |
+| `shadow/md` | x: 0, y: 4, blur: 8, spread: 0 | `Brand (Primitives)/light/overlays/shadow/md` |
+| `shadow/lg` | x: 0, y: 8, blur: 24, spread: 0 | `Brand (Primitives)/light/overlays/shadow/lg` |
 
 ### Misc
 
-```css
---farco-opacity-disabled: 0.4
-```
+Disabled UI uses `opacity: 0.4` on components (e.g. `disabled:opacity-40` in Tailwind). Figma `Base` has `opacity/disabled` = `0.4` for variable binding where needed.
 
 ---
 
@@ -136,9 +255,10 @@ All public components are re-exported from `src/components/index.js`.
 
 ### Styling conventions
 
-- Use Tailwind CSS with **arbitrary CSS-variable values**: `bg-[var(--farco-color-primary)]`
+- Use Tailwind CSS with **arbitrary CSS-variable values**: `bg-[var(--ds-color-background-action-primary)]`
 - For interactive states use Tailwind's `enabled:hover:`, `enabled:active:`, `focus-visible:` prefixes
-- Color mixing for hover/subtle states: `color-mix(in_oklab, var(--farco-color-primary) 92%, var(--farco-color-neutral-100))`
+- Color mixing for hover/subtle states: `color-mix(in_oklab, var(--ds-color-background-action-primary) 92%, var(--ds-color-foreground-text-primary))`
+- Shadows: Tailwind `shadow-sm|md|lg` (mapped to `--ds-shadow-*` in `tailwind.config.js`)
 - Import the `cn` helper from `src/lib/cn.js` for conditional class merging (wraps `clsx` + `tailwind-merge`)
 
 ---
@@ -165,20 +285,20 @@ All public components are re-exported from `src/components/index.js`.
 
 **Size map:**
 ```
-sm → h-[--farco-spacing-8]  (32px)  px-[--farco-spacing-3]  text-sm  gap-1
-md → h-[--farco-spacing-10] (40px)  px-[--farco-spacing-6]  text-md  gap-2
-lg → h-[--farco-spacing-12] (48px)  px-[--farco-spacing-8]  text-md  gap-2
+sm → h-[--ds-spacing-32] (32px)  px-[--ds-spacing-12]  text-sm  gap-[--ds-spacing-4]
+md → h-[--ds-spacing-40] (40px)  px-[--ds-spacing-24]  text-md  gap-[--ds-spacing-8]
+lg → h-[--ds-spacing-48] (48px)  px-[--ds-spacing-32]  text-md  gap-[--ds-spacing-8]
 ```
 
 **Icon size map:** `sm → 14px`, `md → 16px`, `lg → 18px`
 
 **Variant × Intent matrix:**
-- `primary/regular` — solid black bg, white text
-- `primary/danger` — solid `--farco-color-danger` bg, white text
-- `secondary/regular` — transparent bg, black text, neutral border
-- `secondary/danger` — transparent bg, danger text, danger border
-- `ghost/regular` — transparent bg, black text, no border
-- `ghost/danger` — transparent bg, danger text, no border
+- `primary/regular` — `--ds-color-background-action-primary`, label `--ds-color-foreground-action-on-primary` (light: Farco → `on-brand-inverse`, neutral → `on-brand`)
+- `primary/danger` — `--ds-color-background-feedback-error-emphasis`, label `--ds-color-foreground-text-on-brand`
+- `secondary/regular` — transparent bg, `--ds-color-foreground-text-primary`, `--ds-color-border-surface-strong`
+- `secondary/danger` — transparent bg, error emphasis color/border
+- `ghost/regular` — transparent bg, primary text, no border
+- `ghost/danger` — transparent bg, error emphasis text, no border
 
 **Loading state:** animated spinner (0.8 s CSS rotation), button content remains but opacity reduced; `aria-busy="true"` is set.
 
@@ -199,8 +319,8 @@ lg → h-[--farco-spacing-12] (48px)  px-[--farco-spacing-8]  text-md  gap-2
 
 **Size map:**
 ```
-sm → h-[--farco-spacing-5] (20px)  px-2  text-xs  gap-[6px]
-md → h-[--farco-spacing-6] (24px)  px-3  text-sm  gap-1
+sm → h-[--ds-spacing-20] (20px)  px-[--ds-spacing-8]  text-xs  gap-[6px]
+md → h-[--ds-spacing-24] (24px)  px-[--ds-spacing-12]  text-sm  gap-[--ds-spacing-4]
 ```
 
 **Variant styles:** Pill shape (`rounded-full`), 1 px border. Background/text/border all derived from the semantic color via `color-mix`. Text is uppercase + letter-spacing.
@@ -336,13 +456,13 @@ All icons are Phosphor React components accepting `size` and `weight` props.
 
 When the Figma MCP provides design context for a new component, follow these rules:
 
-1. **Token mapping** — Map all Figma color/spacing/typography values to their `--farco-*` equivalents instead of hardcoding hex values.
+1. **Token mapping** — Map all Figma color/spacing/typography values to `--ds-*` theme (semantic) tokens — never hardcode hex or reference brand/base directly in components.
 2. **File placement** — Create `src/components/ui/<name>/<name>.jsx` + `index.js`. Add the named export to `src/components/index.js`.
-3. **Styling** — Use Tailwind arbitrary value syntax: `bg-[var(--farco-color-primary)]`. Use `cn()` for conditional classes.
+3. **Styling** — Use Tailwind arbitrary value syntax: `bg-[var(--ds-color-background-action-primary)]`. Use `cn()` for conditional classes.
 4. **Radix UI primitives** — Prefer `@radix-ui/react-*` for interactive/accessible components (already installed: accordion, alert-dialog, avatar, checkbox, dialog, dropdown-menu, label, popover, radio-group, select, separator, slider, slot, switch, tabs, toast, tooltip).
 5. **Storybook story** — Always create a matching `<name>.stories.jsx` following the pattern in `STORYBOOK_GUIDELINES.md`.
 6. **Props** — Validate enums with a `const` array and fall back to the default if the value is out-of-range.
-7. **No hardcoded values** — Heights, paddings, font sizes, colours, radii, and shadows must all reference a `--farco-*` token.
+7. **No hardcoded values** — Heights, paddings, font sizes, colours, radii, and shadows must use `--ds-*` tokens. Shadows: `--ds-shadow-sm|md|lg` or Tailwind `shadow-sm|md|lg`.
 
 ---
 

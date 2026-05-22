@@ -6,7 +6,13 @@ export default {
     './.storybook/**/*.{js,jsx,ts,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      boxShadow: {
+        sm: 'var(--ds-shadow-sm)',
+        md: 'var(--ds-shadow-md)',
+        lg: 'var(--ds-shadow-lg)',
+      },
+    },
   },
   plugins: [],
 }
