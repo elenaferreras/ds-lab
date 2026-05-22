@@ -33,7 +33,7 @@ function TokenRow({ token, value, preview }) {
     }}>
       {preview && <div style={{ width: '32px', flexShrink: 0 }}>{preview}</div>}
       <span style={{ flex: 1, minWidth: 0 }}>{token}</span>
-      <span style={{ color: 'var(--farco-color-text-secondary)', flexShrink: 0 }}>{value}</span>
+      <span style={{ color: 'var(--ds-color-foreground-text-secondary)', flexShrink: 0 }}>{value}</span>
     </div>
   );
 }
@@ -134,11 +134,12 @@ export const AllTokens = {
       <div className="token-section">
         <h3 className="token-section__title">Semantic — Text</h3>
         {[
-          { token: '--farco-color-text-primary',   value: 'main body' },
-          { token: '--farco-color-text-secondary',  value: 'muted' },
-          { token: '--farco-color-text-disabled',   value: 'disabled' },
-          { token: '--farco-color-text-inverse',    value: 'on dark bg' },
-          { token: '--farco-color-text-on-action',  value: 'button label' },
+          { token: '--ds-color-foreground-text-primary',   value: 'main body' },
+          { token: '--ds-color-foreground-text-secondary', value: 'muted' },
+          { token: '--ds-color-foreground-text-disabled',  value: 'disabled' },
+          { token: '--ds-color-foreground-text-inverse',   value: 'on dark bg' },
+          { token: '--ds-color-foreground-text-on-brand',  value: 'on brand surface' },
+          { token: '--ds-color-foreground-text-on-brand-inverse', value: 'on brand (inverse)' },
         ].map(({ token, value }) => (
           <TokenRow key={token} token={token} value={value}
             preview={<ColorSwatch token={token} />} />

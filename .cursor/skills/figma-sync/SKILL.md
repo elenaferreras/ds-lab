@@ -299,6 +299,28 @@ Some components may be bound to legacy Variable collections (e.g. old `spacing/*
 - Re-scan component nodes and confirm there are **zero** bindings to non-local `spacing/*` and `radius/*` variables.
 - Report counts and a few example node IDs.
 
+### M4. Migrate legacy feedback variables (Badge/Toast/etc.)
+
+Some older components may reference legacy Theme (Semantic) variables under `color/feedback/*` (e.g. `color/feedback/success-bg`). These variables are deprecated; the current system uses:
+
+- `color/background/feedback-*`
+- `color/foreground/feedback-on-*`
+- `color/border/feedback-*`
+
+Migration rule (by variable name):
+
+- `color/feedback/success-bg` → `color/background/feedback-success`
+- `color/feedback/success-border` → `color/border/feedback-success`
+- `color/feedback/success-emphasis` → `color/foreground/feedback-on-success`
+- `color/feedback/warning-bg` → `color/background/feedback-warning`
+- `color/feedback/warning-border` → `color/border/feedback-warning`
+- `color/feedback/warning-emphasis` → `color/foreground/feedback-on-warning`
+- `color/feedback/danger-bg` → `color/background/feedback-error`
+- `color/feedback/danger-border` → `color/border/feedback-error`
+- `color/feedback/danger` → `color/foreground/feedback-on-error`
+
+Apply this migration to any paint bindings (fills/strokes) that are bound to the legacy variable names, across all components.
+
 ## Workflow I — Wire Phosphor icon instances in consuming components
 
 Run this as a **sub-procedure** called from within Workflow A or Workflow B whenever a component has icon slots that need wiring (Button, Badge, Toast). It is not a top-level workflow triggered by a folder scan — the `icons` folder no longer exists in `src/components/ui/`.

@@ -22,7 +22,7 @@
   --ds-color-background-action-primary-pressed:  var(--ds-brand-color-light-primary-700);
   --ds-color-background-action-primary-disabled: var(--ds-brand-color-light-neutral-200);
 
-  --ds-color-foreground-action-on-primary:          var(--ds-brand-color-light-primary-50);
+  --ds-color-foreground-action-on-primary:          var(--ds-brand-foreground-on-primary-light);
   --ds-color-foreground-action-on-primary-disabled: var(--ds-brand-color-light-neutral-400);
 
   --ds-color-border-action-primary:          var(--ds-brand-color-light-primary-500);
@@ -32,17 +32,17 @@
 
   /* Action — Button secondary */
   --ds-color-background-action-secondary:          transparent;
-  --ds-color-background-action-secondary-hover:    var(--ds-brand-color-light-primary-50);
-  --ds-color-background-action-secondary-pressed:  var(--ds-brand-color-light-primary-100);
+  --ds-color-background-action-secondary-hover:    var(--ds-brand-color-light-secondary-50);
+  --ds-color-background-action-secondary-pressed:  var(--ds-brand-color-light-secondary-100);
   --ds-color-background-action-secondary-disabled: transparent;
 
-  --ds-color-foreground-action-on-secondary:          var(--ds-brand-color-light-primary-500);
-  --ds-color-foreground-action-on-secondary-hover:    var(--ds-brand-color-light-primary-600);
+  --ds-color-foreground-action-on-secondary:          var(--ds-brand-color-light-secondary-500);
+  --ds-color-foreground-action-on-secondary-hover:    var(--ds-brand-color-light-secondary-600);
   --ds-color-foreground-action-on-secondary-disabled: var(--ds-brand-color-light-neutral-300);
 
-  --ds-color-border-action-secondary:          var(--ds-brand-color-light-primary-500);
-  --ds-color-border-action-secondary-hover:    var(--ds-brand-color-light-primary-600);
-  --ds-color-border-action-secondary-pressed:  var(--ds-brand-color-light-primary-700);
+  --ds-color-border-action-secondary:          var(--ds-brand-color-light-secondary-500);
+  --ds-color-border-action-secondary-hover:    var(--ds-brand-color-light-secondary-600);
+  --ds-color-border-action-secondary-pressed:  var(--ds-brand-color-light-secondary-700);
   --ds-color-border-action-secondary-disabled: var(--ds-brand-color-light-neutral-200);
 
   /* Action — focus ring (shared across all interactive elements) */
@@ -90,6 +90,8 @@
   --ds-color-foreground-text-secondary: var(--ds-brand-color-light-neutral-500);
   --ds-color-foreground-text-disabled:  var(--ds-brand-color-light-neutral-300);
   --ds-color-foreground-text-inverse:   white;
+  --ds-color-foreground-text-on-brand:  var(--ds-brand-color-light-neutral-50);
+  --ds-color-foreground-text-on-brand-inverse: var(--ds-brand-color-light-neutral-950);
   --ds-color-foreground-text-link:      var(--ds-brand-color-light-primary-500);
   --ds-color-foreground-text-link-hover: var(--ds-brand-color-light-primary-600);
 

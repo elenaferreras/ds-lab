@@ -293,8 +293,8 @@ lg → h-[--ds-spacing-48] (48px)  px-[--ds-spacing-32]  text-md  gap-[--ds-spac
 **Icon size map:** `sm → 14px`, `md → 16px`, `lg → 18px`
 
 **Variant × Intent matrix:**
-- `primary/regular` — `--ds-color-background-action-primary`, `--ds-color-foreground-action-on-primary`
-- `primary/danger` — `--ds-color-background-feedback-error-emphasis`, on-primary text
+- `primary/regular` — `--ds-color-background-action-primary`, label `--ds-color-foreground-action-on-primary` (light: Farco → `on-brand-inverse`, neutral → `on-brand`)
+- `primary/danger` — `--ds-color-background-feedback-error-emphasis`, label `--ds-color-foreground-text-on-brand`
 - `secondary/regular` — transparent bg, `--ds-color-foreground-text-primary`, `--ds-color-border-surface-strong`
 - `secondary/danger` — transparent bg, error emphasis color/border
 - `ghost/regular` — transparent bg, primary text, no border

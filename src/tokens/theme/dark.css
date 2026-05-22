@@ -24,9 +24,8 @@
   --ds-color-background-action-primary-pressed:  var(--ds-brand-color-dark-primary-800);
   --ds-color-background-action-primary-disabled: var(--ds-brand-color-dark-neutral-200);
 
-  /* Text on top of the button — must contrast against the lighter button bg.
-     dark-primary-50 is the darkest step in the dark scale. */
-  --ds-color-foreground-action-on-primary:          var(--ds-brand-color-dark-primary-50);
+  /* Text on top of the button (or any brand fill). */
+  --ds-color-foreground-action-on-primary:          var(--ds-brand-foreground-on-primary-dark);
   --ds-color-foreground-action-on-primary-disabled: var(--ds-brand-color-dark-neutral-400);
 
   --ds-color-border-action-primary:          var(--ds-brand-color-dark-primary-600);
@@ -36,17 +35,17 @@
 
   /* Action — Button secondary */
   --ds-color-background-action-secondary:          transparent;
-  --ds-color-background-action-secondary-hover:    var(--ds-brand-color-dark-primary-200);
-  --ds-color-background-action-secondary-pressed:  var(--ds-brand-color-dark-primary-300);
+  --ds-color-background-action-secondary-hover:    var(--ds-brand-color-dark-secondary-200);
+  --ds-color-background-action-secondary-pressed:  var(--ds-brand-color-dark-secondary-300);
   --ds-color-background-action-secondary-disabled: transparent;
 
-  --ds-color-foreground-action-on-secondary:          var(--ds-brand-color-dark-primary-700);
-  --ds-color-foreground-action-on-secondary-hover:    var(--ds-brand-color-dark-primary-800);
+  --ds-color-foreground-action-on-secondary:          var(--ds-brand-color-dark-secondary-700);
+  --ds-color-foreground-action-on-secondary-hover:    var(--ds-brand-color-dark-secondary-800);
   --ds-color-foreground-action-on-secondary-disabled: var(--ds-brand-color-dark-neutral-400);
 
-  --ds-color-border-action-secondary:          var(--ds-brand-color-dark-primary-600);
-  --ds-color-border-action-secondary-hover:    var(--ds-brand-color-dark-primary-700);
-  --ds-color-border-action-secondary-pressed:  var(--ds-brand-color-dark-primary-800);
+  --ds-color-border-action-secondary:          var(--ds-brand-color-dark-secondary-600);
+  --ds-color-border-action-secondary-hover:    var(--ds-brand-color-dark-secondary-700);
+  --ds-color-border-action-secondary-pressed:  var(--ds-brand-color-dark-secondary-800);
   --ds-color-border-action-secondary-disabled: var(--ds-brand-color-dark-neutral-200);
 
   /* Action — focus ring */
@@ -94,6 +93,9 @@
   --ds-color-foreground-text-secondary:  var(--ds-brand-color-dark-neutral-600);
   --ds-color-foreground-text-disabled:   var(--ds-brand-color-dark-neutral-400);
   --ds-color-foreground-text-inverse:    var(--ds-brand-color-dark-neutral-50);
+  --ds-color-foreground-text-on-brand:   var(--ds-brand-color-dark-neutral-950);
+  /* Darkest step on the inverted dark scale — dark text on light brand fills (e.g. primary-600). */
+  --ds-color-foreground-text-on-brand-inverse: var(--ds-brand-color-dark-neutral-50);
   --ds-color-foreground-text-link:       var(--ds-brand-color-dark-primary-600);
   --ds-color-foreground-text-link-hover: var(--ds-brand-color-dark-primary-700);
 

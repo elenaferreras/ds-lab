@@ -198,7 +198,7 @@ export const SemanticAction = {
       <ColorSection
         title="Foreground — on primary"
         colors={[
-          { token: '--ds-color-foreground-action-on-primary',          label: 'default' },
+          { token: '--ds-color-foreground-action-on-primary',       label: 'default' },
           { token: '--ds-color-foreground-action-on-primary-disabled', label: 'disabled' },
         ]}
       />
@@ -290,6 +290,8 @@ export const SemanticText = {
           { token: '--ds-color-foreground-text-secondary',  label: 'secondary' },
           { token: '--ds-color-foreground-text-disabled',   label: 'disabled' },
           { token: '--ds-color-foreground-text-inverse',    label: 'inverse' },
+          { token: '--ds-color-foreground-text-on-brand',   label: 'on-brand' },
+          { token: '--ds-color-foreground-text-on-brand-inverse', label: 'on-brand-inverse' },
           { token: '--ds-color-foreground-text-link',       label: 'link' },
           { token: '--ds-color-foreground-text-link-hover', label: 'link-hover' },
         ]}

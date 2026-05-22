@@ -28,7 +28,7 @@ function getVariantClasses(variant, intent) {
   if (variant === 'primary') {
     return isDanger
       ? {
-          base: 'bg-[var(--ds-color-background-feedback-error-emphasis)] text-[var(--ds-color-foreground-action-on-primary)] border-[var(--ds-color-background-feedback-error-emphasis)]',
+          base: 'bg-[var(--ds-color-background-feedback-error-emphasis)] text-[var(--ds-color-foreground-text-on-brand)] border-[var(--ds-color-background-feedback-error-emphasis)]',
           hover: 'enabled:hover:bg-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_92%,var(--ds-color-foreground-text-primary))] enabled:hover:border-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_92%,var(--ds-color-foreground-text-primary))]',
           active: 'enabled:active:bg-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_84%,var(--ds-color-foreground-text-primary))] enabled:active:border-[color-mix(in_oklab,var(--ds-color-background-feedback-error-emphasis)_84%,var(--ds-color-foreground-text-primary))] enabled:active:scale-[0.98]',
         }
@@ -49,7 +49,7 @@ function getVariantClasses(variant, intent) {
           ),
           active: cn(
             pressedFrom('--ds-color-background-feedback-error-emphasis'),
-            'enabled:active:text-[var(--ds-color-foreground-action-on-primary)] enabled:active:border-[var(--ds-color-background-feedback-error-emphasis)] enabled:active:scale-[0.98]'
+            'enabled:active:text-[var(--ds-color-foreground-text-on-brand)] enabled:active:border-[var(--ds-color-background-feedback-error-emphasis)] enabled:active:scale-[0.98]'
           ),
         }
       : {

@@ -223,6 +223,19 @@ Radius is brand-specific in code (`--ds-brand-radius-*`). Components must never 
 
 ---
 
+### Collection: Brand (Primitives) — Foreground / on-primary group (modes: `Farco` | `White Label`)
+
+Primary button label color differs by brand (lime vs orange fill). Theme (Semantic) `color/text/on-primary` aliases these; components bind to the Theme variable, not Brand directly.
+
+| Figma Variable name | Farco mode (alias) | White Label mode (alias) |
+|---|---|---|
+| `light/foreground/on-primary` | `light/neutral/950` | `light/neutral/50` |
+| `dark/foreground/on-primary` | `dark/neutral/50` | `dark/neutral/950` |
+
+> CSS source: `--ds-brand-foreground-on-primary-{light|dark}` in `src/tokens/brand/farco.css` and `src/tokens/brand/neutral.css`.
+
+---
+
 ### Collection: Theme (Semantic) — from `theme/` — Color group (modes: `Light` | `Dark`)
 
 All component layers must bind to these Variables. Each mode value is an alias pointing directly to a `Brand (Primitives)/light/*` or `Brand (Primitives)/dark/*` variable, or `Base/color/white` / `Base/color/black`. There is no `resolved` bridge group and no `Base/color/feedback` variables — feedback colors alias `Brand (Primitives)/light/feedback/*` or `Brand (Primitives)/dark/feedback/*` directly.
@@ -252,7 +265,9 @@ All component layers must bind to these Variables. Each mode value is an alias p
 | `color/text/secondary` | `Brand (Primitives)/light/neutral/500` | `Brand (Primitives)/dark/neutral/600` |
 | `color/text/disabled` | `Brand (Primitives)/light/neutral/300` | `Brand (Primitives)/dark/neutral/400` |
 | `color/text/inverse` | `Base/color/white` | `Brand (Primitives)/dark/neutral/50` |
-| `color/text/on-action` | `Brand (Primitives)/light/neutral/50` | `Brand (Primitives)/dark/neutral/950` |
+| `color/text/on-brand` | `Brand (Primitives)/light/neutral/50` | `Brand (Primitives)/dark/neutral/950` |
+| `color/text/on-brand-inverse` | `Brand (Primitives)/light/neutral/950` | `Brand (Primitives)/dark/neutral/50` |
+| `color/text/on-primary` | `Brand (Primitives)/light/foreground/on-primary` | `Brand (Primitives)/dark/foreground/on-primary` |
 | `color/border/subtle` | `Brand (Primitives)/light/neutral/100` | `Brand (Primitives)/dark/neutral/200` |
 | `color/border/strong` | `Brand (Primitives)/light/neutral/500` | `Brand (Primitives)/dark/neutral/500` |
 | `color/border/focus` | `Brand (Primitives)/light/primary/400` | `Brand (Primitives)/dark/primary/600` |
@@ -389,8 +404,8 @@ Shadows are **not** Theme (Semantic) variables. Components use Effect Styles; co
 
 | Variant | Intent | Background | Text | Border |
 |---|---|---|---|---|
-| `primary` | `regular` | `color/action/primary` (#000) | `color/text/inverse` (#fff) | `color/action/primary` (#000) |
-| `primary` | `danger` | `color/action/destructive` (#ff4d4f) | `color/text/inverse` (#fff) | `color/action/destructive` (#ff4d4f) |
+| `primary` | `regular` | `color/action/primary` (#000) | `color/text/on-primary` (Farco → `on-brand-inverse`; White Label → `on-brand`) | `color/action/primary` (#000) |
+| `primary` | `danger` | `color/action/destructive` (#ff4d4f) | `color/text/on-brand` | `color/action/destructive` (#ff4d4f) |
 | `secondary` | `regular` | transparent | `color/text/primary` (#000) | `color/border` (#000) |
 | `secondary` | `danger` | transparent | `color/action/destructive` (#ff4d4f) | `color/action/destructive` (#ff4d4f) |
 | `ghost` | `regular` | transparent | `color/text/primary` (#000) | transparent |
@@ -928,8 +943,8 @@ After placing the instance, apply Variable overrides only when needed to match t
 
 | Consuming component | Icon used | Where | Fill Variable override |
 |---|---|---|---|
-| `Button` (primary, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/text/inverse` |
-| `Button` (primary, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/text/inverse` |
+| `Button` (primary, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/text/on-primary` |
+| `Button` (primary, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/text/on-brand` |
 | `Button` (secondary, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/text/primary` |
 | `Button` (secondary, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/action/destructive` |
 | `Button` (ghost, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/text/primary` |
