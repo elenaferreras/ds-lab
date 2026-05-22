@@ -400,6 +400,27 @@ Shadows are **not** Theme (Semantic) variables. Components use Effect Styles; co
 
 **Icon sizes:** `sm` → 14px, `md` → 16px, `lg` → 18px
 
+**Icon-only (code):** When `Label` is empty and only one icon slot is visible (or `Loading`), the root frame is square — width equals height, no horizontal padding. If both icon slots show without a label, use the labeled size table above.
+
+**Icon-only (Figma):** Use component property **`Icon Only`** (`VARIANT`, `false` | `true`, default `false`). When `Icon Only = true`, apply the square frame rules below instead of the labeled size table.
+
+| Size | Square dimensions | H-Padding | Gap |
+|---|---|---|---|
+| `sm` | 32×32 (`spacing/8`) | 0 | 0 |
+| `md` | 40×40 (`spacing/10`) | 0 | 0 |
+| `lg` | 48×48 (`spacing/12`) | 0 | 0 |
+
+When `Icon Only = true`:
+- Hide `Label` layer (may remain bound to `Label` TEXT property with empty string)
+- Hide `Icon Right` slot (`Has Icon Right = false` on those variant frames)
+- **`Has Icon Left = true` on every `Icon Only = true` variant frame** — `Icon Left` layer `visible = true` with default `Plus` (Phosphor) instance
+- **Figma limitation:** `Has Icon Left` visibility is synced per `Variant × Intent × Size` across `Icon Only` pairs. On `Icon Only = true` frames, **unlink** `Icon Left` from the `Has Icon Left` boolean (`componentPropertyReferences` → `mainComponent` only) so the icon always shows; on instances always set `Icon Only=true` and `Has Icon Left=true` together
+- Show `Icon Left` with default `Plus` (Phosphor) instance
+- Root autolayout frame: **fixed width and height** per table above (bind to `Theme (Semantic)/spacing/*`); do not hug contents
+- `Loading = true` still replaces left icon with spinner; frame stays square
+
+When `Icon Only = false`: use the labeled **Size → Figma dimensions** table above.
+
 **Variant × Intent fill matrix:**
 
 | Variant | Intent | Background | Text | Border |
@@ -633,10 +654,10 @@ Shadows are **not** Theme (Semantic) variables. Components use Effect Styles; co
 
 | Variant | Background | Text | Border | Icon |
 |---|---|---|---|---|
-| `default` | `color/surface/overlay` | `color/text/primary` | `color/border` | none |
-| `success` | `color/background/feedback-success-emphasis` 12% tint over `color/surface/base` | `color/text/primary` (#000) | `color/background/feedback-success-emphasis` 40% tint | `CheckCircle` (Phosphor), `color/foreground/feedback-on-success` |
-| `warning` | `color/background/feedback-warning-emphasis` 12% tint over `color/surface/base` | `color/text/primary` (#000) | `color/background/feedback-warning-emphasis` 40% tint | `Warning` (Phosphor), `color/foreground/feedback-on-warning` |
-| `danger` | `color/background/feedback-error-emphasis` 10% tint over `color/surface/base` | `color/text/primary` (#000) | `color/background/feedback-error-emphasis` 35% tint | `XCircle` (Phosphor), `color/foreground/feedback-on-error` |
+| `default` | `color/surface/overlay` | `color/text/primary` | `color/border/strong` | none |
+| `success` | `color/background/feedback-success` (code: emphasis 12% tint over page — bind subtle bg token in Figma) | `color/text/primary` | `color/border/feedback-success` | `CheckCircle` (Phosphor), `color/text/primary` |
+| `warning` | `color/background/feedback-warning` | `color/text/primary` | `color/border/feedback-warning` | `Warning` (Phosphor), `color/text/primary` |
+| `danger` | `color/background/feedback-error` | `color/text/primary` | `color/border/feedback-error` | `XCircle` (Phosphor), `color/text/primary` |
 
 **Layout:**
 - Border radius: `radius/lg` (8px)
@@ -655,14 +676,14 @@ Shadows are **not** Theme (Semantic) variables. Components use Effect Styles; co
 
 **Close button (must match code):**
 - The `CloseButton` area in the Toast component must contain a **nested `Button` instance** (not an empty frame).
-- Button props (as in code): `variant="ghost"`, `size="sm"`, `iconLeft = X` (Phosphor, `weight="regular"`, `Format = Outline`), and **no label text** (code renders `{null}` as children).
+- Button props (as in code): `variant="ghost"`, `size="sm"`, `iconLeft = X` (Phosphor, `weight="regular"`, `Format = Outline`), and **no label text** (code renders `{null}` as children). In Figma: `Icon Only=true`, `Has Icon Left=true`, `Icon Left = X` (Phosphor).
 - Close icon colour should inherit the Toast text colour:
   - `Variant=default|success|warning|danger` → `color/text/primary`
 
 **Figma layers to update when a token changes:**
-- Variant background token → update `Background` fill on all affected variant frames
-- Variant border token → update `Border` stroke on all affected variant frames
-- `color/text/primary` → update text fill on `default` variant frames
+- Variant background token → update root frame fill on all affected variant frames (`color/background/feedback-*` for success/warning/danger; never legacy `color/feedback/*`)
+- Variant border token → update root frame stroke (`color/border/feedback-*` or `color/border/strong` for default)
+- `color/text/primary` → update text fill on **all** variant frames (title, description, status icon Vector, close button)
 - `shadow/md` change → update drop shadow effect on all Toast variant frames
 - `radius/lg` change → update corner radius on all Toast variant frames
 - Spacing token change → update padding and gap values on affected frames
@@ -780,6 +801,7 @@ Properties are defined on the **component set** (the parent node that wraps all 
 | `Variant` | `VARIANT` | `primary`, `secondary`, `ghost` | `primary` |
 | `Intent` | `VARIANT` | `regular`, `danger` | `regular` |
 | `Size` | `VARIANT` | `sm`, `md`, `lg` | `md` |
+| `Icon Only` | `VARIANT` | `false`, `true` | `false` |
 | `Disabled` | `BOOLEAN` | — | `false` |
 | `Loading` | `BOOLEAN` | — | `false` |
 | `Has Icon Left` | `BOOLEAN` | — | `false` |
@@ -787,6 +809,11 @@ Properties are defined on the **component set** (the parent node that wraps all 
 | `Has Icon Right` | `BOOLEAN` | — | `false` |
 | `Icon Right` | `INSTANCE_SWAP` | — | `ArrowRight` (Phosphor) |
 | `Label` | `TEXT` | — | `"Label"` |
+
+**Visual rules per variant state:**
+- `Icon Only = true` → apply §2 icon-only Figma frame rules; hide `Label`; hide `Icon Right`; **`Icon Left` always visible** (unlinked from `Has Icon Left` boolean per §2); on instances set **`Has Icon Left = true`** with `Icon Only = true`
+- `Icon Only = false` → standard labeled button layout (labeled size table); **`Has Icon Left = false`** unless the designer toggles it on
+- `Icon Only = true` with both icon slots visible is invalid — only `Icon Left` should show
 
 **Visual rules per boolean state:**
 - `Disabled = true` → apply `opacity/disabled` (0.4) to the entire component, set `pointer-events: none`
@@ -929,6 +956,7 @@ Use this mapping in `figma-sync` Workflow I when wiring nested icon instances in
   - Toast icon size: 16px
   - Badge dismiss icon size: 10px (`sm`) / 12px (`md`)
 - Icon colour should be driven by the consuming component’s text colour unless an explicit override is required (see nested instances table below).
+- **No fill on the icon instance root** (`Icon Left` / `Icon Right` slot layers in Button, or the Phosphor instance wrapper): set `fills = []` on the instance layer. Apply colour only on the inner `Vector` path (via Variable override on the vector `fills` — must match the Label text variable for that variant/intent, e.g. `color/text/on-primary` for `primary/regular`, not `color/text/on-brand`).
 - Button icon weights must match code defaults:
   - Button chrome icons (`Plus`, `ArrowRight`, `X`) use `Weight = Regular`
   - Status icons (Toast) use `Weight = Fill`
@@ -950,9 +978,9 @@ After placing the instance, apply Variable overrides only when needed to match t
 | `Button` (ghost, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/text/primary` |
 | `Button` (ghost, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/action/destructive` |
 | `Badge` | `XIcon` | dismiss × button layer | same Variable as the badge's text color for that variant (see §2 Badge color matrix) |
-| `Toast` (success) | `CheckCircleIcon` | icon layer | `color/foreground/feedback-on-success` |
-| `Toast` (warning) | `WarningIcon` | icon layer | `color/foreground/feedback-on-warning` |
-| `Toast` (danger) | `XCircleIcon` | icon layer | `color/foreground/feedback-on-error` |
+| `Toast` (success) | `CheckCircleIcon` | icon layer (Vector fill) | `color/text/primary` |
+| `Toast` (warning) | `WarningIcon` | icon layer (Vector fill) | `color/text/primary` |
+| `Toast` (danger) | `XCircleIcon` | icon layer (Vector fill) | `color/text/primary` |
 | `Toast` (all variants) | `XIcon` | close button (`Button` nested instance `iconLeft`) | `color/text/primary` |
 
 After wiring icon instances, verify that each consuming component has the icon slot wired to a live instance (not a detached vector) and that any required Variable override is correctly set on the instance. If the slot is a raw vector, replace it with an instance and apply the override.
@@ -1121,7 +1149,9 @@ Each card contains exactly two text layers:
 
 ### Placeholder strings
 
-Use exactly these strings for scaffolded cards. They are intentionally generic — designers replace them.
+Use exactly these strings for scaffolded cards when no guideline file exists. When `docs/components/<ComponentName>.md` is present, Workflow D uses that file's `## Do`, `## Don't`, `## Content guidelines`, and `## Accessibility` sections instead (first scaffold only). Paste-ready text: `docs/components/figma-scaffold/<ComponentName>.md`.
+
+Otherwise these placeholders are intentionally generic — designers replace them.
 
 | Sub-section | Label | Placeholder body |
 |---|---|---|
