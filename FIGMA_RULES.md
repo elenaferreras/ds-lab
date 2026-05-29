@@ -405,6 +405,51 @@ Footer   → px-6 pt-4 pb-6  border-top neutral-20
 
 ---
 
+### InputPassword
+
+**File:** `src/components/ui/input-password/input-password.jsx`
+
+A specialised password field built on the same visual foundation as `Input`. Adds a password visibility toggle on the trailing edge of the field.
+
+**Props:**
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `label` | string | — | Label above the input |
+| `placeholder` | string | — | Placeholder text |
+| `helperText` | string | — | Helper text below the input |
+| `error` | string | — | Error message (overrides helperText, applies error styles) |
+| `disabled` | boolean | `false` | Disables both the input and the visibility toggle |
+| `id` | string | auto (`useId`) | Custom input id |
+| `className` | string | — | Container classes |
+| `inputClassName` | string | — | Input element classes |
+| `value` | string | — | Controlled value |
+| `onChange` | ChangeEventHandler | — | Change handler |
+| `defaultVisible` | boolean | `false` | Initial visibility state (uncontrolled) |
+| `visible` | boolean | — | Controlled visibility state |
+| `onVisibleChange` | `(visible: boolean) => void` | — | Callback fired when the toggle is clicked |
+
+**Visibility toggle:**
+- Hidden password → `Eye` icon (Phosphor, Format=Outline, Weight=Regular), aria-label: "Show password"
+- Visible password → `EyeSlash` icon (same format/weight), aria-label: "Hide password"
+- Toggle is an icon button **inside** the trailing edge of the input shell (32×32), not outside the field border
+- Inherits the `disabled` state of the field
+- Focus ring: `focus-within` on the input shell using `--ds-color-border-action-focus`
+
+**Figma anatomy:**
+```
+InputPassword (Frame, auto-layout column, gap=4)
+├── Label (Text, optional)
+├── InputField (Frame, horizontal autolayout, h=40, pl=`spacing/4` (16px), pr=`spacing/2` (8px), gap=`spacing/1` (4px))
+│   ├── Input text (TEXT, flex fill)
+│   └── ToggleButton (32×32)
+│       └── Eye / EyeSlash (16×16, Phosphor instance)
+└── HelperText (Text, optional)
+```
+
+**States:** default, focus (accent ring on input), error (danger border + ring on input), disabled (opacity 0.4, subtle bg, pointer-events-none on toggle).
+
+---
+
 ### Toast
 
 **File:** `src/components/ui/toast/toast.jsx`
@@ -507,6 +552,7 @@ The design file is: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-
 | Avatar | `6:3` | `8:14` | COMPONENT_SET |
 | Card | `6:4` | `10:2` | COMPONENT |
 | Input | `6:5` | `11:27` | COMPONENT_SET |
+| InputPassword | `827:124` | `827:160` | COMPONENT_SET |
 | Toast | `6:6` | `12:25` | COMPONENT_SET |
 | Modal | `742:124` | `744:154` | COMPONENT_SET |
 | Button / Documentation | `0:1` | `172:116` | FRAME |
@@ -514,6 +560,7 @@ The design file is: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-
 | Avatar / Documentation | `6:3` | `172:290` | FRAME |
 | Card / Documentation | `6:4` | `172:365` | FRAME |
 | Input / Documentation | `6:5` | `172:431` | FRAME |
+| InputPassword / Documentation | `827:124` | `832:124` | FRAME |
 | Toast / Documentation | `6:6` | `172:525` | FRAME |
 | Modal / Documentation | `742:124` | `769:141` | FRAME |
 
@@ -531,3 +578,5 @@ The DS-Lab-Components file uses the subscribed library `DS Lab: Phosphor Icons`.
 | `XCircleIcon` | `XCircle` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `5557c9aa1f5aa166243bca01a2107496666f2632` |
 | `PlusIcon` | `Plus` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `c1b8a390deee2ebb32f6d22211b031833595619a` |
 | `ArrowRightIcon` | `ArrowRight` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `c838cca546e0059b52148b958ab3e0749c5d0132` |
+| `Eye` | `Eye` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `7a8d3e0275d77d4fc54b0632e71694f1a45766c7` |
+| `EyeSlash` | `EyeSlash` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `61996b1851ea1dccc6cf5d0957baa64df6c090c1` |
