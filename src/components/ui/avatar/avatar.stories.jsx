@@ -1,4 +1,6 @@
 import { Avatar } from './avatar'
+import { createDocumentationStory } from '../../../storybook/createDocumentationStory'
+import avatarGuidelines from '../../../../docs/components/Avatar.md?raw'
 
 export default {
   title: 'Components/Avatar',
@@ -90,3 +92,5 @@ export const NoFallback = {
     </div>
   ),
 }
+
+export const Documentation = createDocumentationStory({ guidelines: avatarGuidelines })

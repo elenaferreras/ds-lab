@@ -1,4 +1,6 @@
 import { Input } from './input'
+import { createDocumentationStory } from '../../../storybook/createDocumentationStory'
+import inputGuidelines from '../../../../docs/components/Input.md?raw'
 
 export default {
   title: 'Components/Input',
@@ -117,3 +119,5 @@ export const States = {
     </div>
   ),
 }
+
+export const Documentation = createDocumentationStory({ guidelines: inputGuidelines })

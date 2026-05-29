@@ -1,6 +1,23 @@
 import { userEvent, within } from 'storybook/test'
 import { ToastProvider, useToast } from './toast'
 import { Button } from '../button'
+import { createDocumentationStory } from '../../../storybook/createDocumentationStory'
+import { DocSection } from '../../../storybook/documentation/DocSection'
+import { resolveRelatedPreview } from '../../../storybook/documentation/relatedPreviewRegistry'
+import toastGuidelines from '../../../../docs/components/Toast.md?raw'
+
+function ToastDocumentationVisuals() {
+  return (
+    <div className="component-documentation__visuals">
+      <DocSection
+        title="Example"
+        description="Static preview. Wrap your app with ToastProvider and call useToast() to show live toasts."
+      >
+        {resolveRelatedPreview('toast-close')}
+      </DocSection>
+    </div>
+  )
+}
 
 export default {
   title: 'Components/Toast',
@@ -135,3 +152,8 @@ export const Multiple = {
     await userEvent.click(canvas.getByRole('button', { name: /fire 3 toasts/i }))
   },
 }
+
+export const Documentation = createDocumentationStory({
+  guidelines: toastGuidelines,
+  customVisuals: ToastDocumentationVisuals,
+})

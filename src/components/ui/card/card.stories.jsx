@@ -1,6 +1,39 @@
 import { Card } from './card'
 import { Button } from '../button'
 import { Badge } from '../badge'
+import { createDocumentationStory } from '../../../storybook/createDocumentationStory'
+import { DocSection } from '../../../storybook/documentation/DocSection'
+import cardGuidelines from '../../../../docs/components/Card.md?raw'
+
+function CardDocumentationVisuals() {
+  return (
+    <div className="component-documentation__visuals">
+      <DocSection
+        title="Structure"
+        description="Header, body, and footer slots for grouped content and actions."
+      >
+        <Card style={{ maxWidth: 420 }}>
+          <Card.Header>
+            <h3 style={{ margin: 0, fontSize: 'var(--ds-font-size-md)' }}>Notifications</h3>
+          </Card.Header>
+          <Card.Body>
+            <p style={{ margin: 0, color: 'var(--ds-color-foreground-text-secondary)' }}>
+              Manage email and push preferences.
+            </p>
+          </Card.Body>
+          <Card.Footer>
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+              <Button variant="secondary" size="sm">
+                Cancel
+              </Button>
+              <Button size="sm">Save</Button>
+            </div>
+          </Card.Footer>
+        </Card>
+      </DocSection>
+    </div>
+  )
+}
 
 export default {
   title: 'Components/Card',
@@ -129,3 +162,8 @@ export const RichContent = {
     </div>
   ),
 }
+
+export const Documentation = createDocumentationStory({
+  guidelines: cardGuidelines,
+  customVisuals: CardDocumentationVisuals,
+})

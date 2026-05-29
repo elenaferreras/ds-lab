@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Badge } from './badge'
+import { createDocumentationStory } from '../../../storybook/createDocumentationStory'
+import badgeGuidelines from '../../../../docs/components/Badge.md?raw'
 
 export default {
   title: 'Components/Badge',
@@ -96,3 +98,5 @@ export const AllVariantsBothSizes = {
     )
   },
 }
+
+export const Documentation = createDocumentationStory({ guidelines: badgeGuidelines })

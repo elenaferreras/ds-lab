@@ -1,5 +1,7 @@
 import { Button } from './button'
 import { ArrowRightIcon, PlusIcon } from '@phosphor-icons/react'
+import { createDocumentationStory } from '../../../storybook/createDocumentationStory'
+import buttonGuidelines from '../../../../docs/components/Button.md?raw'
 
 export default {
   title: 'Components/Button',
@@ -127,3 +129,5 @@ export const States = {
     </div>
   ),
 }
+
+export const Documentation = createDocumentationStory({ guidelines: buttonGuidelines })

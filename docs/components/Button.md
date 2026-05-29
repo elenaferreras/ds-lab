@@ -6,6 +6,98 @@ storybook: Components/Button
 figma_page: Button
 figma_file: https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-Components
 tags: [action, form, navigation]
+documentation:
+  demoComponent: Button
+  variantDescription: "Visual hierarchy: one primary CTA per view; secondary and ghost for supporting actions."
+  variants:
+    - label: Save
+      props: { variant: primary }
+    - label: Cancel
+      props: { variant: secondary }
+    - label: More options
+      props: { variant: ghost }
+  dangerVariants:
+    - label: Delete account
+      props: { variant: primary, intent: danger }
+    - label: Remove
+      props: { variant: secondary, intent: danger }
+    - label: Discard
+      props: { variant: ghost, intent: danger }
+  sizesDescription: "Default md. sm for compact UI; lg sparingly. loading ≠ disabled."
+  sizes:
+    - label: Small
+      props: { size: sm }
+    - label: Medium
+      props: { size: md }
+    - label: Large
+      props: { size: lg }
+  states:
+    - label: Default
+      props: {}
+    - label: Disabled
+      props: { disabled: true }
+    - label: Loading
+      props: { loading: true }
+  compositionPatterns:
+    - id: form-footer
+      buttons:
+        - { label: Cancel, variant: secondary }
+        - { label: Save, variant: primary }
+    - id: destructive-confirm
+      buttons:
+        - { label: Cancel, variant: secondary }
+        - { label: Delete account, variant: primary, intent: danger }
+    - id: empty-state
+      buttons:
+        - { label: Create project, variant: primary }
+        - { label: Learn more, variant: ghost }
+    - id: toolbar
+      buttons:
+        - { iconOnly: true, icon: pencil-simple, ariaLabel: Edit, props: { variant: ghost, size: sm } }
+        - { iconOnly: true, icon: copy, ariaLabel: Copy, props: { variant: ghost, size: sm } }
+        - { iconOnly: true, icon: trash, ariaLabel: Delete, props: { variant: ghost, size: sm } }
+  colorTokensDescription: "Theme (semantic) variables used by Button. Values update with Brand and Mode toolbar. Secondary/ghost hover and active use color-mix() from these tokens — not separate variables."
+  colorTokens:
+    - token: --ds-color-background-action-primary
+      role: Primary fill and border (regular)
+      sample: background
+    - token: --ds-color-background-action-primary-hover
+      role: Primary hover fill and border
+      sample: background
+    - token: --ds-color-background-action-primary-pressed
+      role: Primary pressed fill and border
+      sample: background
+    - token: --ds-color-foreground-action-on-primary
+      role: Primary label and icon (regular)
+      sample: text
+    - token: --ds-color-background-feedback-error-emphasis
+      role: Danger fill, border, and ghost/secondary text
+      sample: background
+    - token: --ds-color-foreground-text-on-brand
+      role: Danger primary label; secondary danger pressed text
+      sample: text
+    - token: --ds-color-foreground-text-primary
+      role: Secondary and ghost label; color-mix target for hover/active
+      sample: text
+    - token: --ds-color-border-surface-strong
+      role: Secondary border; ghost hover/active mix source
+      sample: border
+    - token: --ds-color-border-action-focus
+      role: Focus ring
+      sample: ring
+    - token: --ds-color-background-surface-page
+      role: Focus ring offset
+      sample: background
+  related:
+    - name: Badge
+      description: Dismiss control is a nested Button (ghost, sm, icon-only).
+      previewType: badge-dismiss
+    - name: Toast
+      description: Close control is a nested Button (ghost, sm, X icon).
+      previewType: toast-close
+    - name: Text link
+      description: Inline, low-emphasis navigation in copy — not a Button.
+      previewType: text-link
 ---
 
 # Button
@@ -48,6 +140,7 @@ Button triggers actions. It expresses visual hierarchy (`primary` → `secondary
 | Hover / active | Only when enabled and not loading. Primary `regular` uses theme action tokens; secondary and ghost use `color-mix` overlays; active applies `scale(0.98)` on all variants. |
 | Focus | `focus-visible` ring: 2px `--ds-color-border-action-focus`, 2px offset from `--ds-color-background-surface-page`. |
 
+<!-- storybook-hide -->
 **Icon-only rules:**
 
 - Square dimensions when: no label AND (`loading` OR exactly one of `iconLeft` / `iconRight`).
@@ -58,6 +151,7 @@ Button triggers actions. It expresses visual hierarchy (`primary` → `secondary
 **Primary icon colour:** `primary` + `regular` icons use the same fill as the label — Theme `color/text/on-primary` (brand-aware). `primary` + `danger` uses `color/text/on-brand`. In code, icons inherit `--ds-color-foreground-action-on-primary` via `currentColor`.
 
 **Nested usage:** Toast close and Badge dismiss use `variant="ghost"`, `size="sm"`, icon-only with `X`. See Related components.
+<!-- /storybook-hide -->
 
 ## Composition patterns
 
@@ -125,10 +219,3 @@ import { Button } from '../../components/ui/button'
 - **Badge** — dismiss control is a nested `Button` (`ghost`, `sm`, icon-only).
 - **Toast** — close control is a nested `Button` (`ghost`, `sm`, `X` icon).
 - Text links — inline, low-emphasis navigation in copy (not Button).
-
-## Spec reference
-
-- Implementation: [src/components/ui/button/button.jsx](../../src/components/ui/button/button.jsx)
-- Figma dimensions and tokens: [.cursor/skills/figma-sync/references/COMPONENT_SPECS.md](../../.cursor/skills/figma-sync/references/COMPONENT_SPECS.md) (§ Button)
-- Integration rules: [FIGMA_RULES.md](../../FIGMA_RULES.md) (§ Button)
-- Storybook: `Components/Button`
