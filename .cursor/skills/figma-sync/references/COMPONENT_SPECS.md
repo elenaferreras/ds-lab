@@ -631,6 +631,56 @@ When `Icon Only = false`: use the labeled **Size → Figma dimensions** table ab
 
 ---
 
+### Modal
+
+**Source:** `src/components/ui/modal/modal.jsx`
+
+**Overview:** Modal is a controlled dialog overlay built on Radix `Dialog`. It renders a centered panel (`sm` / `md` / `lg`) with title, optional description, and a header close button (a nested `Button` instance: `variant=ghost`, `size=sm`, icon-only with `X`).
+
+**Sizes:**
+
+| Size | Panel width (code) | Use for |
+|---|---|---|
+| `sm` | 320px (`calc(var(--ds-spacing-80) * 4)`) | Short confirmations |
+| `md` | 480px (`calc(var(--ds-spacing-80) * 6)`) | Default dialogs and forms |
+| `lg` | 560px (`calc(var(--ds-spacing-80) * 7)`) | Richer content / wider forms |
+
+**Structure (layers):**
+- `Overlay` — full-viewport scrim behind the panel
+- `Content` — panel root (autolayout vertical)
+  - `Header` — title/description block + close button
+  - `Body` — content area (supports a body text sample + optional nested components)
+
+**Tokens / bindings:**
+- Panel background: `color/surface/overlay` (code: `--ds-color-background-surface-overlay`)
+- Panel border: `color/border/subtle` (code: `--ds-color-border-surface-default`)
+- Panel radius: `radius/lg` (code: `--ds-radius-lg`)
+- Panel shadow: Effect Style `shadow/lg` (code: `--ds-shadow-lg`)
+- Overlay scrim: **derived** `color-mix(in_oklab, color/text/primary 50%, transparent)` (no Theme variable; set as raw fill and flag as derived)
+
+**Typography (Text Styles):**
+- Title: Text Style `text/md-medium`, color `color/text/primary`
+- Description: Text Style `text/sm-regular`, color `color/text/secondary` (hidden when empty)
+- Body sample (if present): Text Style `text/sm-regular`, color `color/text/secondary`
+
+**Layout:**
+- Header padding: px 24 (`spacing/6`), pt 24 (`spacing/6`), pb 16 (`spacing/4`)
+- Body padding: px 24 (`spacing/6`), pb 24 (`spacing/6`)
+- Header gap between title block and close: 16 (`spacing/4`)
+- Body vertical gap: 16 (`spacing/4`)
+
+**Close button (nested instance):**
+- Use a nested `Button` instance configured as:
+  - `Variant = ghost`
+  - `Size = sm`
+  - `Icon Only = true`
+  - `Has Icon Left = true`
+  - `Icon Left = X` (Phosphor)
+  - `Label` empty/hidden
+  - `aria-label` lives in code; no Figma property required
+
+---
+
 ### Toast
 
 **Source:** `src/components/ui/toast/toast.jsx`
@@ -904,6 +954,28 @@ Card is a compound layout component. Figma properties are defined on each sub-co
 
 ---
 
+### Modal
+
+**Source:** `src/components/ui/modal/modal.jsx`
+
+| Figma property name | Property type | Options | Default |
+|---|---|---|---|
+| `Size` | `VARIANT` | `sm`, `md`, `lg` | `md` |
+| `Title` | `TEXT` | — | `"Modal title"` |
+| `Has Description` | `BOOLEAN` | — | `true` |
+| `Description` | `TEXT` | — | `"Optional description"` |
+| `Body` | `TEXT` | — | `"Modal body content"` |
+
+**Visual rules per boolean state:**
+- `Has Description = true` → show the description text layer
+- `Has Description = false` → hide the description text layer entirely
+
+**Notes:**
+- The close control is a nested `Button` instance configured as `ghost`, `sm`, icon-only with `X` (Phosphor). No separate Modal property is required for it.
+- `open` / `onClose` are runtime behaviors and are not represented as Figma component properties.
+
+---
+
 ### Toast
 
 **Source:** `src/components/ui/toast/toast.jsx`
@@ -1071,11 +1143,13 @@ Children, in order:
 
 Both sub-sections share the same structural spec.
 
-Outer frame: vertical autolayout, width 1128 (fill container), gap 16 between heading and table.
+Outer frame: vertical autolayout, width **1168** (fill container), gap 16 between heading and table.
+
+**Documentation frame** must set **explicit Light mode** on `Theme (Semantic)` so table text and fills stay readable regardless of the file's active mode.
 
 **Heading** — text layer whose content is literally `Variants` or `Props`. Text Style `text/xl-regular`. Colour `color/text/primary`.
 
-**Table** — vertical autolayout frame named `Table`. Width 1128 (fill container). Gap 0 (rows stack flush; data rows carry their own bottom border). No padding. No fill.
+**Table** — vertical autolayout frame named `Table`. Width **1168** (fill container). Gap **0** (rows stack flush; data rows carry their own bottom border only). No padding. No fill. Canonical reference: Badge page Documentation → `Variants` / `Props` tables (`172:205`).
 
 The table's children are one **Header** row followed by N **Background** (data) rows.
 
@@ -1083,16 +1157,16 @@ The table's children are one **Header** row followed by N **Background** (data) 
 
 | Property | Value |
 |---|---|
-| Layout | `HORIZONTAL`, gap 40, width fill (1128) |
+| Layout | `HORIZONTAL`, gap 40, width **fixed 1168px** |
 | Padding | `32` left/right, `16` top/bottom |
 | Fill | `color/surface/subtle` |
 | Border | None |
 | Corner radius | 0 |
 
-Header row cells are text layers placed directly in the header row (not wrapped in `div` frames):
+Header row cells are text layers placed **directly** in the header row (not wrapped in `div` frames):
 
-- First cell: text layer named `Name`, content `Name`, width **fixed 320px**.
-- Remaining cells: text layers, width **fill (`flex: 1`)**. Content matches the column label — Variants uses `Purpose`; Props uses `Type` and `Default` (two cells).
+- **Variants:** `Name` **320px**, `Purpose` **744px**.
+- **Props:** `Name` **320px**, `Type` **352px**, `Default` **352px**.
 
 All header cells use Text Style `text/md-medium`, colour `color/text/primary`.
 
@@ -1100,18 +1174,18 @@ All header cells use Text Style `text/md-medium`, colour `color/text/primary`.
 
 | Property | Value |
 |---|---|
-| Layout | `HORIZONTAL`, gap 40, width fill (1128) |
+| Layout | `HORIZONTAL`, gap 40, width **fixed 1168px** |
 | Padding | `32` left/right, `16` top/bottom |
 | Fill | `color/surface/base` |
-| Border | 1px bottom, colour `color/text/disabled` |
-| Corner radius | 4 |
+| Border | **1px bottom only** (`strokeTop/Left/Right = 0`), colour `color/text/disabled` — rows must stack flush (no gaps) |
+| Corner radius | `0` on all data rows except the **last** row in the table (`4`) |
 
-Each data row wraps its cells in inner autolayout frames named `div` (vertical autolayout, items-start, justify-center, gap 0, no padding, no fill):
+Each data row wraps its cells in inner autolayout frames named `div` (vertical autolayout, items-start, gap 0, no padding, no fill):
 
-- First `div`: width **fixed 320px**. Contains one text layer with the row's `Name` value.
-- Remaining `div`s: width **fill (`flex: 1`)**. Each contains one text layer with the corresponding column value.
+- **Variants:** first `div` **320px**, second `div` **744px**.
+- **Props:** first `div` **320px**, second and third `div`s **352px** each.
 
-All data-row text layers use Text Style `text/md-regular`, colour `color/text/primary`.
+All data-row text layers use Text Style `text/md-regular`, colour `color/text/primary`. Props **Name** column uses `text/md-medium` (matches header weight).
 
 **Column content sources:**
 

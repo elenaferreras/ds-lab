@@ -3,6 +3,7 @@ import { Badge } from '../../components/ui/badge'
 import { Button } from '../../components/ui/button'
 import { Card } from '../../components/ui/card'
 import { Input } from '../../components/ui/input'
+import { Modal } from '../../components/ui/modal'
 import { ToastProvider } from '../../components/ui/toast'
 
 /** @type {Record<string, React.ComponentType<any>>} */
@@ -12,6 +13,7 @@ export const COMPONENT_REGISTRY = {
   Button,
   Card,
   Input,
+  Modal,
   Toast: ToastProvider,
 }
 

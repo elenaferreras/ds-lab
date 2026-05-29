@@ -508,12 +508,14 @@ The design file is: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-
 | Card | `6:4` | `10:2` | COMPONENT |
 | Input | `6:5` | `11:27` | COMPONENT_SET |
 | Toast | `6:6` | `12:25` | COMPONENT_SET |
+| Modal | `742:124` | `744:154` | COMPONENT_SET |
 | Button / Documentation | `0:1` | `172:116` | FRAME |
 | Badge / Documentation | `6:2` | `172:205` | FRAME |
 | Avatar / Documentation | `6:3` | `172:290` | FRAME |
 | Card / Documentation | `6:4` | `172:365` | FRAME |
 | Input / Documentation | `6:5` | `172:431` | FRAME |
 | Toast / Documentation | `6:6` | `172:525` | FRAME |
+| Modal / Documentation | `742:124` | `769:141` | FRAME |
 
 To get design context for a specific component, open the Figma file in the Figma Desktop app, select the component frame, then call `get_design_context` (the node ID will be in the selection).
 

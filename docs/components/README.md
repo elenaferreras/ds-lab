@@ -11,6 +11,7 @@ Human-authored usage documentation for each UI component. One file per component
 | [Button](./Button.md) | draft | `src/components/ui/button/button.jsx` | `Components/Button` → **Documentation** |
 | [Card](./Card.md) | draft | `src/components/ui/card/card.jsx` | `Components/Card` → **Documentation** |
 | [Input](./Input.md) | draft | `src/components/ui/input/input.jsx` | `Components/Input` → **Documentation** |
+| [Modal](./Modal.md) | draft | `src/components/ui/modal/modal.jsx` | `Components/Modal` → **Documentation** |
 | [Toast](./Toast.md) | draft | `src/components/ui/toast/toast.jsx` | `Components/Toast` → **Documentation** |
 
 ## File location
