@@ -12,6 +12,12 @@ const SIZE_CLASSES = {
   lg: 'h-[var(--ds-spacing-48)] px-[var(--ds-spacing-32)] text-[var(--ds-font-size-md)] gap-[var(--ds-spacing-8)]',
 }
 
+const LINK_SIZE_CLASSES = {
+  sm: 'h-[var(--ds-spacing-32)] px-0 text-[var(--ds-font-size-sm)] gap-[var(--ds-spacing-4)]',
+  md: 'h-[var(--ds-spacing-40)] px-0 text-[var(--ds-font-size-md)] gap-[var(--ds-spacing-8)]',
+  lg: 'h-[var(--ds-spacing-48)] px-0 text-[var(--ds-font-size-md)] gap-[var(--ds-spacing-8)]',
+}
+
 const ICON_ONLY_SIZE_CLASSES = {
   sm: 'h-[var(--ds-spacing-32)] w-[var(--ds-spacing-32)] p-0 text-[var(--ds-font-size-sm)] gap-0',
   md: 'h-[var(--ds-spacing-40)] w-[var(--ds-spacing-40)] p-0 text-[var(--ds-font-size-md)] gap-0',
@@ -22,6 +28,23 @@ const ICON_SIZE = {
   sm: 14,
   md: 16,
   lg: 18,
+}
+
+function getLinkClasses(intent) {
+  const isDanger = intent === 'danger'
+  return isDanger
+    ? {
+        base: 'bg-transparent text-[var(--ds-color-background-feedback-error-emphasis)] border-transparent',
+        hover: 'enabled:hover:text-[var(--ds-color-foreground-text-link)] enabled:hover:border-transparent',
+        active:
+          'enabled:active:text-[var(--ds-color-background-feedback-error-emphasis)] enabled:active:border-transparent enabled:active:scale-[0.98]',
+      }
+    : {
+        base: 'bg-transparent text-[var(--ds-color-foreground-text-primary)] border-transparent',
+        hover: 'enabled:hover:text-[var(--ds-color-foreground-text-link)] enabled:hover:border-transparent',
+        active:
+          'enabled:active:text-[var(--ds-color-foreground-text-primary)] enabled:active:border-transparent enabled:active:scale-[0.98]',
+      }
 }
 
 function getVariantClasses(variant, intent) {
@@ -85,6 +108,7 @@ function getVariantClasses(variant, intent) {
  *   children?: React.ReactNode
  *   variant?: 'primary' | 'secondary' | 'ghost'
  *   intent?: 'regular' | 'danger'
+ *   link?: boolean
  *   size?: 'sm' | 'md' | 'lg'
  *   disabled?: boolean
  *   loading?: boolean
@@ -99,6 +123,7 @@ export function Button({
   children = 'Label',
   variant = 'primary',
   intent = 'regular',
+  link = false,
   size = 'md',
   disabled = false,
   loading = false,
@@ -112,7 +137,7 @@ export function Button({
   const resolvedVariant = VARIANTS.includes(variant) ? variant : 'primary'
   const resolvedIntent = INTENTS.includes(intent) ? intent : 'regular'
   const resolvedSize = SIZES.includes(size) ? size : 'md'
-  const v = getVariantClasses(resolvedVariant, resolvedIntent)
+  const v = link ? getLinkClasses(resolvedIntent) : getVariantClasses(resolvedVariant, resolvedIntent)
   const iconPx = ICON_SIZE[resolvedSize]
 
   const isDisabled = disabled
@@ -124,6 +149,12 @@ export function Button({
     !hasLabel &&
     (isLoading || iconLeft || iconRight) &&
     !(iconLeft && iconRight)
+
+  const sizeClasses = isIconOnly
+    ? ICON_ONLY_SIZE_CLASSES[resolvedSize]
+    : link
+      ? LINK_SIZE_CLASSES[resolvedSize]
+      : SIZE_CLASSES[resolvedSize]
 
   const base = cn(
     // layout
@@ -137,7 +168,7 @@ export function Button({
     // loading
     isLoading && 'opacity-70 cursor-wait pointer-events-none',
     // size
-    isIconOnly ? ICON_ONLY_SIZE_CLASSES[resolvedSize] : SIZE_CLASSES[resolvedSize],
+    sizeClasses,
     v.base,
     isInteractive && v.hover,
     isInteractive && v.active,

@@ -16,7 +16,15 @@ Keeps the DS-Lab Figma file in sync with the codebase. Handles three scenarios:
 
 ## Prerequisites
 
-- Figma Desktop app must be running with the local MCP server active at `http://127.0.0.1:3845/mcp`
+**Two MCP servers are required** (see [docs/FIGMA_MCP_SETUP.md](../../../docs/FIGMA_MCP_SETUP.md)):
+
+| MCP name | Endpoint | Used for |
+|---|---|---|
+| `figma-desktop` | `http://127.0.0.1:3845/mcp` | Read: `get_design_context`, `get_metadata`, `get_variable_defs`, screenshots |
+| `figma` (remote) | `https://mcp.figma.com/mcp` | Write: `use_figma` (Plugin API on canvas) |
+
+- Figma Desktop app must be running with **Dev Mode MCP Server** enabled (Preferences).
+- Remote `figma` must be **authenticated** in Cursor (OAuth). Without it, only read/audit workflows are possible — do not claim a full sync completed.
 - Figma file: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-Components`
 - Phosphor Icons library file (read-only reference): `https://www.figma.com/design/DgCvciYAzYDi5jNMyt14t2/DS-Lab--Phosphor-Icons`
 - Token source of truth: `src/tokens/base.css` (base primitives), `src/tokens/brand/farco.css` and `src/tokens/brand/neutral.css` (brand primitives), plus `src/tokens/theme/light.css` and `src/tokens/theme/dark.css` (semantic theme layer, shared across brands)

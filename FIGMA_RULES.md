@@ -275,6 +275,7 @@ All public components are re-exported from `src/components/index.js`.
 | `children` | ReactNode | `'Label'` | Button label |
 | `variant` | `'primary' \| 'secondary' \| 'ghost'` | `'primary'` | Visual hierarchy |
 | `intent` | `'regular' \| 'danger'` | `'regular'` | Color intent |
+| `link` | `boolean` | `false` | Text-link style; zero horizontal padding; overrides variant chrome when `true` |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Height/padding scale |
 | `disabled` | boolean | `false` | Disabled state |
 | `loading` | boolean | `false` | Shows animated spinner |
