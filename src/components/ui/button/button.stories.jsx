@@ -1,5 +1,7 @@
 import { Button } from './button'
 import { ArrowRightIcon, PlusIcon } from '@phosphor-icons/react'
+import { createDocumentationStory } from '../../../storybook/createDocumentationStory'
+import buttonGuidelines from '../../../../docs/components/Button.md?raw'
 
 export default {
   title: 'Components/Button',
@@ -100,10 +102,17 @@ export const WithIcons = {
 
 export const IconOnly = {
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-      <Button size="sm" iconLeft={<PlusIcon />} className="px-0 w-[var(--farco-spacing-8)]">{null}</Button>
-      <Button size="md" iconLeft={<PlusIcon />} className="px-0 w-[var(--farco-spacing-10)]">{null}</Button>
-      <Button size="lg" iconLeft={<PlusIcon />} className="px-0 w-[var(--farco-spacing-12)]">{null}</Button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <Button size="sm" iconLeft={<PlusIcon />}>{null}</Button>
+        <Button size="md" iconLeft={<PlusIcon />}>{null}</Button>
+        <Button size="lg" iconLeft={<PlusIcon />}>{null}</Button>
+      </div>
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <Button variant="primary" iconLeft={<PlusIcon />}>{null}</Button>
+        <Button variant="secondary" iconLeft={<PlusIcon />}>{null}</Button>
+        <Button variant="ghost" iconLeft={<PlusIcon />}>{null}</Button>
+      </div>
     </div>
   ),
 }
@@ -120,3 +129,5 @@ export const States = {
     </div>
   ),
 }
+
+export const Documentation = createDocumentationStory({ guidelines: buttonGuidelines })

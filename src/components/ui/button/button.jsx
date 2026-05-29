@@ -1,3 +1,4 @@
+import { cloneElement, isValidElement } from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cn } from '../../../lib/cn'
 
@@ -9,6 +10,12 @@ const SIZE_CLASSES = {
   sm: 'h-[var(--ds-spacing-32)] px-[var(--ds-spacing-12)] text-[var(--ds-font-size-sm)] gap-[var(--ds-spacing-4)]',
   md: 'h-[var(--ds-spacing-40)] px-[var(--ds-spacing-24)] text-[var(--ds-font-size-md)] gap-[var(--ds-spacing-8)]',
   lg: 'h-[var(--ds-spacing-48)] px-[var(--ds-spacing-32)] text-[var(--ds-font-size-md)] gap-[var(--ds-spacing-8)]',
+}
+
+const ICON_ONLY_SIZE_CLASSES = {
+  sm: 'h-[var(--ds-spacing-32)] w-[var(--ds-spacing-32)] p-0 text-[var(--ds-font-size-sm)] gap-0',
+  md: 'h-[var(--ds-spacing-40)] w-[var(--ds-spacing-40)] p-0 text-[var(--ds-font-size-md)] gap-0',
+  lg: 'h-[var(--ds-spacing-48)] w-[var(--ds-spacing-48)] p-0 text-[var(--ds-font-size-md)] gap-0',
 }
 
 const ICON_SIZE = {
@@ -112,6 +119,12 @@ export function Button({
   const isLoading = loading
   const isInteractive = !isDisabled && !isLoading
 
+  const hasLabel = children != null && children !== ''
+  const isIconOnly =
+    !hasLabel &&
+    (isLoading || iconLeft || iconRight) &&
+    !(iconLeft && iconRight)
+
   const base = cn(
     // layout
     'inline-flex items-center justify-center rounded-full border select-none transition-[transform,background-color,border-color,color] duration-150',
@@ -124,7 +137,7 @@ export function Button({
     // loading
     isLoading && 'opacity-70 cursor-wait pointer-events-none',
     // size
-    SIZE_CLASSES[resolvedSize],
+    isIconOnly ? ICON_ONLY_SIZE_CLASSES[resolvedSize] : SIZE_CLASSES[resolvedSize],
     v.base,
     isInteractive && v.hover,
     isInteractive && v.active,
@@ -164,11 +177,13 @@ export function Button({
   const iconWrapper = (node) =>
     node ? (
       <span
-        className="inline-flex items-center justify-center shrink-0"
+        className="inline-flex items-center justify-center shrink-0 text-inherit [&_svg]:fill-current"
         style={{ width: iconPx, height: iconPx }}
         aria-hidden="true"
       >
-        {node}
+        {isValidElement(node)
+          ? cloneElement(node, { color: 'currentColor', className: cn(node.props.className, 'fill-current') })
+          : node}
       </span>
     ) : null
 

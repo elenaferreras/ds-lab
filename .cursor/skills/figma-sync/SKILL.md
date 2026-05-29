@@ -372,15 +372,19 @@ After all required icon component keys are resolved, check each consuming compon
   - **Button icon slots:** left slot must be Phosphor `Plus`, right slot must be Phosphor `ArrowRight`
   - **Badge dismiss:** must be Phosphor `X`
   - **Toast status icons:** `success` → Phosphor `CheckCircle`, `warning` → Phosphor `Warning`, `danger` → Phosphor `XCircle`
+  - **Toast status icon colour:** bind inner `Vector` fill to Theme `color/text/primary` (matches code `text-inherit` on icon wrapper — not `color/foreground/feedback-on-*` or legacy `color/feedback/*`)
+  - **Toast variant frames:** root `fills`/`strokes` must use current Theme tokens — `default` → `color/surface/overlay` + `color/border/strong`; `success` → `color/background/feedback-success` + `color/border/feedback-success`; `warning` → `color/background/feedback-warning` + `color/border/feedback-warning`; `danger` → `color/background/feedback-error` + `color/border/feedback-error`. Repair any `MISSING` bindings from deleted legacy `color/feedback/*` variables.
 - Enforce Button icon constraints (must match code + library policy):
   - `Icon Left` / `Icon Right` must always be **instances from the Phosphor library** (never raw vectors, never local SVG components).
   - Phosphor instance properties must be enforced:
     - `Format = Outline` (never `Stroke`)
     - `Weight = Regular` for Button chrome icons (Plus, ArrowRight)
   - If a Button icon slot contains a non-Phosphor instance, replace it with the correct Phosphor instance and reapply the paint variable override for that variant/intent.
+  - Clear any solid fill on the `Icon Left` / `Icon Right` instance layer (`fills = []`); colour belongs on the inner `Vector` only.
 - Enforce Toast close-button structure (must match code):
-  - The Toast component’s `CloseButton` must contain a **nested `Button` instance** configured as `variant=ghost`, `size=sm`, `Has Icon Left=true`, `Icon Left = X (Phosphor)`, and no visible label.
+  - The Toast component’s `CloseButton` must contain a **nested `Button` instance** configured as `variant=ghost`, `size=sm`, `Icon Only=true`, `Has Icon Left=true`, `Icon Left = X (Phosphor)`, `Label` hidden/empty.
   - The close icon colour must inherit the Toast text colour (`color/text/primary` for all variants).
+- Enforce Badge dismiss nested `Button` instances: `Icon Only=true`, `size=sm`, `Has Icon Left=true`, `Icon Left = X (Phosphor)`; instance-level width/height override 16×16 (`sm` badge) or 20×20 (`md` badge) per code `className`.
 - If the plugin runtime cannot load the project font (commonly `Overused Grotesk`) and instance creation fails, do **not** attempt to script around it (it will keep failing). Apply the close-button structure **manually in Figma UI** (place a Button instance and set its properties), then re-run `figma-sync` to apply Variable bindings and Phosphor instance overrides.
 - Apply this to all variant frames in the consuming component that contain that icon slot
 
@@ -458,6 +462,12 @@ Using the component's known node ID from `FIGMA_RULES.md` §8:
 
 ### A4. Apply the updates
 
+**Button — `Icon Only` VARIANT (when missing or frames wrong):**
+1. Add VARIANT property `Icon Only` (`false` | `true`, default `false`) on the Button component set (`3:38` per `FIGMA_RULES.md` §8).
+2. Duplicate / scaffold variant rows for `Icon Only = true` across `Variant × Intent × Size ×` interactive states (same states as labeled variants).
+3. On every `Icon Only = true` frame: fixed square width = height per `COMPONENT_SPECS.md` §2 (`spacing/8` / `spacing/10` / `spacing/12`); horizontal padding 0; hide `Label` and `Icon Right`; set **`Icon Left` layer `visible = true`** and **unlink** `visible` from `Has Icon Left` (keep `mainComponent` swap only — see §2 Figma limitation); show Phosphor instance with correct paint Variable per variant/intent. On nested instances, set `Icon Only=true` and `Has Icon Left=true`.
+4. On `Icon Only = false` frames: labeled layout (height + H-padding from size table); **`Has Icon Left = false`** (`Icon Left` layer `visible = false`) unless explicitly enabled.
+
 For each changed property:
 - **Bind the layer to the corresponding `Theme (Semantic)` Variable** — do not set raw hex, px, or numeric values directly. Use the Figma MCP's variable binding API to attach the layer property to the Variable by name
 - **Bind every text layer to its named Text Style** — use the Figma MCP's text style binding API. Do not set font family, size, weight, line height, or letter spacing as raw values. Text Style assignments are listed in `references/COMPONENT_SPECS.md` §2. After binding, if the component applies `uppercase` or other text decorations, set those as layer-level overrides on top of the bound style (text decoration overrides are valid; font property overrides are not).
@@ -506,6 +516,7 @@ On the new page, create one frame per variant × size × state combination. Foll
 
 Once all frames are scaffolded, define Figma component properties on the **component set** (the parent wrapper node, not individual frames) using the property table in `references/COMPONENT_SPECS.md` §4 for this component:
 
+- For **Button**: include `Icon Only` as a VARIANT dimension (`false` | `true`) and scaffold square icon-only frames per §2 when `Icon Only = true`
 - For each `VARIANT` property: create the property with the listed options and default value; wire it to the corresponding variant dimension so Figma switches frames when the property changes
 - For each `BOOLEAN` property: create the property with the listed default value. Then immediately set the controlled layer's visibility to match the default — if the default is `false`, set the layer to hidden right now; if `true`, set it to visible. Wire the property to the layer so toggling it in Figma updates the layer's visibility. If the visual rules for that boolean require a fill or other layer attribute to be pre-set on the hidden layer (e.g. an image fill that must exist before the layer is made visible), apply that fill first before hiding the layer.
 - For each `TEXT` property: create the property with the listed default value; bind it to the corresponding text layer so editing the property value updates the layer content
@@ -587,8 +598,12 @@ For each human-authored card that does not yet exist (`Do / Don't`, `Content gui
 - **`Do / Don't`:** a horizontal autolayout wrapper (gap 24, width 1128) containing two fixed-width-552 cards named `Do` and `Don't`.
 - **`Content guidelines`:** single card, width fill (1128).
 - **`Accessibility`:** single card, width fill (1128).
-- Use the exact placeholder strings from §6.
+- **Body content source (first scaffold only):**
+  1. If `docs/components/<ComponentName>.md` exists, extract bullet lists from `## Do`, `## Don't`, `## Content guidelines`, and `## Accessibility` (plain text, no markdown links) and use them as card body text. A paste-ready copy lives in `docs/components/figma-scaffold/<ComponentName>.md` when present.
+  2. Otherwise use the exact placeholder strings from `COMPONENT_SPECS.md` §6.
 - **This is the only time the skill touches these children.** If they already exist — even with unchanged placeholder text — do not recreate, reorder, or modify them.
+
+Human-authored usage docs live in `docs/components/`. See `docs/components/README.md` for the full template and split of responsibilities vs `COMPONENT_SPECS.md`.
 
 ### D5. Assemble, reparent the component set, and position the Documentation frame
 

@@ -292,6 +292,10 @@ lg → h-[--ds-spacing-48] (48px)  px-[--ds-spacing-32]  text-md  gap-[--ds-spac
 
 **Icon size map:** `sm → 14px`, `md → 16px`, `lg → 18px`
 
+**Icon-only (no label):** When `children` is empty (`null` or `""`) and a single icon slot is shown (or `loading`), width equals height per size — `sm` 32×32, `md` 40×40, `lg` 48×48 — with `p-0`. Both `iconLeft` and `iconRight` without a label keeps labeled horizontal padding. Consumers may override dimensions via `className` (e.g. Badge dismiss).
+
+**Figma workaround:** Use component property **`Icon Only`** (`VARIANT`, `false` | `true`). When `true`, hide `Label`, hide `Icon Right`, keep **`Icon Left` visible** on the variant frame, set **`Has Icon Left = true`** on instances, and set root frame to fixed square width per size (32 / 40 / 48). `Has Icon Left` is synced per `Variant × Intent × Size` across `Icon Only` pairs — icon-only frames unlink `Icon Left` visibility from that boolean so the icon always shows. Code has no `iconOnly` prop — empty `children` triggers the same layout in Storybook/app.
+
 **Variant × Intent matrix:**
 - `primary/regular` — `--ds-color-background-action-primary`, label `--ds-color-foreground-action-on-primary` (light: Farco → `on-brand-inverse`, neutral → `on-brand`)
 - `primary/danger` — `--ds-color-background-feedback-error-emphasis`, label `--ds-color-foreground-text-on-brand`
@@ -423,6 +427,8 @@ toast({
 ```
 
 Built on `@radix-ui/react-toast`. Toast items stack from the bottom-right corner. Each variant has an icon (`CheckCircle` / `Warning` / `XCircle` from Phosphor).
+
+**Status icon colour:** In code, icons inherit the toast text colour (`--ds-color-foreground-text-primary`) via `text-inherit` / `currentColor` — not `--ds-color-foreground-feedback-on-*`. In Figma, bind status icon `Vector` fills to Theme `color/text/primary` on `success`, `warning`, and `danger` variants. Do not use legacy `color/feedback/*` or `color/foreground/feedback-on-*` on toast icons.
 
 ---
 
