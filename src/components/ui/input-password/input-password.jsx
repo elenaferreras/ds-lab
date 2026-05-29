@@ -2,10 +2,12 @@ import { useState, useId } from 'react'
 import { Eye, EyeSlash } from '@phosphor-icons/react'
 import { cn } from '../../../lib/cn'
 
+const ICON_SIZE = 16
+
 /**
  * InputPassword — a specialised password field built on the same visual
- * foundation as Input.  Adds a visibility toggle button (Eye / EyeSlash)
- * that supports both controlled and uncontrolled state.
+ * foundation as Input.  Adds a visibility toggle icon button on the trailing
+ * edge, always rendered inside the input box.
  *
  * @param {{
  *   label?: string
@@ -32,7 +34,6 @@ export function InputPassword({
   id: externalId,
   className,
   inputClassName,
-  // visibility API
   defaultVisible = false,
   visible,
   onVisibleChange,
@@ -43,7 +44,6 @@ export function InputPassword({
   const hasError = Boolean(error)
   const bottomText = error || helperText
 
-  // ── Visibility state ──────────────────────────────────────────────────────
   const isControlled = visible !== undefined
   const [internalVisible, setInternalVisible] = useState(defaultVisible)
   const isVisible = isControlled ? visible : internalVisible
@@ -57,7 +57,6 @@ export function InputPassword({
 
   return (
     <div className={cn('flex flex-col gap-[var(--ds-spacing-4)]', className)}>
-      {/* Label */}
       {label && (
         <label
           htmlFor={id}
@@ -72,8 +71,23 @@ export function InputPassword({
         </label>
       )}
 
-      {/* Input row — relative wrapper so the toggle can be absolutely placed */}
-      <div className="relative">
+      {/* Single bordered shell — toggle lives inside trailing edge */}
+      <div
+        className={cn(
+          'flex w-full items-center gap-[var(--ds-spacing-4)]',
+          'h-[var(--ds-spacing-40)] rounded-[var(--ds-radius-md)] border',
+          'bg-[var(--ds-color-background-surface-page)]',
+          'pr-[var(--ds-spacing-8)]',
+          'transition-[border-color,box-shadow] duration-150',
+          !hasError && 'border-[var(--ds-color-border-surface-default)]',
+          !hasError &&
+            'focus-within:border-[var(--ds-color-border-action-focus)] focus-within:ring-2 focus-within:ring-[var(--ds-color-border-action-focus)] focus-within:ring-offset-0',
+          hasError && 'border-[var(--ds-color-border-input-error)]',
+          hasError &&
+            'focus-within:border-[var(--ds-color-border-input-error)] focus-within:ring-2 focus-within:ring-[color-mix(in_oklab,var(--ds-color-border-input-error)_30%,transparent)] focus-within:ring-offset-0',
+          disabled && 'opacity-40 cursor-not-allowed bg-[var(--ds-color-background-surface-subtle)]'
+        )}
+      >
         <input
           id={id}
           type={isVisible ? 'text' : 'password'}
@@ -82,63 +96,41 @@ export function InputPassword({
           aria-invalid={hasError ? true : undefined}
           aria-describedby={bottomText ? `${id}-helper` : undefined}
           className={cn(
-            // base layout
-            'w-full h-[var(--ds-spacing-40)] rounded-[var(--ds-radius-md)] border',
-            'pl-[var(--ds-spacing-16)] pr-[var(--ds-spacing-40)]',
-            'bg-[var(--ds-color-background-surface-page)] text-[var(--ds-color-foreground-text-primary)]',
+            'min-w-0 flex-1 border-0 bg-transparent py-0 pl-[var(--ds-spacing-16)] pr-0 shadow-none outline-none',
             'text-[var(--ds-font-size-sm)] font-[var(--ds-font-family-body)] leading-none',
-            'transition-[border-color,box-shadow] duration-150 outline-none',
-            // placeholder
+            'text-[var(--ds-color-foreground-text-primary)]',
             'placeholder:text-[var(--ds-color-foreground-text-disabled)]',
-            // default border
-            !hasError && 'border-[var(--ds-color-border-surface-default)]',
-            // focus — no error
-            !hasError &&
-              'focus:border-[var(--ds-color-border-action-focus)] focus:ring-2 focus:ring-[var(--ds-color-border-action-focus)] focus:ring-offset-0',
-            // error border + focus ring
-            hasError && 'border-[var(--ds-color-border-input-error)]',
-            hasError &&
-              'focus:border-[var(--ds-color-border-input-error)] focus:ring-2 focus:ring-[color-mix(in_oklab,var(--ds-color-border-input-error)_30%,transparent)] focus:ring-offset-0',
-            // disabled
-            'disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-[var(--ds-color-background-surface-subtle)]',
+            'disabled:cursor-not-allowed',
             inputClassName
           )}
           {...props}
         />
 
-        {/* Visibility toggle */}
         <button
           type="button"
           aria-label={isVisible ? 'Hide password' : 'Show password'}
           disabled={disabled}
           onClick={handleToggle}
           className={cn(
-            // position — flush to the right edge, vertically centred
-            'absolute inset-y-0 right-0',
-            'flex items-center justify-center',
-            'w-[var(--ds-spacing-40)]',
-            // shape — match the right-side radius of the input
-            'rounded-r-[var(--ds-radius-md)]',
-            // colour
+            'inline-flex shrink-0 items-center justify-center',
+            'h-[var(--ds-spacing-32)] w-[var(--ds-spacing-32)]',
+            'rounded-[var(--ds-radius-sm)]',
+            'border-0 bg-transparent p-0',
             'text-[var(--ds-color-foreground-text-secondary)]',
             'transition-colors duration-150',
-            // focus ring
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-border-action-focus)] focus-visible:ring-inset',
-            // hover
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-border-action-focus)] focus-visible:ring-offset-0',
             !disabled && 'hover:text-[var(--ds-color-foreground-text-primary)]',
-            // disabled
-            'disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none'
+            'disabled:cursor-not-allowed disabled:pointer-events-none'
           )}
         >
           {isVisible ? (
-            <EyeSlash size={16} weight="regular" aria-hidden="true" />
+            <EyeSlash size={ICON_SIZE} weight="regular" aria-hidden="true" />
           ) : (
-            <Eye size={16} weight="regular" aria-hidden="true" />
+            <Eye size={ICON_SIZE} weight="regular" aria-hidden="true" />
           )}
         </button>
       </div>
 
-      {/* Helper / error text */}
       {bottomText && (
         <span
           id={`${id}-helper`}
