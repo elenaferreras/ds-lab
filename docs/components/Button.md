@@ -8,7 +8,7 @@ figma_file: https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-Component
 tags: [action, form, navigation]
 documentation:
   demoComponent: Button
-  variantDescription: "Visual hierarchy: one primary CTA per view; secondary and ghost for supporting actions."
+  variantDescription: "Visual hierarchy: one primary CTA per view; secondary and ghost for supporting actions; link for low-emphasis inline actions."
   variants:
     - label: Save
       props: { variant: primary }
@@ -16,6 +16,8 @@ documentation:
       props: { variant: secondary }
     - label: More options
       props: { variant: ghost }
+    - label: Skip for now
+      props: { link: true }
   dangerVariants:
     - label: Delete account
       props: { variant: primary, intent: danger }
@@ -104,7 +106,7 @@ documentation:
 
 ## Overview
 
-Button triggers actions. It expresses visual hierarchy (`primary` → `secondary` → `ghost`) and semantic intent (`regular` vs `danger`). It supports labels, leading and trailing icons, icon-only mode, loading, and disabled states.
+Button triggers actions. It expresses visual hierarchy (`primary` → `secondary` → `ghost`), optional **link** style via the `link` prop, and semantic intent (`regular` vs `danger`). It supports labels, leading and trailing icons, icon-only mode, loading, and disabled states.
 
 ## When to use
 
@@ -115,12 +117,14 @@ Button triggers actions. It expresses visual hierarchy (`primary` → `secondary
 
 ## Variants
 
-| Variant | Purpose |
-|---|---|
-| `primary` | Single most important action on the screen |
-| `secondary` | Supporting action alongside a primary (e.g. Cancel next to Save) |
-| `ghost` | Tertiary action, toolbar controls, or dense UI where fill or outline adds noise |
-| `danger` (intent) | Destructive actions; works with all three variants |
+Matrix: **rows** = intent (`regular`, `danger`) · **columns** = style (`primary`, `secondary`, `ghost`, `link`).
+
+| | `primary` | `secondary` | `ghost` | `link` |
+|---|---|---|---|---|
+| **`regular`** | Main CTA on a screen | Supporting action (e.g. Cancel) | Tertiary / toolbar | Inline low-emphasis (`link={true}`) |
+| **`danger`** | Destructive filled | Destructive outlined | Destructive text-only | Destructive link style |
+
+In Figma the **Variants** section shows this as a **visual grid** of Button instances (not a text table). Use prop **`Link=true`** for the link column — not `Variant=link`.
 
 **Size guidance:** Default to `md`. Use `sm` in compact rows (tables, cards, toasts). Use `lg` for hero or full-width mobile footers sparingly.
 
@@ -130,14 +134,15 @@ Button triggers actions. It expresses visual hierarchy (`primary` → `secondary
 |---|---|
 | `children` | Label text. Empty string or `null` with a single icon (or `loading`) → **icon-only** square button. |
 | `variant` / `intent` | Invalid values fall back to `primary` / `regular`. |
-| `size` | Controls height, padding, font size, icon size (14 / 16 / 18 px), and gap. |
+| `link` | When `true`, applies link styling (transparent chrome, link hover color) and **zero horizontal padding** (labeled buttons). Ignores `variant` chrome. Default `false`. |
+| `size` | Controls height, padding (except when `link`), font size, icon size (14 / 16 / 18 px), and gap. |
 | `iconLeft` / `iconRight` | Icons are decorative (`aria-hidden` on wrapper). Icon-only **must** have an accessible name via `aria-label` on the button (not provided by the component). |
 | `loading` | Spinner replaces left icon; label stays visible; opacity 0.7; `pointer-events: none`; `aria-busy="true"`; `onClick` not fired. |
 | `disabled` | Opacity 0.4; `pointer-events: none`; native `disabled` on `<button>`. |
 | `asChild` | Merges props onto child via Radix `Slot` (e.g. render as `<a>`). Caller must pass a single focusable child. |
 | `className` | Appended to root classes (used by nested consumers such as Badge dismiss). |
 | `onClick` | Suppressed when `disabled` or `loading`. |
-| Hover / active | Only when enabled and not loading. Primary `regular` uses theme action tokens; secondary and ghost use `color-mix` overlays; active applies `scale(0.98)` on all variants. |
+| Hover / active | Only when enabled and not loading. Primary `regular` uses theme action tokens; secondary and ghost use `color-mix` overlays. Link hover uses `--ds-color-foreground-text-link`; active applies `scale(0.98)` on all variants. |
 | Focus | `focus-visible` ring: 2px `--ds-color-border-action-focus`, 2px offset from `--ds-color-background-surface-page`. |
 
 <!-- storybook-hide -->
@@ -183,6 +188,7 @@ import { Button } from '../../components/ui/button'
 - Use sentence case in source copy; the component renders labels **uppercase** via styles.
 - Keep labels short: one to three words when possible.
 - Use `iconLeft` for add or create and `iconRight` for continue or forward when it aids scanning.
+- Use `link` for low-emphasis form or card actions (e.g. Cancel, Skip, Learn more).
 - Set `loading` on the button that was clicked, not on unrelated buttons.
 - Provide `aria-label` for every icon-only button (e.g. "Close dialog", "Add item").
 - Pass `type="submit"` via `...props` when the button submits a form (default `type` is `button`).
@@ -192,6 +198,7 @@ import { Button } from '../../components/ui/button'
 - Do not place two `primary` buttons in the same action group.
 - Do not pair `primary` and `danger` on the same row without clear hierarchy; destructive commit should be obvious, usually with Cancel.
 - Do not use `ghost` as the only CTA on an empty state or onboarding step.
+- Do not use `link` (or `link` with misleading labels) for destructive confirms or primary conversion actions.
 - Do not use `disabled` to mean in-progress — use `loading`.
 - Do not set both `iconLeft` and `iconRight` without a visible label.
 - Do not rely on icon color alone for destructive meaning — use `intent="danger"`.

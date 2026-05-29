@@ -268,6 +268,8 @@ All component layers must bind to these Variables. Each mode value is an alias p
 | `color/text/on-brand` | `Brand (Primitives)/light/neutral/50` | `Brand (Primitives)/dark/neutral/950` |
 | `color/text/on-brand-inverse` | `Brand (Primitives)/light/neutral/950` | `Brand (Primitives)/dark/neutral/50` |
 | `color/text/on-primary` | `Brand (Primitives)/light/foreground/on-primary` | `Brand (Primitives)/dark/foreground/on-primary` |
+| `color/text/link` | `Brand (Primitives)/light/primary/500` | `Brand (Primitives)/dark/primary/600` |
+| `color/text/link-hover` | `Brand (Primitives)/light/primary/600` | `Brand (Primitives)/dark/primary/700` |
 | `color/border/subtle` | `Brand (Primitives)/light/neutral/100` | `Brand (Primitives)/dark/neutral/200` |
 | `color/border/strong` | `Brand (Primitives)/light/neutral/500` | `Brand (Primitives)/dark/neutral/500` |
 | `color/border/focus` | `Brand (Primitives)/light/primary/400` | `Brand (Primitives)/dark/primary/600` |
@@ -374,18 +376,22 @@ Shadows are **not** Theme (Semantic) variables. Components use Effect Styles; co
 
 **Source:** `src/components/ui/button/button.jsx`
 
-**Overview:** Button is the primary action trigger in the system. It comes in three visual styles (primary, secondary, ghost) and two intents (regular, danger), supports three sizes, and handles loading and disabled states natively.
+**Overview:** Button is the primary action trigger in the system. It comes in three visual styles (primary, secondary, ghost), an optional **link** boolean (text-only, no horizontal padding), and two intents (regular, danger). Supports three sizes, loading, and disabled states.
 
-**Variants:**
+**Variants (visual styles):** `primary`, `secondary`, `ghost`
 
-| Name | Purpose |
-|---|---|
-| `primary` | High-emphasis action — filled background; use for the single most important action on a screen |
-| `secondary` | Medium-emphasis — outlined; use for secondary actions alongside a primary button |
-| `ghost` | Low-emphasis — no border or fill; use for tertiary actions or in dense UI where visual weight must be minimised |
-| `danger` intent | Signals a destructive or irreversible action; available on all three variants |
+**Documentation matrix (Figma `Variants` → frame `Matrix`, and `docs/components/Button.md`):**
 
-**Variants:** `primary`, `secondary`, `ghost`
+Visual grid — **2 rows** (`regular`, `danger`) × **4 columns** (`primary`, `secondary`, `ghost`, `link`). Each cell is a **Button instance** (`Size=md`, `Icon Only=false`); `link` column sets `Link=true` (boolean). Not a text table like Props.
+
+| | `primary` | `secondary` | `ghost` | `link` |
+|---|---|---|---|---|
+| **`regular`** | instance | instance | instance | instance `Link=true` |
+| **`danger`** | instance | instance | instance | instance `Link=true` |
+
+**Link (code `link` / Figma `Link` BOOLEAN, default `false`):**
+- When `true`: transparent background and border; label/icon colors per `Intent` (same as former `variant="link"`); **horizontal padding 0** on labeled buttons (`Icon Only=false`).
+- Overrides `Variant` chrome — a `primary` instance with `Link=true` renders as link, not filled primary.
 **Intents:** `regular`, `danger`
 **Sizes:** `sm` (32px h), `md` (40px h), `lg` (48px h)
 **States:** Default, Hover, Active, Disabled, Loading
@@ -431,6 +437,22 @@ When `Icon Only = false`: use the labeled **Size → Figma dimensions** table ab
 | `secondary` | `danger` | transparent | `color/action/destructive` (#ff4d4f) | `color/action/destructive` (#ff4d4f) |
 | `ghost` | `regular` | transparent | `color/text/primary` (#000) | transparent |
 | `ghost` | `danger` | transparent | `color/action/destructive` (#ff4d4f) | transparent |
+**When `Link=true` (boolean, not Variant):**
+
+| Intent | Background | Text | Border |
+|---|---|---|---|
+| `regular` | transparent | `color/text/primary` (#000) | transparent |
+| `danger` | transparent | `color/action/destructive` (#ff4d4f) | transparent |
+
+**Link interactive states (code + Figma when `Link=true`):**
+
+| State | `regular` label color | `danger` label color |
+|---|---|---|
+| Default | `color/text/primary` | `color/action/destructive` |
+| Hover | `color/text/link` | `color/text/link` |
+| Active | `color/text/primary` | `color/action/destructive` |
+
+Hover/active on `link` are **text color only** (no background fill). Bind hover label (and icon Vector on hover frames if modeled) to `color/text/link`.
 
 **Shared styling:**
 - Border radius: `radius/full` (9999px) — full pill shape
@@ -802,6 +824,7 @@ Properties are defined on the **component set** (the parent node that wraps all 
 | `Intent` | `VARIANT` | `regular`, `danger` | `regular` |
 | `Size` | `VARIANT` | `sm`, `md`, `lg` | `md` |
 | `Icon Only` | `VARIANT` | `false`, `true` | `false` |
+| `Link` | `BOOLEAN` | — | `false` |
 | `Disabled` | `BOOLEAN` | — | `false` |
 | `Loading` | `BOOLEAN` | — | `false` |
 | `Has Icon Left` | `BOOLEAN` | — | `false` |
@@ -816,6 +839,8 @@ Properties are defined on the **component set** (the parent node that wraps all 
 - `Icon Only = true` with both icon slots visible is invalid — only `Icon Left` should show
 
 **Visual rules per boolean state:**
+- `Link = true` → hide `Background` and `Border` layers; show `LabelLink` (hide `Label`); horizontal padding 0 via hidden `PadLeft`/`PadRight` (see §6 Variant matrix layout); icon Vector uses link colors per `Intent`. Overrides `Variant` chrome.
+- `Link = false` → standard variant chrome and labeled padding per size table.
 - `Disabled = true` → apply `opacity/disabled` (0.4) to the entire component, set `pointer-events: none`
 - `Loading = true` → opacity 0.7, replace `Icon Left` slot with the spinner instance, hide `Icon Right`
 - `Disabled` and `Loading` are mutually exclusive — when `Loading = true`, `Disabled` is ignored
@@ -977,6 +1002,8 @@ After placing the instance, apply Variable overrides only when needed to match t
 | `Button` (secondary, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/action/destructive` |
 | `Button` (ghost, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/text/primary` |
 | `Button` (ghost, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/action/destructive` |
+| `Button` (`Link=true`, regular) | any icon | `Icon Left` / `Icon Right` slots | `color/text/primary` (hover: `color/text/link`) |
+| `Button` (`Link=true`, danger) | any icon | `Icon Left` / `Icon Right` slots | `color/action/destructive` (hover: `color/text/link`) |
 | `Badge` | `XIcon` | dismiss × button layer | same Variable as the badge's text color for that variant (see §2 Badge color matrix) |
 | `Toast` (success) | `CheckCircleIcon` | icon layer (Vector fill) | `color/text/primary` |
 | `Toast` (warning) | `WarningIcon` | icon layer (Vector fill) | `color/text/primary` |
@@ -1115,7 +1142,7 @@ All data-row text layers use Text Style `text/md-regular`, colour `color/text/pr
 
 **Column content sources:**
 
-- **Variants:** rows come from the §2 Variants table for this component. Columns: `Name`, `Purpose`.
+- **Variants:** for **Button**, use the §2 **visual matrix** frame `Matrix` (rows = `regular` | `danger`; columns = `primary` | `secondary` | `ghost` | `link` with live instances). Other components: text table with columns `Name`, `Purpose`.
 - **Props:** rows come from the §4 property table for this component. Use `Figma property name` → `Name`, `Property type` → `Type`, `Default` → `Default`. Columns: `Name`, `Type`, `Default`.
 
 > The reference mockup at `134:2082` has the Props header text layers mis-named `Purpose` in the layer tree (duplicated from Variants). When creating new tables, name the layers `Name`, `Type`, and `Default` to match their displayed content.

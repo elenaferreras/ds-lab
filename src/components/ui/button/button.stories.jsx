@@ -13,6 +13,10 @@ export default {
       options: ['primary', 'secondary', 'ghost'],
       description: 'Visual hierarchy of the button',
     },
+    link: {
+      control: 'boolean',
+      description: 'Text-link style (no horizontal padding; overrides variant chrome)',
+    },
     intent: {
       control: 'select',
       options: ['regular', 'danger'],
@@ -53,6 +57,7 @@ export const Variants = {
       <Button variant="primary">Primary</Button>
       <Button variant="secondary">Secondary</Button>
       <Button variant="ghost">Ghost</Button>
+      <Button link>Link</Button>
     </div>
   ),
 }
@@ -69,10 +74,17 @@ export const Danger = {
 
 export const Sizes = {
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-      <Button size="sm">Small</Button>
-      <Button size="md">Medium</Button>
-      <Button size="lg">Large</Button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <Button size="sm">Small</Button>
+        <Button size="md">Medium</Button>
+        <Button size="lg">Large</Button>
+      </div>
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <Button size="sm" link>Small link</Button>
+        <Button size="md" link>Medium link</Button>
+        <Button size="lg" link>Large link</Button>
+      </div>
     </div>
   ),
 }
@@ -127,6 +139,67 @@ export const States = {
       <Button size="sm" loading>Loading sm</Button>
       <Button size="lg" loading>Loading lg</Button>
     </div>
+  ),
+}
+
+export const FormInBody = {
+  name: 'Form In Body',
+  render: () => (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault()
+      }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--ds-spacing-16)',
+        maxWidth: '420px',
+        padding: 'var(--ds-spacing-16)',
+        border: '1px solid var(--ds-color-border-surface-default)',
+        borderRadius: 'var(--ds-radius-md)',
+        background: 'var(--ds-color-background-surface-base)',
+      }}
+    >
+      <label
+        htmlFor="storybook-email"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--ds-spacing-8)',
+          color: 'var(--ds-color-foreground-text-primary)',
+          fontFamily: 'var(--ds-font-family-body)',
+          fontSize: 'var(--ds-font-size-sm)',
+          textTransform: 'uppercase',
+          letterSpacing: 'var(--ds-base-letter-spacing-wide)',
+        }}
+      >
+        Email
+        <input
+          id="storybook-email"
+          type="email"
+          placeholder="name@company.com"
+          style={{
+            height: 'var(--ds-spacing-40)',
+            padding: '0 var(--ds-spacing-12)',
+            border: '1px solid var(--ds-color-border-surface-strong)',
+            borderRadius: 'var(--ds-radius-md)',
+            background: 'var(--ds-color-background-surface-base)',
+            color: 'var(--ds-color-foreground-text-primary)',
+            fontFamily: 'var(--ds-font-family-body)',
+            fontSize: 'var(--ds-font-size-md)',
+          }}
+        />
+      </label>
+
+      <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <Button type="button" link size="md">
+          Cancel
+        </Button>
+        <Button type="submit" variant="primary" size="md">
+          Save
+        </Button>
+      </div>
+    </form>
   ),
 }
 
