@@ -401,6 +401,51 @@ Footer   → px-6 pt-4 pb-6  border-top neutral-20
 
 ---
 
+### InputPassword
+
+**File:** `src/components/ui/input-password/input-password.jsx`
+
+A specialised password field built on the same visual foundation as `Input`. Adds a password visibility toggle on the trailing edge of the field.
+
+**Props:**
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `label` | string | — | Label above the input |
+| `placeholder` | string | — | Placeholder text |
+| `helperText` | string | — | Helper text below the input |
+| `error` | string | — | Error message (overrides helperText, applies error styles) |
+| `disabled` | boolean | `false` | Disables both the input and the visibility toggle |
+| `id` | string | auto (`useId`) | Custom input id |
+| `className` | string | — | Container classes |
+| `inputClassName` | string | — | Input element classes |
+| `value` | string | — | Controlled value |
+| `onChange` | ChangeEventHandler | — | Change handler |
+| `defaultVisible` | boolean | `false` | Initial visibility state (uncontrolled) |
+| `visible` | boolean | — | Controlled visibility state |
+| `onVisibleChange` | `(visible: boolean) => void` | — | Callback fired when the toggle is clicked |
+
+**Visibility toggle:**
+- Hidden password → `Eye` icon (weight: regular), aria-label: "Show password"
+- Visible password → `EyeSlash` icon (weight: regular), aria-label: "Hide password"
+- Toggle is a `type="button"` absolutely positioned on the trailing edge of the input field
+- Inherits the `disabled` state of the field
+- Focus ring: `focus-visible:ring-2` using `--ds-color-border-action-focus`, `ring-inset`
+
+**Figma anatomy:**
+```
+InputPassword (Frame, auto-layout column, gap=4)
+├── Label (Text, optional)
+├── InputRow (Frame, relative, auto-layout row)
+│   ├── Input field (fills width, pr=40)
+│   └── ToggleButton (40×40, right-aligned, rounded-r-md)
+│       └── Eye / EyeSlash icon (16×16, nested Phosphor instance)
+└── HelperText (Text, optional)
+```
+
+**States:** default, focus (accent ring on input), error (danger border + ring on input), disabled (opacity 0.4, subtle bg, pointer-events-none on toggle).
+
+---
+
 ### Toast
 
 **File:** `src/components/ui/toast/toast.jsx`
@@ -501,6 +546,7 @@ The design file is: `https://www.figma.com/design/Oppoy4D4dW42oWPr8Qssqd/DS-Lab-
 | Avatar | `6:3` | `8:14` | COMPONENT_SET |
 | Card | `6:4` | `10:2` | COMPONENT |
 | Input | `6:5` | `11:27` | COMPONENT_SET |
+| InputPassword | TBD | TBD | COMPONENT_SET |
 | Toast | `6:6` | `12:25` | COMPONENT_SET |
 | Button / Documentation | `0:1` | `172:116` | FRAME |
 | Badge / Documentation | `6:2` | `172:205` | FRAME |
@@ -523,3 +569,5 @@ The DS-Lab-Components file uses the subscribed library `DS Lab: Phosphor Icons`.
 | `XCircleIcon` | `XCircle` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `5557c9aa1f5aa166243bca01a2107496666f2632` |
 | `PlusIcon` | `Plus` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `c1b8a390deee2ebb32f6d22211b031833595619a` |
 | `ArrowRightIcon` | `ArrowRight` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | `c838cca546e0059b52148b958ab3e0749c5d0132` |
+| `Eye` | `Eye` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | TBD |
+| `EyeSlash` | `EyeSlash` | `DS Lab: Phosphor Icons` | `lk-12537a39e566ea8a49c7c5b948590a83d1b0be20cb337647680ae1e2912b0b80dc96101434286561484108b914d52a083be12f0cdf86b30fd2ea100344d18149` | TBD |
