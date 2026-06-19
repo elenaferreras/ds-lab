@@ -6,6 +6,8 @@ export { Avatar } from './ui/avatar'
 export { Card } from './ui/card'
 export { ToastProvider, useToast } from './ui/toast'
 export { Modal } from './ui/modal'
+export { SideNav } from './ui/side-nav'
+export { Tooltip, TooltipProvider } from './ui/tooltip'
 export {
   Area,
   AreaChart,
@@ -22,7 +24,7 @@ export {
   PieChart,
   ResponsiveContainer,
   RoundedBarChart,
-  Tooltip,
+  ChartTooltip,
   XAxis,
   YAxis,
   axisProps,
