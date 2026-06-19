@@ -1,25 +1,43 @@
+import { FarcoLogo } from '../components/ui/logo'
 import { Button, Input, InputPassword } from '../components'
+import { LoginMediaPanel } from './LoginMediaPanel'
 import { GoogleLogo } from '@phosphor-icons/react'
 
-export default function LoginPage() {
+/**
+ * @param {{
+ *   media?: 'gradient' | 'image' | 'video' | 'none'
+ *   layout?: 'split' | 'stack'
+ *   imageSrc?: string
+ *   videoSrc?: string
+ * }} props
+ */
+export default function LoginPage({
+  media = 'gradient',
+  layout = 'split',
+  imageSrc,
+  videoSrc,
+}) {
+  const isSplit = layout === 'split' && media !== 'none'
+
   return (
-    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
-      {/* Left panel — form */}
-      <div className="relative flex flex-col bg-[var(--ds-color-background-surface-page)] px-[var(--ds-spacing-32)] py-[var(--ds-spacing-32)] lg:px-[var(--ds-spacing-40)]">
+    <div
+      className={
+        isSplit
+          ? 'grid min-h-screen grid-cols-2'
+          : 'min-h-screen'
+      }
+    >
+      <div className="relative flex min-h-screen min-w-0 flex-col bg-[var(--ds-color-background-surface-page)] px-[var(--ds-spacing-32)] py-[var(--ds-spacing-32)] md:px-[var(--ds-spacing-40)]">
         <div className="shrink-0">
-          <img src="/farco-logo.svg" alt="Farco" className="h-9 w-auto" />
+          <FarcoLogo className="text-[var(--ds-color-foreground-text-primary)]" />
         </div>
 
         <div className="flex flex-1 items-center justify-center py-[var(--ds-spacing-32)]">
           <div className="w-full max-w-[360px]">
-            <h1
-              className="m-0 mb-[var(--ds-spacing-8)] font-[var(--ds-font-family-body)] text-[var(--ds-font-size-xl)] font-bold leading-tight tracking-[-0.01em] text-[var(--ds-color-foreground-text-primary)]"
-            >
+            <h1 className="m-0 mb-[var(--ds-spacing-8)] font-[var(--ds-font-family-body)] text-[var(--ds-font-size-xl)] font-bold leading-tight tracking-[-0.01em] text-[var(--ds-color-foreground-text-primary)]">
               Welcome back
             </h1>
-            <p
-              className="m-0 mb-[var(--ds-spacing-32)] font-[var(--ds-font-family-body)] text-[var(--ds-font-size-md)] leading-normal text-[var(--ds-color-foreground-text-secondary)]"
-            >
+            <p className="m-0 mb-[var(--ds-spacing-32)] font-[var(--ds-font-family-body)] text-[var(--ds-font-size-md)] leading-normal text-[var(--ds-color-foreground-text-secondary)]">
               Welcome back! Please enter your details.
             </p>
 
@@ -70,14 +88,13 @@ export default function LoginPage() {
         </footer>
       </div>
 
-      {/* Right panel — placeholder image */}
-      <div className="relative hidden min-h-[240px] overflow-hidden bg-[var(--ds-color-background-surface-subtle)] lg:block">
-        <img
-          src="/avatar-default.png"
-          alt=""
-          className="h-full w-full object-cover"
+      {isSplit ? (
+        <LoginMediaPanel
+          media={media}
+          imageSrc={imageSrc}
+          videoSrc={videoSrc}
         />
-      </div>
+      ) : null}
     </div>
   )
 }

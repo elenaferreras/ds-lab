@@ -1,0 +1,105 @@
+/* Login media panel — animated brand gradient */
+
+@keyframes login-gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes login-gradient-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(6%, -4%) scale(1.08);
+  }
+  66% {
+    transform: translate(-4%, 6%) scale(0.94);
+  }
+}
+
+.login-media-panel {
+  background-color: var(--ds-brand-color-light-primary-300, #daf6ad);
+}
+
+.login-media-panel__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    var(--ds-brand-color-light-primary-300, #daf6ad) 0%,
+    var(--ds-brand-color-light-primary-500, #acea42) 22%,
+    var(--ds-brand-color-light-secondary-300, #6a9db7) 48%,
+    var(--ds-brand-color-light-primary-400, #c4f07f) 72%,
+    var(--ds-brand-color-light-secondary-400, #4b809a) 100%
+  );
+  background-size: 320% 320%;
+  animation: login-gradient-shift 18s ease-in-out infinite;
+}
+
+.login-media-panel__gradient::before,
+.login-media-panel__gradient::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.62;
+  animation: login-gradient-drift 22s ease-in-out infinite;
+}
+
+.login-media-panel__gradient::before {
+  top: -12%;
+  left: -8%;
+  width: 58%;
+  height: 58%;
+  background: var(--ds-brand-color-light-primary-400, #c4f07f);
+}
+
+.login-media-panel__gradient::after {
+  right: -10%;
+  bottom: -14%;
+  width: 52%;
+  height: 52%;
+  background: var(--ds-brand-color-light-secondary-300, #6a9db7);
+  animation-delay: -10s;
+}
+
+[data-mode='dark'] .login-media-panel {
+  background-color: var(--ds-brand-color-dark-primary-400, #83ba2a);
+}
+
+[data-mode='dark'] .login-media-panel__gradient {
+  background: linear-gradient(
+    135deg,
+    var(--ds-brand-color-dark-primary-400, #83ba2a) 0%,
+    var(--ds-brand-color-dark-primary-600, #c4f07f) 22%,
+    var(--ds-brand-color-dark-secondary-500, #2d627d) 48%,
+    var(--ds-brand-color-dark-primary-500, #acea42) 72%,
+    var(--ds-brand-color-dark-secondary-600, #4b809a) 100%
+  );
+}
+
+[data-mode='dark'] .login-media-panel__gradient::before {
+  background: var(--ds-brand-color-dark-primary-500, #acea42);
+}
+
+[data-mode='dark'] .login-media-panel__gradient::after {
+  background: var(--ds-brand-color-dark-secondary-500, #2d627d);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-media-panel__gradient {
+    animation: none;
+    background-size: 100% 100%;
+  }
+
+  .login-media-panel__gradient::before,
+  .login-media-panel__gradient::after {
+    animation: none;
+  }
+}
