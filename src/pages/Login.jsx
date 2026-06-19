@@ -1,6 +1,7 @@
 import { FarcoLogo } from '../components/ui/logo'
 import { Button, Input, InputPassword } from '../components'
 import { LoginMediaPanel } from './LoginMediaPanel'
+import { GoogleLogo } from '@phosphor-icons/react'
 
 /**
  * @param {{
