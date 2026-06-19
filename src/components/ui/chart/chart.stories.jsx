@@ -10,7 +10,7 @@ import {
   Line,
   LineChart,
   RoundedBarChart,
-  Tooltip,
+  ChartTooltip,
   XAxis,
   YAxis,
   axisProps,
@@ -67,7 +67,7 @@ export const LineChartExample = {
             <CartesianGrid {...gridProps} />
             <XAxis dataKey="month" {...axisProps} />
             <YAxis {...axisProps} />
-            <Tooltip {...tooltipProps} />
+            <ChartTooltip {...tooltipProps} />
             <Legend />
             <Line
               type="monotone"
@@ -112,7 +112,7 @@ export const MultiSeries = {
             <XAxis dataKey="month" {...axisProps} />
             <YAxis yAxisId="left" {...axisProps} />
             <YAxis yAxisId="right" orientation="right" {...axisProps} />
-            <Tooltip {...tooltipProps} />
+            <ChartTooltip {...tooltipProps} />
             <Legend />
             <Area
               yAxisId="left"
@@ -159,7 +159,7 @@ export const CategoryBars = {
             <CartesianGrid {...gridProps} horizontal={false} vertical />
             <XAxis type="number" {...axisProps} />
             <YAxis type="category" dataKey="name" width={72} {...axisProps} />
-            <Tooltip {...tooltipProps} />
+            <ChartTooltip {...tooltipProps} />
             <Bar dataKey="value" name="Share %" fill={chartColor(2)} radius={[0, 4, 4, 0]} />
           </BarChart>
         </ChartContainer>

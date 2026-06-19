@@ -24,7 +24,7 @@ export {
   PieChart,
   ResponsiveContainer,
   RoundedBarChart,
-  Tooltip,
+  ChartTooltip,
   XAxis,
   YAxis,
   axisProps,

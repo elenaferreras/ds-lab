@@ -30,7 +30,7 @@ export {
   Pie,
   PieChart,
   ResponsiveContainer,
-  Tooltip,
+  Tooltip as ChartTooltip,
   XAxis,
   YAxis,
 } from 'recharts'
