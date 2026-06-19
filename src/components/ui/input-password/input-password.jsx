@@ -18,6 +18,7 @@ const ICON_SIZE = 16
  *   id?: string
  *   className?: string
  *   inputClassName?: string
+ *   footer?: React.ReactNode
  *   value?: string
  *   onChange?: React.ChangeEventHandler<HTMLInputElement>
  *   defaultVisible?: boolean
@@ -34,6 +35,7 @@ export function InputPassword({
   id: externalId,
   className,
   inputClassName,
+  footer,
   defaultVisible = false,
   visible,
   onVisibleChange,
@@ -130,6 +132,8 @@ export function InputPassword({
           )}
         </button>
       </div>
+
+      {footer}
 
       {bottomText && (
         <span
