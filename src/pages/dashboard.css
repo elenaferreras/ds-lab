@@ -1,0 +1,97 @@
+.dashboard {
+  min-height: 100vh;
+  background-color: var(--ds-color-background-surface-subtle);
+  padding: var(--ds-spacing-32);
+}
+
+.dashboard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-24);
+  margin-bottom: var(--ds-spacing-32);
+}
+
+.dashboard__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-16);
+}
+
+.dashboard__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ds-spacing-24);
+  margin-bottom: var(--ds-spacing-24);
+}
+
+.dashboard__charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ds-spacing-24);
+  margin-bottom: var(--ds-spacing-24);
+}
+
+.dashboard__section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-spacing-16);
+}
+
+.dashboard__section-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-8);
+  flex-shrink: 0;
+}
+
+.dashboard__heatmap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-12);
+}
+
+.dashboard__heatmap-row {
+  display: grid;
+  grid-template-columns: 88px repeat(4, minmax(0, 1fr));
+  gap: var(--ds-spacing-8);
+  align-items: center;
+}
+
+.dashboard__heatmap-label {
+  margin: 0;
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-color-foreground-text-secondary);
+}
+
+.dashboard__heatmap-cell {
+  height: var(--ds-spacing-40);
+  border-radius: var(--ds-radius-md);
+}
+
+.dashboard__transactions {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard__transaction-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-16);
+  padding: var(--ds-spacing-16) 0;
+  border-bottom: 1px solid var(--ds-color-border-surface-default);
+}
+
+.dashboard__transaction-row:last-child {
+  border-bottom: none;
+}
+
+@media (max-width: 1024px) {
+  .dashboard__metrics,
+  .dashboard__charts {
+    grid-template-columns: 1fr;
+  }
+}
