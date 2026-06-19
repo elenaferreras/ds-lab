@@ -6,6 +6,8 @@ export { Avatar } from './ui/avatar'
 export { Card } from './ui/card'
 export { ToastProvider, useToast } from './ui/toast'
 export { Modal } from './ui/modal'
+export { DateRangePicker } from './ui/date-range-picker'
+export { FilterSelect } from './ui/filter-select'
 export { SideNav } from './ui/side-nav'
 export { Tooltip, TooltipProvider } from './ui/tooltip'
 export {
