@@ -1,4 +1,4 @@
-import { Button, Input } from '../components'
+import { Button, Input, InputPassword } from '../components'
 import { GoogleLogo } from '@phosphor-icons/react'
 
 export default function LoginPage() {
@@ -33,11 +33,20 @@ export default function LoginPage() {
                 placeholder="Enter your email"
                 autoComplete="email"
               />
-              <Input
+              <InputPassword
                 label="Password"
-                type="password"
                 placeholder="Enter your password"
                 autoComplete="current-password"
+                footer={
+                  <Button
+                    type="button"
+                    link
+                    size="sm"
+                    className="-mx-[6px] w-full justify-start"
+                  >
+                    Forgot password
+                  </Button>
+                }
               />
 
               <div className="flex flex-col gap-[var(--ds-spacing-12)]">
